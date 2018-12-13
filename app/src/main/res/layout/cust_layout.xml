@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardBackgroundColor="@color/titlecolor"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cust_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/id"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/cust_Addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/addr"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/cust_Phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/phone"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/cust_Loan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/loan_amount"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/cust_Interest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/interest_rate"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/cust_DOI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/date_of_issue"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+
+
+            <TextView
+                android:id="@+id/cust_DOR"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="5dp"
+                android:text="@string/date_of_return"
+                android:textColor="@color/colorWidget"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

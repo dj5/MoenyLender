@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.loginActivity">
+
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/Login_Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="top"
+        app:title="log in"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <EditText
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Login_Toolbar"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="70dp"
+        android:ems="10"
+        android:hint="@string/enter_email"
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/black" />
+
+
+    <EditText
+        android:id="@+id/Login_Pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/login_email"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:ems="10"
+        android:hint="@string/enter_password"
+        android:inputType="textPersonName|textPassword"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/Login_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/Login_Pass"
+        android:background="@color/colorWidget"
+        android:elevation="6dp"
+        android:text="@string/log_in"
+        android:textColor="@color/common_google_signin_btn_text_dark_default" />
+
+
+    <TextView
+        android:id="@+id/forgetPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Login_btn"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/forgot_password"
+        android:textColor="@color/colorWidget" />
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forgetPass"
+        android:layout_marginStart="182dp"
+        android:layout_marginTop="10dp"
+        android:text="Or"
+        android:textColor="@color/colorWidget" />
+
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/googleSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/or"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:elevation="10dp" />
+
+</RelativeLayout>

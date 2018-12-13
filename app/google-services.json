@@ -1,0 +1,79 @@
+{
+  "project_info": {
+    "project_number": "150314773303",
+    "firebase_url": "https://moneylender-d8895.firebaseio.com",
+    "project_id": "moneylender-d8895",
+    "storage_bucket": "moneylender-d8895.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150314773303:android:5309136de2f75bee",
+        "android_client_info": {
+          "package_name": "com.example.ashitosh.moneylender"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150314773303-j9lghvp9m51ee7evqdqhlqdauforr7dm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ashitosh.moneylender",
+            "certificate_hash": "ccc94282bc8c67de17cde36bf554e53b504a1ae0"
+          }
+        },
+        {
+          "client_id": "150314773303-momr8k54milo88ln952jehfflrihmvqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ashitosh.moneylender",
+            "certificate_hash": "0747c639b5997ec59ea05b3144627711443c952e"
+          }
+        },
+        {
+          "client_id": "150314773303-506cjkhvsbe2r8siqrp2jdabohjvjc6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ashitosh.moneylender",
+            "certificate_hash": "4ae8cf98b075e3d3005701c8a75ca55a2bbe60ee"
+          }
+        },
+        {
+          "client_id": "150314773303-93nf7c0e731nebbo3cj1n5cas7ksre92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ashitosh.moneylender",
+            "certificate_hash": "377b8458deb212be5929dee27f802e5e13936214"
+          }
+        },
+        {
+          "client_id": "150314773303-tg7j4ji9ms3uub40gdn786eofe47etg6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_XI2a6MNnM6--Rxa0D3aU57Ma0w0erU4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150314773303-tg7j4ji9ms3uub40gdn786eofe47etg6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

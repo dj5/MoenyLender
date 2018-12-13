@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/HomeNav"
+        android:title="home"
+        android:icon="@drawable/baseline_home_black_24"
+        android:iconTint="@color/colorWidget"
+        android:iconTintMode="src_atop"/>
+
+
+    <item
+        android:id="@+id/SearchNav"
+        android:icon="@drawable/search"
+        android:iconTint="@color/colorWidget"
+        android:title="search"
+        android:iconTintMode="src_atop"/>
+
+
+    <item
+        android:id="@+id/ManageAgentNav"
+        android:title="account"
+        android:icon="@drawable/baseline_supervisor_account_black_24"
+        android:iconTint="@color/colorWidget"
+        android:iconTintMode="src_atop"/>
+
+
+    <item
+        android:id="@+id/AccountNav"
+        android:title="@string/settings"
+        android:icon="@drawable/account"
+        android:iconTint="@color/colorWidget"
+        android:iconTintMode="src_atop"/>
+
+
+
+</menu>

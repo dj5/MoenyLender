@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/AgentHomeNav"
+        android:title="home"
+        android:icon="@drawable/baseline_home_black_24"
+        android:iconTint="@color/colorWidget"
+        android:iconTintMode="src_atop"/>
+
+
+    <item
+        android:id="@+id/AgentCollectNav"
+        android:icon="@drawable/plus"
+        android:iconTint="@color/colorWidget"
+        android:title="Collect"
+        android:iconTintMode="src_atop"/>
+
+
+    <item
+        android:id="@+id/AgentAccountNav"
+        android:title="@string/settings"
+        android:icon="@drawable/account"
+        android:iconTint="@color/colorWidget"
+        android:iconTintMode="src_atop"/>
+
+</menu>

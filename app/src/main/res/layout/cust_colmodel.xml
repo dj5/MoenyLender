@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/CustColCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="#37474F"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/CustAcc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginEnd="10dp"
+
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:padding="1dp"
+                android:text="@string/customer_name"
+                android:textColor="@color/titlecolor"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/CustAccNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:layout_marginEnd="10dp"
+
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="1dp"
+                android:padding="1dp"
+                android:text="@string/customers"
+                android:textColor="@color/titlecolor"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/CustColTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="5dp"
+            android:padding="1dp"
+            android:text="@string/amount_paid"
+            android:textColor="@color/titlecolor"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/CustColAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="20dp"
+            android:padding="2dp"
+            android:text="@string/amount"
+            android:textColor="@color/titlecolor"
+            android:textSize="14sp" />
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

@@ -1,0 +1,97 @@
+<resources>
+    <string name="app_name">MoneyLender</string>
+    <string name="login">Login</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="or">or</string>
+    <string name="search">Search</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_home_fragment">hello_home_fragment</string>
+    <string name="hello_manage_agent_fragmennt">hello manage Agent Fragmennt</string>
+    <string name="search_fragment">search Fragment</string>
+    <string name="id">Id</string>
+    <string name="addr">addr</string>
+    <string name="photo">photo</string>
+    <string name="customer_list">customer List</string>
+    <string name="register_agent">Register Agent</string>
+    <string name="agent_phone">Agent Phone</string>
+    <string name="agent_email">Agent Email</string>
+    <string name="agent_name">Agent Name</string>
+    <string name="delete_agent">Delete Agent</string>
+    <string name="agent_address">Agent Address</string>
+    <string name="manage_agents">Manage Agents</string>
+    <string name="date_of_return">Date of Return</string>
+    <string name="date_of_issue">Date of Issue</string>
+    <string name="interest_rate">Interest Rate</string>
+    <string name="phone">Phone</string>
+    <string name="loan_amount">Loan Amount</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="collection_updates">Collection Updates</string>
+    <string name="daily">Daily</string>
+    <string name="monthly">Monthly</string>
+    <string name="installment_type">Installment Type</string>
+    <string name="amount_collection_dates">Amount collection dates</string>
+    <string name="month">Month</string>
+    <string name="year">year</string>
+    <string name="amount_collected">Amount Collected</string>
+    <string name="date">Date</string>
+    <string name="day">Day</string>
+    <string name="amount">amount</string>
+    <string name="total">Total</string>
+    <string name="generate">Generate</string>
+    <string name="read_customer_csv">Read Customer Csv</string>
+    <string name="customers">Customers</string>
+    <string name="customer_addr">Customer Addr</string>
+    <string name="account_no">Account No.</string>
+    <string name="account">Account</string>
+    <string name="customer_namedetail">customer_name:</string>
+    <string name="address">Address:</string>
+    <string name="phone_no">Phone No.:</string>
+    <string name="customer_nameD">Customer Name:</string>
+    <string name="loan">Loan</string>
+    <string name="total_loans">Total Loans:</string>
+    <string name="agent">agent</string>
+    <string name="agent_nameD">Agent Name:</string>
+    <string name="account_noD">Account No.:</string>
+    <string name="view">View</string>
+    <string name="loan_return_type">Loan Return Type</string>
+
+    <string name="loans">Loans</string>
+    <string name="loan_no">Loan No.:</string>
+    <string name="loan_type">Loan Type:</string>
+    <string name="requested_amount">Requested Amount:</string>
+    <string name="filed_amount">Filed Amount:</string>
+    <string name="expected_installment">Expected Installment:</string>
+    <string name="loan_details">Loan Details</string>
+    <string name="customer_address">Customer Address</string>
+    <string name="register_customer">Register Customer</string>
+    <string name="next">Next</string>
+    <string name="expected_installment_amount">Expected Installment Amount</string>
+    <string name="email">Email:</string>
+    <string name="customer_account_no">Customer Account No.</string>
+    <string name="select_date_of_issue">Select date of issue</string>
+    <string name="select_date_of_return">Select date of Return</string>
+    <string name="amount_collection">amount_collection</string>
+    <string name="enter_customeraccount_no">enter customeraccount no</string>
+    <string name="enter_amount">enter amount</string>
+    <string name="dd_mm_yyyy">dd_mm_yyyy</string>
+    <string name="get_date">get date</string>
+    <string name="collect_amount">collect amount</string>
+    <string name="pending_amount">Pending Amount:</string>
+    <string name="amounttoreturn">AmountToReturn:</string>
+    <string name="dailycsv">DailyCsv</string>
+    <string name="monthlycsv">MonthlyCsv</string>
+    <string name="custcsv">CustCsv</string>
+    <string name="back">back</string>
+    <string name="reset_password">reset password</string>
+    <string name="amount_paid">Amount Paid</string>
+    <string name="forgot_password">forgot password</string>
+    <string name="log_in">log in</string>
+
+
+</resources>
