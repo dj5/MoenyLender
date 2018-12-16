@@ -2,18 +2,26 @@ package com.example.ashitosh.moneylender.Activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.internal.NavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Fragments.OwnerAccount;
 import com.example.ashitosh.moneylender.Fragments.SearchFragment;
 import com.example.ashitosh.moneylender.Fragments.ManageAgent;
+import com.example.ashitosh.moneylender.Fragments.csvFragment;
 import com.example.ashitosh.moneylender.Fragments.homeFragment;
 import com.example.ashitosh.moneylender.R;
 import com.google.android.gms.auth.api.Auth;
@@ -23,6 +31,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -41,7 +51,8 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
     private SearchFragment searchFrag;
     private ManageAgent manageAgent;
     private OwnerAccount ownerFrag;
-
+    private DrawerLayout mdrawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
         nav=findViewById(R.id.bottom_navigation);
 
         mainframe=findViewById(R.id.mainFrame);
+
 
         //firebase
         f_auth= FirebaseAuth.getInstance();
@@ -67,6 +79,21 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
         manageAgent=new ManageAgent();
         ownerFrag=new OwnerAccount();
 
+        //******************************************************
+
+        mdrawerLayout=findViewById(R.id.drawer_layout);
+        mdrawerLayout.setDrawerElevation(10);
+
+        ActionBar actionBar=getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        navigationView=findViewById(R.id.nav_view);
+        NavigationMenuView navMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+        navMenuView.addItemDecoration(new DividerItemDecoration(Owner.this,DividerItemDecoration.VERTICAL));
+
+        //*********************************************************
+
         gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -77,6 +104,36 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         //Set Default Fragment
         setFragment(homeFrag);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                mdrawerLayout.closeDrawers();
+
+                switch (item.getItemId())
+                {
+                    case R.id.csvfile:
+
+                        csvFragment fragment=new csvFragment();
+
+
+                        android.support.v4.app.FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction()
+                                .add(fragment,"csv").addToBackStack("csv");
+
+                        fragmentTransaction.replace(R.id.mainFrame,fragment);
+                        fragmentTransaction.commit();
+                        return true;
+
+                    case R.id.logoutnav:
+                        signOut();
+                        return true;
+
+                }
+
+                return true;
+            }
+        });
 
         nav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -98,11 +155,6 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                         setFragment(manageAgent);
                         return true;
 
-                    case R.id.AccountNav:
-                       setFragment(ownerFrag);
-                        return true;
-
-
 
                     default:    return false;
                 }
@@ -110,7 +162,33 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
             }
         });
 
+
+ //***************************************************************************************
+        mdrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
+
+  //*************************************************************************************
 
     private void setFragment(Fragment fragment) {
 
@@ -119,6 +197,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
         fragmentTransaction.commit();
 
     }
+
 
     @Override
 
@@ -136,12 +215,25 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
     {
         super.onOptionsItemSelected(item);
 
-        if(item.getItemId()==R.id.owner_logout)
+        switch(item.getItemId())
         {
-            signOut();
+            case android.R.id.home:
+                mdrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+
+            case R.id.owner_logout:
+                signOut();
+                return true;
+
+            case R.id.logoutnav:
+                Toast.makeText(Owner.this,"signed out",Toast.LENGTH_LONG).show();
+               // signOut();
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
+
+
 
 
     private void signOut() {
@@ -167,4 +259,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(Owner.this,"Connection failed",Toast.LENGTH_LONG).show();
     }
+
+
+
 }

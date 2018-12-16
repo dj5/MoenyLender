@@ -120,7 +120,7 @@ public class AgentHome extends Fragment {
             }
         });
 
-
+//gets Daily ACtive customer
         fs.collection("Agents").document("Agent_"+email).collection("Daily").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -135,19 +135,25 @@ public class AgentHome extends Fragment {
                     {
                         if (doc.getType().equals(DocumentChange.Type.ADDED))
                         {
-                            custModel model=doc.getDocument().toObject(custModel.class);
-                            userList.add(model);
+                            String status=doc.getDocument().getData().get("Status").toString();
 
-                            String name=doc.getDocument().getString("CustName");
-                            Log.d("name","name: "+name);
+                            if(status.equals("1")) {
 
-                            adapter.notifyDataSetChanged();
+                                custModel model = doc.getDocument().toObject(custModel.class);
+                                userList.add(model);
+
+                                String name = doc.getDocument().getString("CustName");
+                                Log.d("name", "name: " + name);
+
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 }
             }
         });
 
+        //Gets Monthly Active customer
 
         fs.collection("Agents").document("Agent_"+email).collection("Monthly").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -163,13 +169,18 @@ public class AgentHome extends Fragment {
                     {
                         if (doc.getType().equals(DocumentChange.Type.ADDED))
                         {
-                            custModel model=doc.getDocument().toObject(custModel.class);
-                            userList.add(model);
+                            String status=doc.getDocument().getData().get("Status").toString();
 
-                            String name=doc.getDocument().getString("CustName");
-                            Log.d("name","name: "+name);
+                            if(status.equals("1")) {
 
-                            adapter.notifyDataSetChanged();
+                                custModel model = doc.getDocument().toObject(custModel.class);
+                                userList.add(model);
+
+                                String name = doc.getDocument().getString("CustName");
+                                Log.d("name", "name: " + name);
+                                adapter.notifyDataSetChanged();
+
+                            }
                         }
                     }
                 }

@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -57,6 +59,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_view"
+        app:headerLayout="@layout/drawer_header"
         />
 
 </android.support.v4.widget.DrawerLayout>

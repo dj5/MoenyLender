@@ -58,6 +58,7 @@ public class CollectMoneyFragment extends Fragment {
     private ProgressDialog pd;
     private int mMonth,mYear,mDay;
     public int flag=0;
+    private String status;
     public CollectMoneyFragment() {
         // Required empty public constructor
     }
@@ -368,10 +369,18 @@ public class CollectMoneyFragment extends Fragment {
             double tempamount=AmountToReturn;
             if(tempamount!=0) {
                 tempamount = tempamount - Double.parseDouble(amounttext);
+
+                if(tempamount==0)
+                {
+                    status="0";
+                    data.put("Status","0");
+                }
                 data.put("AmountToReturn", String.valueOf(tempamount));
             }
             else
             {
+                status="0";
+                data.put("Status","0");
                 Toast.makeText(getActivity(), "AmountToReturn is null", Toast.LENGTH_SHORT).show();
             }
         }
@@ -381,7 +390,39 @@ public class CollectMoneyFragment extends Fragment {
         }
         else
         {
+            status="0";
+            data.put("Status","0");
             Toast.makeText(getActivity(), "Account is null", Toast.LENGTH_SHORT).show();
+        }
+
+        if(status.equals("0"))
+        {
+
+            fs.collection("Agents").document( "Agent_"+Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail())
+                    .collection(loantype).document("cust_"+acctext).update("Status",status)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if(task.isSuccessful())
+                            {
+                                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(),"Status Updated",Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(),"Status Updated",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    if(e!=null)
+                    {
+                        Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(),"Status Updatation failed "+e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
         }
 

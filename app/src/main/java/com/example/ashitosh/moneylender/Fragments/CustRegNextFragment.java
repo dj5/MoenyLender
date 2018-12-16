@@ -364,6 +364,7 @@ public class CustRegNextFragment extends Fragment  {
 
                 if (isValid())
                 {
+                    Custdata.put("Status","1");
                     fs.collection("Agents").document("Agent_"+agentEmail).collection(typeStr).document("cust_"+String.valueOf(AccountNo)).set(Custdata, SetOptions.merge())
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -408,7 +409,7 @@ public class CustRegNextFragment extends Fragment  {
 
                         Double rate=  Double.parseDouble(interestStr);
 
-                        Double SI=(Double.parseDouble(filedamountStr) * rate * duration)/(100*12);
+                        Double SI=(Double.parseDouble(filedamountStr) * rate * duration)/(100);
 
                         Double Amount=Double.parseDouble(filedamountStr)+SI;
 
@@ -423,13 +424,23 @@ public class CustRegNextFragment extends Fragment  {
                     loanData.put("AgentName",agentnameStr);
                     loanData.put("DOI",doiStr);
                     loanData.put("DOR",dorStr);
+
                     loanData.put("ExpectedInstallment",expInstallStr);
+
                     loanData.put("FiledAmount",filedamountStr);
                     loanData.put("Interest",interestStr);
                     loanData.put("LoanType",typeStr);
                     loanData.put("ReqAmount",reqamountStr);
                     loanData.put("AmountToReturn",AmountToReturn);
                     loanData.put("PendingAmount",PendingAmount);
+
+                    if(Double.parseDouble(AmountToReturn)>0) {
+                        loanData.put("Status", "1");
+                    }else
+                    {
+                        loanData.put("Status", "0");
+                    }
+
 
                     fs.collection("clients").document("client_"+AccountNo).collection("loans").document("loan"+String.valueOf(loanno))
                             .set(loanData, SetOptions.merge())

@@ -3,15 +3,20 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/csvfile"
-            android:title="Csv Files" />
+            android:title="Csv Files"
+            android:icon="@drawable/csv_icon"/>
         <item
             android:id="@+id/ActiveClient"
-            android:title="Active Client" />
+            android:title="Active Client"
+            android:icon="@drawable/account" />
 
     </group>
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single"  >
         <item
             android:id="@+id/logoutnav"
-            android:title="@string/logout" />
+            android:title="@string/logout"
+            android:icon="@drawable/logout"/>
+
+
     </group>
 </menu>
