@@ -8,12 +8,12 @@
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-xhdpi-v4/abc_ic_menu_cut_mtrl_alpha.png"
     },
     {
-        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_notification_template_big_media.xml.flat",
-        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/f1ebcb70bbd04a5f242e736bd59c6dab/res/layout/notification_template_big_media.xml"
-    },
-    {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_notification_template_media_custom.xml.flat",
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/f1ebcb70bbd04a5f242e736bd59c6dab/res/layout/notification_template_media_custom.xml"
+    },
+    {
+        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_notification_template_big_media.xml.flat",
+        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/f1ebcb70bbd04a5f242e736bd59c6dab/res/layout/notification_template_big_media.xml"
     },
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_common_google_signin_btn_icon_light_normal_background.9.png.flat",
@@ -96,16 +96,16 @@
         "source": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/res/layout/cust_head_layout.xml"
     },
     {
-        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_scrubber_primary_mtrl_alpha.9.png.flat",
-        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-xhdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png"
+        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_notification_action_tombstone.xml.flat",
+        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/d2077004456192fad9327dae3c28e2a7/res/layout/notification_action_tombstone.xml"
     },
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_fragment_loan.xml.flat",
         "source": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/res/layout/fragment_loan.xml"
     },
     {
-        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_notification_action_tombstone.xml.flat",
-        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/d2077004456192fad9327dae3c28e2a7/res/layout/notification_action_tombstone.xml"
+        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_abc_scrubber_primary_mtrl_alpha.9.png.flat",
+        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-xhdpi-v4/abc_scrubber_primary_mtrl_alpha.9.png"
     },
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_list_longpressed_holo.9.png.flat",
@@ -188,12 +188,12 @@
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/play-services-base-15.0.1.aar/ad86bc7e7ca7eaa385604883efd61b82/res/drawable/common_google_signin_btn_icon_light_normal.xml"
     },
     {
-        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
-        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
-    },
-    {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_design_ic_visibility_off.png.flat",
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/design-27.1.1.aar/a43f40d9bfa2b8dbb1d76a26956eab31/res/drawable-xxxhdpi-v4/design_ic_visibility_off.png"
+    },
+    {
+        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4_abc_btn_switch_to_on_mtrl_00012.9.png.flat",
+        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_fui_provider_button_email.xml.flat",
@@ -264,12 +264,12 @@
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-mdpi-v4/abc_btn_check_to_on_mtrl_000.png"
     },
     {
-        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_design_navigation_item.xml.flat",
-        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/design-27.1.1.aar/a43f40d9bfa2b8dbb1d76a26956eab31/res/layout/design_navigation_item.xml"
-    },
-    {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_list_focused_holo.9.png.flat",
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-xxhdpi-v4/abc_list_focused_holo.9.png"
+    },
+    {
+        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_design_navigation_item.xml.flat",
+        "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/design-27.1.1.aar/a43f40d9bfa2b8dbb1d76a26956eab31/res/layout/design_navigation_item.xml"
     },
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_text_select_handle_middle_mtrl_light.png.flat",
@@ -1358,6 +1358,10 @@
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-mdpi-v4_abc_cab_background_top_mtrl_alpha.9.png.flat",
         "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/drawable-mdpi-v4/abc_cab_background_top_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/layout_fragment_active_client.xml.flat",
+        "source": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/res/layout/fragment_active_client.xml"
     },
     {
         "merged": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4_abc_text_select_handle_left_mtrl_light.png.flat",

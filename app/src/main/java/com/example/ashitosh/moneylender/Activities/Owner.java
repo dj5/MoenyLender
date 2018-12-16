@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.ashitosh.moneylender.Fragments.ActiveClientFragment;
 import com.example.ashitosh.moneylender.Fragments.OwnerAccount;
 import com.example.ashitosh.moneylender.Fragments.SearchFragment;
 import com.example.ashitosh.moneylender.Fragments.ManageAgent;
@@ -119,10 +120,30 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
 
                         android.support.v4.app.FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction()
-                                .add(fragment,"csv").addToBackStack("csv");
+                                .add(fragment,"ActiveCust").addToBackStack("ActiveCust");
 
                         fragmentTransaction.replace(R.id.mainFrame,fragment);
                         fragmentTransaction.commit();
+                        return true;
+
+
+                    case R.id.ActiveClient:
+
+                        ActiveClientFragment frag1=new ActiveClientFragment();
+                        android.support.v4.app.FragmentTransaction ft1= getSupportFragmentManager().beginTransaction()
+                                .add(frag1,"ActiveCust").addToBackStack("ActiveCust");
+                        ft1.replace(R.id.mainFrame,frag1);
+                        ft1.commit();
+                        return true;
+
+
+                    case R.id.ManageClient:
+
+                        SearchFragment frag2=new SearchFragment();
+                        android.support.v4.app.FragmentTransaction ft2= getSupportFragmentManager().beginTransaction()
+                                .add(frag2,"manageCust").addToBackStack("ManageCust");
+                        ft2.replace(R.id.mainFrame,frag2);
+                        ft2.commit();
                         return true;
 
                     case R.id.logoutnav:
@@ -145,10 +166,6 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                       //  CollectionFragment fragment=new CollectionFragment();
                         setFragment(homeFrag);
-                        return true;
-
-                    case R.id.SearchNav:
-                        setFragment(searchFrag);
                         return true;
 
                     case R.id.ManageAgentNav:

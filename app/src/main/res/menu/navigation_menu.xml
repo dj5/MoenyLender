@@ -11,14 +11,6 @@
 
 
     <item
-        android:id="@+id/SearchNav"
-        android:icon="@drawable/search"
-        android:iconTint="@color/colorWidget"
-        android:title="search"
-        android:iconTintMode="src_atop"/>
-
-
-    <item
         android:id="@+id/ManageAgentNav"
         android:title="account"
         android:icon="@drawable/baseline_supervisor_account_black_24"

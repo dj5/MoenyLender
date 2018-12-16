@@ -10,6 +10,11 @@
             android:title="Active Client"
             android:icon="@drawable/account" />
 
+        <item
+            android:id="@+id/ManageClient"
+            android:title="Manage Client"
+            android:icon="@drawable/account" />
+
     </group>
     <group android:checkableBehavior="single"  >
         <item
