@@ -65,6 +65,7 @@ MERGED from [android.arch.lifecycle:livedata:1.1.0] /home/ashitosh/.gradle/cache
 MERGED from [com.android.support:support-fragment:27.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-fragment-27.1.1.aar/bada434be51352f3971af28d870b7dcf/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/f276a3d1f1b1a44826dd1eefcece2274/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/7cad3f9c798386001d34d1d4b793e869/AndroidManifest.xml:17:1-22:12
+MERGED from [net.danlew:android.joda:2.10.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/android.joda-2.10.1.aar/7f214e911a0e9e78eac7871a0a30ec3d/AndroidManifest.xml:2:1-7:12
 MERGED from [com.android.support:animated-vector-drawable:27.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/7c3e360bcdf5ee054d0a0b506b1854e0/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:support-core-ui:27.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/d6e8373ff7301a1f27647f160e8313fd/AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:customtabs:27.0.2] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/customtabs-27.0.2.aar/182e1e78672741950b6fb27a4f65e0c3/AndroidManifest.xml:17:1-22:12
@@ -396,6 +397,8 @@ MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /home/ashitosh/.gradle/
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/f276a3d1f1b1a44826dd1eefcece2274/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.core:runtime:1.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/7cad3f9c798386001d34d1d4b793e869/AndroidManifest.xml:20:5-44
 MERGED from [android.arch.core:runtime:1.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/runtime-1.1.1.aar/7cad3f9c798386001d34d1d4b793e869/AndroidManifest.xml:20:5-44
+MERGED from [net.danlew:android.joda:2.10.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/android.joda-2.10.1.aar/7f214e911a0e9e78eac7871a0a30ec3d/AndroidManifest.xml:5:5-43
+MERGED from [net.danlew:android.joda:2.10.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/android.joda-2.10.1.aar/7f214e911a0e9e78eac7871a0a30ec3d/AndroidManifest.xml:5:5-43
 MERGED from [com.android.support:animated-vector-drawable:27.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/7c3e360bcdf5ee054d0a0b506b1854e0/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:animated-vector-drawable:27.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/animated-vector-drawable-27.1.1.aar/7c3e360bcdf5ee054d0a0b506b1854e0/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-core-ui:27.1.1] /home/ashitosh/.gradle/caches/transforms-1/files-1.1/support-core-ui-27.1.1.aar/d6e8373ff7301a1f27647f160e8313fd/AndroidManifest.xml:20:5-44

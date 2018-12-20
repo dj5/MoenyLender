@@ -63,7 +63,7 @@ public class csvDaily extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_csv, container, false);
+        View v= inflater.inflate(R.layout.daily_csv_fragment, container, false);
         fs= FirebaseFirestore.getInstance();
         f_auth=FirebaseAuth.getInstance();
 
@@ -196,8 +196,6 @@ if(email!=null)
                 writer.writeNext(entries);
             }
             writer.close();
-
-
 
         }
         catch (IOException e)
