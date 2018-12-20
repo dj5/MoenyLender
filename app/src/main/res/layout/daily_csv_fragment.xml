@@ -6,36 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".sheetsActivity">
 
-    <TextView
-        android:id="@+id/csvSelectHead"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/select_type_of_csv"
-        android:textAlignment="viewStart"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <Spinner
-        android:id="@+id/CsvSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/csvSelectHead"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp" />
-
 
     <Button
-        android:id="@+id/GenerateCsvBtn"
+        android:id="@+id/generateDaily"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/CsvSpinner"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="136dp"
         android:background="@color/colorWidget"
         android:padding="2dp"
         android:text="@string/generate_csv"
@@ -44,17 +24,17 @@
         android:textSize="16sp" />
 
     <Button
-        android:id="@+id/ReadCsvBtn"
+        android:id="@+id/readDaily"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="214dp"
         android:background="@color/colorWidget"
+        android:text="@string/read_csv"
         android:textColor="@color/titlecolor"
-        android:textSize="16sp"
-        android:layout_marginTop="180dp"
-        android:text="@string/read_csv" />
+        android:textSize="16sp" />
 
 </RelativeLayout>

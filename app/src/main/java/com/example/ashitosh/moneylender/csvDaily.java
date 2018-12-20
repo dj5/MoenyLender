@@ -67,8 +67,8 @@ public class csvDaily extends Fragment {
         fs= FirebaseFirestore.getInstance();
         f_auth=FirebaseAuth.getInstance();
 
-        generate=v.findViewById(R.id.GenerateCsvBtn);
-        read=v.findViewById(R.id.ReadCsvBtn);
+        generate=v.findViewById(R.id.generateDaily);
+        read=v.findViewById(R.id.readDaily);
 
         Bundle data=getArguments();
 
