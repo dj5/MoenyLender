@@ -7,10 +7,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Adapters.CustAdapter;
@@ -37,8 +40,8 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseFirestore fs;
     private CustAdapter adapter;
-    private List<custModel> userList;
-
+    private ArrayList<custModel> userList;
+    private EditText search;
     private FloatingActionButton addcust,delcust;
 
    // private CollectionReference collectionReference;
@@ -59,6 +62,7 @@ public class SearchFragment extends Fragment {
 
         addcust=v.findViewById(R.id.CustAdd);
         delcust=v.findViewById(R.id.CustDel);
+        search=v.findViewById(R.id.ManageClientSearch);
 
         fs= FirebaseFirestore.getInstance();
 
@@ -129,11 +133,67 @@ public class SearchFragment extends Fragment {
             }
         });
 
-        return v;
 
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //    adapter.getFilter().filter(s);
+                //    adapter.notifyDataSetChanged();
+                if (s.length()>0) {
+                    filter(s.toString());
+                }
+                else
+                {
+                    adapter.filterList(userList);
+                }
+            }
+        });
+
+
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus && search.getText().length()>0)
+                {
+                    filter(search.getText().toString());
+                    v.refreshDrawableState();
+                }
+                else if(!hasFocus && search.getText().length()<=0)
+                {
+                    adapter.filterList(userList);
+                    v.refreshDrawableState();
+                }
+
+            }
+        });
+
+        return v;
     }
 
+    private void filter(String s) {
 
+        ArrayList<custModel> filteredList=new ArrayList<>();
+
+        for(custModel item:userList)
+        {
+            if(item.getCustName().toLowerCase().contains(s.toLowerCase()) || item.getAccountNo().toLowerCase().contains(s.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
+    }
 
 }
 

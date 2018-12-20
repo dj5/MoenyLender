@@ -2,13 +2,14 @@ package com.example.ashitosh.moneylender.Models;
 
 public class LoanModel {
 
-    String AgentName,DOI,DOR,ExpectedInstallment,FiledAmount,Interest,LoanType,ReqAmount,AmountToReturn,PendingAmount;
+    String Status,AgentName,DOI,DOR,ExpectedInstallment,FiledAmount,Interest,LoanType,ReqAmount,AmountToReturn,PendingAmount,LoanId;
 
 
     public LoanModel() {
     }
 
-    public LoanModel(String agentName, String DOI, String DOR, String expectedInstallment, String filedAmount, String interest, String loanType, String reqAmount) {
+    public LoanModel(String status, String agentName, String DOI, String DOR, String expectedInstallment, String filedAmount, String interest, String loanType, String reqAmount, String amountToReturn, String pendingAmount, String loanId) {
+        Status = status;
         AgentName = agentName;
         this.DOI = DOI;
         this.DOR = DOR;
@@ -17,27 +18,21 @@ public class LoanModel {
         Interest = interest;
         LoanType = loanType;
         ReqAmount = reqAmount;
+        AmountToReturn = amountToReturn;
+        PendingAmount = pendingAmount;
+        LoanId = loanId;
     }
 
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
 
     public String getAgentName() {
         return AgentName;
-    }
-
-    public String getAmountToReturn() {
-        return AmountToReturn;
-    }
-
-    public void setAmountToReturn(String amountToReturn) {
-        AmountToReturn = amountToReturn;
-    }
-
-    public String getPendingAmount() {
-        return PendingAmount;
-    }
-
-    public void setPendingAmount(String pendingAmount) {
-        PendingAmount = pendingAmount;
     }
 
     public void setAgentName(String agentName) {
@@ -98,5 +93,29 @@ public class LoanModel {
 
     public void setReqAmount(String reqAmount) {
         ReqAmount = reqAmount;
+    }
+
+    public String getAmountToReturn() {
+        return AmountToReturn;
+    }
+
+    public void setAmountToReturn(String amountToReturn) {
+        AmountToReturn = amountToReturn;
+    }
+
+    public String getPendingAmount() {
+        return PendingAmount;
+    }
+
+    public void setPendingAmount(String pendingAmount) {
+        PendingAmount = pendingAmount;
+    }
+
+    public String getLoanId() {
+        return LoanId;
+    }
+
+    public void setLoanId(String loanId) {
+        LoanId = loanId;
     }
 }

@@ -10,13 +10,6 @@
         android:iconTintMode="src_atop"/>
 
 
-    <item
-        android:id="@+id/ManageAgentNav"
-        android:title="account"
-        android:icon="@drawable/baseline_supervisor_account_black_24"
-        android:iconTint="@color/colorWidget"
-        android:iconTintMode="src_atop"/>
-
 
     <item
         android:id="@+id/AccountNav"

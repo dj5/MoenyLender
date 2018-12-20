@@ -92,6 +92,16 @@
     <string name="amount_paid">Amount Paid</string>
     <string name="forgot_password">forgot password</string>
     <string name="log_in">log in</string>
+    <string name="search_customer">Search Customer</string>
+    <string name="amount_collection1">Amount Collection</string>
+    <string name="loan_id">Loan Id:</string>
+    <string name="loan_id1">Loan Id</string>
+    <string name="month_of_collection">Month Of Collection</string>
+    <string name="date_of_collection">Date Of Collection</string>
+    <string name="agent_s_collection">Agent`s Collection</string>
+    <string name="select_type_of_csv">Select Type Of Csv</string>
+    <string name="read_csv">Read Csv</string>
+    <string name="generate_csv">Generate Csv</string>
 
 
 </resources>

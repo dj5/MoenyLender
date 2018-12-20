@@ -1,7 +1,0 @@
-#Tue Nov 06 23:48:00 IST 2018
-base.0=/home/dj/Downloads/MoneyLender-20181106T054730Z-001/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/44
-path.1=classes2.dex
-renamed.1=classes2.dex
-path.0=classes.dex
-renamed.0=classes.dex
-base.1=/home/dj/Downloads/MoneyLender-20181106T054730Z-001/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/44

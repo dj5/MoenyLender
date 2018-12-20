@@ -13,14 +13,28 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="20dp"
-        android:text="@string/customers" />
+        android:text="@string/customers"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/ActiveClientSearch"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/ActiveCustHead"
+        android:focusable="auto"
+        android:hint="@string/search" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/Activecust_List"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ActiveCustHead"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/ActiveClientSearch"
+        android:layout_marginTop="2dp"
         android:orientation="horizontal"
         android:scrollbars="vertical" />
 

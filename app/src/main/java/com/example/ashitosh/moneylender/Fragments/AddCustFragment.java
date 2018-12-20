@@ -61,6 +61,7 @@ public class AddCustFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                 nameStr=name.getText().toString();
                 emailStr=email.getText().toString();
                 phoneStr=phone.getText().toString();
@@ -76,6 +77,7 @@ public class AddCustFragment extends Fragment {
                     data.putString("CustEmail",emailStr);
                     data.putString("CustPhone",phoneStr);
                     data.putString("CustAddr",addressStr);
+                    data.putString("BtnId","FirstLoan");
 
 
 

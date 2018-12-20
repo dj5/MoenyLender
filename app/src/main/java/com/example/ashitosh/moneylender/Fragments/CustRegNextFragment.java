@@ -24,6 +24,7 @@ import com.example.ashitosh.moneylender.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -33,6 +34,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Months;
 
@@ -56,10 +59,10 @@ public class CustRegNextFragment extends Fragment  {
 
 
     private Spinner spinner,agentSpinner;
-    private EditText reqamount,filedamount,interest,expectedInstall;
+    private EditText reqamount,filedamount,interest;
     private ArrayAdapter<String> adapter,agentAdapter;
     private List<String> type,agentList,agentEmailList;
-    private Button regbtn,doi,dor;
+    private Button regbtn,dor;
     private FirebaseFirestore fs;
 
     private String typeStr,agentEmail,reqamountStr,expInstallStr,interestStr,doiStr,dorStr,agentnameStr,filedamountStr;
@@ -70,6 +73,8 @@ public class CustRegNextFragment extends Fragment  {
     private int loanno=0;
 
     public Date sdate,edate;
+    private String totalLoan;
+    private String btnId,addLoanAccNo;
 
     private int mYear, mMonth, mDay;
     private int issueMonth,returnMonth,issueYear,returnYear;
@@ -78,6 +83,7 @@ public class CustRegNextFragment extends Fragment  {
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,13 +94,13 @@ public class CustRegNextFragment extends Fragment  {
         agentSpinner=v.findViewById(R.id.CustAgentName);
 
 
+
         reqamount=v.findViewById(R.id.CustReqAmount);
         filedamount=v.findViewById(R.id.CustFiledAmount);
         interest=v.findViewById(R.id.CustRegInterest);
-        doi=v.findViewById(R.id.CustDOI);
+      //  doi=v.findViewById(R.id.CustDOI);
         dor=v.findViewById(R.id.CustDOR);
         regbtn=v.findViewById(R.id.CustRegBtn);
-        expectedInstall=v.findViewById(R.id.ExpectedInstall);
 
         fs=FirebaseFirestore.getInstance();
 
@@ -112,57 +118,38 @@ public class CustRegNextFragment extends Fragment  {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-
+        totalLoan="0";
 
         //Fetching Custoer Details from previous fragment
-        Bundle data=getArguments();
+        final Bundle data=getArguments();
 
         custName= Objects.requireNonNull(data).getString("CustName");
         custemail=data.getString("CustEmail");
         phone=data.getString("CustPhone");
         Address=data.getString("CustAddr");
 
-//Selects date of Issue
+        btnId=data.getString("BtnId");
+        addLoanAccNo=data.getString("AccountNo");
 
-        doi.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("NewApi")
-            @Override
-            public void onClick(View v) {
+        totalLoan=data.getString("TotalLoan");
 
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
+        Toast.makeText(getActivity().getApplicationContext(), "BtnId: "+btnId, Toast.LENGTH_SHORT).show();
+
+        //Selects date of Issue
 
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                        new DatePickerDialog.OnDateSetListener() {
+        DateTimeZone zone=DateTimeZone.forID("Asia/Kolkata");
+        DateTime dateTime=new DateTime(zone);
+        doiStr=dateTime.toLocalDate().toString();
 
-                            @SuppressLint("SimpleDateFormat")
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        try {
 
-                                issueMonth=month;
-                                doiStr=dayOfMonth+"/"+month+"/"+year;
+            sdate=new SimpleDateFormat("dd/MM/yyyy").parse(doiStr);
+            doiStr=sdate.toString();
 
-                                try {
-                                    sdate=new SimpleDateFormat("dd/MM/yyyy").parse(doiStr);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-
-                                doi.setText("DOI= "+doiStr);
-
-                            }
-
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-
-
-
-            }
-
-        });
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
 //Selects date Of Return
@@ -186,17 +173,15 @@ public class CustRegNextFragment extends Fragment  {
 
                                 returnMonth=month;
 
-                                dorStr=dayOfMonth+"/"+month+"/"+year;
+                                dorStr=year+"-"+month+"-"+dayOfMonth;
 
                                 try {
-                                    edate=new SimpleDateFormat("dd/MM/yyyy").parse(dorStr);
+                                    edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                                 dor.setText("DOR="+dorStr);
-
                             }
-
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
 
@@ -245,13 +230,11 @@ public class CustRegNextFragment extends Fragment  {
 
                 if(typeStr.equals("Daily"))
                 {
-                 //   interest.setEnabled(false);
-                  //  interest.setFocusable(false);
+                    interest.setVisibility(View.GONE);
                 }
                 if(typeStr.equals("Monthly"))
                 {
-                   // interest.setEnabled(true);
-                  //  interest.setFocusable(true);
+                    interest.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -293,243 +276,463 @@ public class CustRegNextFragment extends Fragment  {
                 pd.setMessage("Please wait until registering customer");
                 pd.show();
 
-                fs.collection("AccNo").document("CurrentAcc").get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-
-                                    pd.setMessage("Account no. fetched");
-
-                                    AccountNo = task.getResult().getString("Accno");
-
-                if(!Objects.requireNonNull(AccountNo).isEmpty())
-                {
-
-                    Toast.makeText(getActivity(), "Account no.fetched", Toast.LENGTH_SHORT).show();
-
-                    Map<String,Object> Custdata=new HashMap<>();
-
-                    Custdata.put("AccountNo",AccountNo);
-                    Custdata.put("CustEmail",custemail);
-                    Custdata.put("CustAddr",Address);
-                 //   Custdata.put("agent_name",agentnameStr);
-                    Custdata.put("CustName",custName);
-                    Custdata.put("CustPhone",phone);
-
-
-                    //Registering Clint
-                    fs.collection("clients").document("client_"+AccountNo).set(Custdata, SetOptions.merge())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                if (btnId.equals("FirstLoan")) {
+                    fs.collection("AccNo").document("CurrentAcc").get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful())
-                                    {
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+
+                                        pd.setMessage("Account no. fetched");
+
+                                        AccountNo = task.getResult().getString("Accno");
+
+                                        if (!Objects.requireNonNull(AccountNo).isEmpty()) {
+
+                                            Toast.makeText(getActivity(), "Account no.fetched", Toast.LENGTH_SHORT).show();
+
+                                            Map<String, Object> Custdata = new HashMap<>();
+
+                                            Custdata.put("AccountNo", AccountNo);
+                                            Custdata.put("CustEmail", custemail);
+                                            Custdata.put("CustAddr", Address);
+                                            //   Custdata.put("agent_name",agentnameStr);
+                                            Custdata.put("CustName", custName);
+                                            Custdata.put("CustPhone", phone);
+                                            Custdata.put("CustTotalLoan","1");
+
+                                            //Registering Clint
+                                            fs.collection("clients").document("client_" + AccountNo).set(Custdata, SetOptions.merge())
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
 
 
-                            pd.setMessage("customer registered");
+                                                                pd.setMessage("customer registered");
 
-                            Toast.makeText(getActivity(),"Customer Registed Successfully",Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(getActivity(), "Customer Registed Successfully", Toast.LENGTH_LONG).show();
 
-                        }
+                                                            }
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
 
-                pd.setMessage("failed to register customer");
-                pd.hide();
-                pd.dismiss();
+                                                    pd.setMessage("failed to register customer");
+                                                    pd.hide();
+                                                    pd.dismiss();
 
-                Toast.makeText(getActivity(),"Failed to register Customer: "+e.getMessage(),Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(getActivity(), "Failed to register Customer: " + e.getMessage(), Toast.LENGTH_LONG).show();
 
-            }
-
-
-        });
+                                                }
 
 
-
-        //Cust Loan Registration
-                reqamountStr=reqamount.getText().toString();
-                interestStr=interest.getText().toString();
-                filedamountStr=filedamount.getText().toString();
-                expInstallStr=expectedInstall.getText().toString();
-
-                if(typeStr.equals("Daily"))
-                {
-                    interestStr="0";
-                }
-
-                if (isValid())
-                {
-                    Custdata.put("Status","1");
-                    fs.collection("Agents").document("Agent_"+agentEmail).collection(typeStr).document("cust_"+String.valueOf(AccountNo)).set(Custdata, SetOptions.merge())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful())
-                                    {
-
-                                        pd.setMessage("agent assigned");
-                                        Toast.makeText(getActivity(),"Agent Customer Registed Successfully",Toast.LENGTH_LONG).show();
-
-                                    }
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            pd.setMessage("failed to assign agent");
-                            pd.hide();
-                            pd.dismiss();
-
-                            Toast.makeText(getActivity(),"Failed to register Agent Customer: "+e.getMessage(),Toast.LENGTH_LONG).show();
-
-                        }
-                    });
+                                            });
 
 
-                    //uploading loan details
+                                            //Cust Loan Registration
+                                            reqamountStr = reqamount.getText().toString();
+                                            interestStr = interest.getText().toString();
+                                            filedamountStr = filedamount.getText().toString();
 
-                    Map<String,Object > loanData=new HashMap<>();
+                                            if (typeStr.equals("Daily")) {
+                                                interestStr = "0";
+                                            }
 
-
-                    if(typeStr.equals("Daily"))
-                    {
-                        AmountToReturn=filedamountStr;
-                    }
-                    else if(typeStr.equals("Monthly"))
-                    {
-
-//                        int duration = Months.monthsBetween(sdate, edate).getMonths();
-
-                        int duration= monthsBetweenDates(sdate, edate);   //duration in months
-
-                        Double rate=  Double.parseDouble(interestStr);
-
-                        Double SI=(Double.parseDouble(filedamountStr) * rate * duration)/(100);
-
-                        Double Amount=Double.parseDouble(filedamountStr)+SI;
-
-                        DecimalFormat dec = new DecimalFormat("#0.00");
-
-                        AmountToReturn=String.valueOf(dec.format(Amount));
-
-                    }
-
-                    PendingAmount="0";
-
-                    loanData.put("AgentName",agentnameStr);
-                    loanData.put("DOI",doiStr);
-                    loanData.put("DOR",dorStr);
-
-                    loanData.put("ExpectedInstallment",expInstallStr);
-
-                    loanData.put("FiledAmount",filedamountStr);
-                    loanData.put("Interest",interestStr);
-                    loanData.put("LoanType",typeStr);
-                    loanData.put("ReqAmount",reqamountStr);
-                    loanData.put("AmountToReturn",AmountToReturn);
-                    loanData.put("PendingAmount",PendingAmount);
-
-                    if(Double.parseDouble(AmountToReturn)>0) {
-                        loanData.put("Status", "1");
-                    }else
-                    {
-                        loanData.put("Status", "0");
-                    }
+                                            if (isValid()) {
+                                                Custdata.put("Status", "1");
+                                                fs.collection("Agents").document("Agent_" + agentEmail).collection(typeStr).document("cust_" + String.valueOf(AccountNo)).set(Custdata, SetOptions.merge())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
 
 
-                    fs.collection("clients").document("client_"+AccountNo).collection("loans").document("loan"+String.valueOf(loanno))
-                            .set(loanData, SetOptions.merge())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful())
-                                    {
-
-                                        Toast.makeText(getActivity(),"Customer Loan added Successfully",Toast.LENGTH_LONG).show();
-                                        loanno++;
-
-                                    }
+                                                                    Map<String,Object> data=new HashMap<>();
+                                                                    data.put("Status","1");
 
 
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
 
-                            pd.setMessage("Failed to register customer");
-                            pd.hide();
-                            pd.dismiss();
+                                                                     fs.collection("Agents").document("Agent_"+agentEmail).collection(typeStr).document("cust_"+ String.valueOf(Integer.parseInt(AccountNo)-1))
+                                                                            .collection("Loans").document("loan_1")
+                                                                            .set(data,SetOptions.merge())
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    if(task.isSuccessful())
+                                                                                    {
+                                                                                        Toast.makeText(getActivity().getApplicationContext(), "Successfully loan added", Toast.LENGTH_SHORT).show();
+                                                                                        pd.dismiss();
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        Toast.makeText(getActivity().getApplicationContext(), "failed to add loan", Toast.LENGTH_SHORT).show();
+                                                                                        pd.dismiss();
+                                                                                    }
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Toast.makeText(getActivity().getApplicationContext(), "failed to upload loan "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                            pd.dismiss();
+                                                                        }
+                                                                    });
 
-                            Toast.makeText(getActivity(),"Failed to register Customer: "+e.getMessage(),Toast.LENGTH_LONG).show();
 
-                        }
+                                                                    pd.setMessage("agent assigned");
+                                                                    Toast.makeText(getActivity(), "Agent Customer Registed Successfully", Toast.LENGTH_LONG).show();
+
+                                                                }
+
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        pd.setMessage("failed to assign agent");
+                                                        pd.hide();
+                                                        pd.dismiss();
+
+                                                        Toast.makeText(getActivity(), "Failed to register Agent Customer: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                });
 
 
-                    });
+                                                //uploading loan details
+
+                                                Map<String, Object> loanData = new HashMap<>();
+
+
+                                                if (typeStr.equals("Daily")) {
+                                                    AmountToReturn = filedamountStr;
+                                                    DateTime start = new DateTime(sdate);
+                                                    DateTime end = new DateTime(edate);
+
+                                                    int DaysDuration = Days.daysBetween(start.toLocalDate(), end.toLocalDate()).getDays();
+                                                    Double Amount = Double.parseDouble(AmountToReturn) / DaysDuration;
+
+                                                    DecimalFormat dec = new DecimalFormat("#0.00");
+
+                                                    expInstallStr = String.valueOf(dec.format(Amount));
+                                                } else if (typeStr.equals("Monthly")) {
+
+                                                    DateTime start = new DateTime(sdate);
+                                                    DateTime end = new DateTime(edate);
+
+
+                                                    int months=Months.monthsBetween(start.toLocalDate(),end.toLocalDate()).getMonths();
+
+                                                    Double rate = Double.parseDouble(interestStr);
+
+                                                    Double SI = (Double.parseDouble(filedamountStr) * rate * months) / (100);
+
+                                                    Double Amount = Double.parseDouble(filedamountStr) + SI;
+
+                                                    DecimalFormat dec = new DecimalFormat("#0.00");
+
+                                                    AmountToReturn = String.valueOf(dec.format(Amount));
+
+                                                    //calculating expected Amount
+
+                                                    Double expectAmount = Amount / months;
+
+                                                    expInstallStr = String.valueOf(dec.format(expectAmount));
+
+                                                }
+
+                                                PendingAmount = "0";
+
+                                                loanData.put("LoanId","1");
+                                                loanData.put("AgentName", agentnameStr);
+                                                loanData.put("DOI", doiStr);
+                                                loanData.put("DOR", dorStr);
+
+                                                loanData.put("ExpectedInstallment", expInstallStr);
+
+                                                loanData.put("FiledAmount", filedamountStr);
+                                                loanData.put("Interest", interestStr);
+                                                loanData.put("LoanType", typeStr);
+                                                loanData.put("ReqAmount", reqamountStr);
+                                                loanData.put("AmountToReturn", AmountToReturn);
+                                                loanData.put("PendingAmount", PendingAmount);
+
+                                                if (Double.parseDouble(AmountToReturn) > 0) {
+                                                    loanData.put("Status", "1");
+                                                } else {
+                                                    loanData.put("Status", "0");
+                                                }
+
+
+                                                fs.collection("clients").document("client_" + AccountNo).collection("loans").document("loan_1" )
+                                                        .set(loanData, SetOptions.merge())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+
+                                                                    Toast.makeText(getActivity(), "Customer Loan added Successfully", Toast.LENGTH_LONG).show();
+                                                                    loanno++;
+
+                                                                }
+
+
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                        pd.setMessage("Failed to register customer");
+                                                        pd.hide();
+                                                        pd.dismiss();
+
+                                                        Toast.makeText(getActivity(), "Failed to register Customer: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                                    }
+
+
+                                                });
 
 
 //Updating account no.
 
-                    Map<String, String> acc=new HashMap<>();
+                                                Map<String, String> acc = new HashMap<>();
 
-                    AccountNo=String.valueOf(Integer.parseInt(AccountNo)+1);
+                                                AccountNo = String.valueOf(Integer.parseInt(AccountNo) + 1);
 
-                    acc.put("Accno",AccountNo);
+                                                acc.put("Accno", AccountNo);
 
-                    fs.collection("AccNo").document("CurrentAcc").set(acc, SetOptions.merge())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        Toast.makeText(getActivity(), "acc no. updated", Toast.LENGTH_SHORT).show();
+                                                fs.collection("AccNo").document("CurrentAcc").set(acc, SetOptions.merge())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(getActivity(), "acc no. updated", Toast.LENGTH_SHORT).show();
 
-                                        pd.hide();
-                                        pd.dismiss();
-                                        sendTomain();
+                                                                    pd.hide();
+                                                                    pd.dismiss();
+                                                                    sendTomain();
+                                                                }
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                        pd.setMessage("Failed to register customer");
+                                                        pd.hide();
+                                                        pd.dismiss();
+
+                                                        Toast.makeText(getActivity(), "Failed to update Account no.: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                                    }
+
+
+                                                });
+
+
+                                            } else {
+                                                Toast.makeText(getActivity(), "invalid data", Toast.LENGTH_LONG).show();
+
+                                            }
+
+                                        } else {
+                                            Toast.makeText(getActivity(), "Account no. could not fetched", Toast.LENGTH_SHORT).show();
+
+                                        }
+
                                     }
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                            });     //end of Acc no fetch
+                }
+  //Add Loan
+                else if(btnId.equals("AddLoan")) {
 
-                            pd.setMessage("Failed to register customer");
-                            pd.hide();
-                            pd.dismiss();
-
-                            Toast.makeText(getActivity(),"Failed to update Account no.: "+e.getMessage(),Toast.LENGTH_LONG).show();
-
-                        }
+                    fs.collection("AccNo").document("CurrentAcc").get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
 
 
-                    });
+                                            //Cust Loan Registration
+                                            reqamountStr = reqamount.getText().toString();
+                                            interestStr = interest.getText().toString();
+                                            filedamountStr = filedamount.getText().toString();
 
+                                            if (typeStr.equals("Daily")) {
+                                                interestStr = "0";
+                                            }
+
+                                            if (isValid()) {
+
+ //Adds Multiple loans
+                                                Map<String,Object> data=new HashMap<>();
+                                                data.put("Status","1");
+
+                                                fs.collection("Agents").document("Agent_"+agentEmail).collection(typeStr).document("cust_"+addLoanAccNo)
+                                                        .collection("Loans").document("loan_"+String.valueOf(Integer.parseInt(totalLoan)+1))
+                                                        .set(data,SetOptions.merge())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful())
+                                                                {
+                                                                    Toast.makeText(getActivity().getApplicationContext(), "Successfully loan added", Toast.LENGTH_SHORT).show();
+                                                                    pd.dismiss();
+                                                                }
+                                                                else
+                                                                {
+                                                                    Toast.makeText(getActivity().getApplicationContext(), "failed to add loan", Toast.LENGTH_SHORT).show();
+                                                                    pd.dismiss();
+                                                                }
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(getActivity().getApplicationContext(), "failed to upload loan "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                        pd.dismiss();
+                                                    }
+                                                });
+
+
+                                                //uploading loan details
+
+                                                Map<String, Object> loanData = new HashMap<>();
+
+
+                                                if (typeStr.equals("Daily")) {
+                                                    AmountToReturn = filedamountStr;
+                                                    DateTime start = new DateTime(sdate);
+                                                    DateTime end = new DateTime(edate);
+
+                                                    int DaysDuration = Days.daysBetween(start.toLocalDate(), end.toLocalDate()).getDays();
+                                                    Double Amount = Double.parseDouble(AmountToReturn) / DaysDuration;
+
+                                                    DecimalFormat dec = new DecimalFormat("#0.00");
+
+                                                    expInstallStr = String.valueOf(dec.format(Amount));
+                                                } else if (typeStr.equals("Monthly")) {
+
+
+
+                                                    DateTime start = new DateTime(sdate);
+                                                    DateTime end = new DateTime(edate);
+
+
+                                                    int months=Months.monthsBetween(start.toLocalDate(),end.toLocalDate()).getMonths();
+
+                                               //     int Monthduration = monthsBetweenDates(sdate, edate);   //duration in months
+
+                                                    Double rate = Double.parseDouble(interestStr);
+
+                                                    Double SI = (Double.parseDouble(filedamountStr) * rate * months) / (100);
+
+                                                    Double Amount = Double.parseDouble(filedamountStr) + SI;
+
+                                                    DecimalFormat dec = new DecimalFormat("#0.00");
+
+                                                    AmountToReturn = String.valueOf(dec.format(Amount));
+
+                                                    //calculating expected Amount
+
+                                                    Double expectAmount = Amount /  months;
+
+                                                    expInstallStr = String.valueOf(dec.format(expectAmount));
+
+                                                }
+
+                                                PendingAmount = "0";
+
+                                                loanData.put("LoanId",String.valueOf(Integer.parseInt(totalLoan)+1));
+                                                loanData.put("AgentName", agentnameStr);
+                                                loanData.put("DOI", doiStr);
+                                                loanData.put("DOR", dorStr);
+
+                                                loanData.put("ExpectedInstallment", expInstallStr);
+
+                                                loanData.put("FiledAmount", filedamountStr);
+                                                loanData.put("Interest", interestStr);
+                                                loanData.put("LoanType", typeStr);
+                                                loanData.put("ReqAmount", reqamountStr);
+                                                loanData.put("AmountToReturn", AmountToReturn);
+                                                loanData.put("PendingAmount", PendingAmount);
+
+                                                if (Double.parseDouble(AmountToReturn) > 0) {
+                                                    loanData.put("Status", "1");
+                                                } else {
+                                                    loanData.put("Status", "0");
+                                                }
+
+
+                                                fs.collection("clients").document("client_" + addLoanAccNo).collection("loans").document("loan_"+String.valueOf(Integer.parseInt(totalLoan)+1))
+                                                        .set(loanData, SetOptions.merge())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+
+                                                                    Toast.makeText(getActivity(), "Customer Loan added Successfully", Toast.LENGTH_LONG).show();
+                                                                    //loanno++;
+
+                                                                    fs.collection("clients").document("client_"+addLoanAccNo).update("CustTotalLoan",String.valueOf(Integer.parseInt(totalLoan)+1))
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    if(task.isSuccessful())
+                                                                                    {
+                                                                                        sendTomain();
+                                                                                    }
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Toast.makeText(getActivity().getApplicationContext(), "Error in updating Total Loans "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+                                                                }
+
+
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+
+                                                        pd.setMessage("Failed to register customer");
+                                                        pd.hide();
+                                                        pd.dismiss();
+                                                        sendTomain();
+
+                                                        Toast.makeText(getActivity(), "Failed to register Customer: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                                    }
+
+
+                                                });
+
+
+                                            } else {
+                                                Toast.makeText(getActivity(), "invalid data", Toast.LENGTH_LONG).show();
+
+                                            }
+
+                                        } else {
+                                            Toast.makeText(getActivity(), "Account no. could not fetched", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                    }
+
+
+                            });
 
                 }
-                else
-                {
-                    Toast.makeText(getActivity(),"invalid data",Toast.LENGTH_LONG).show();
-
-                }
-                
             }
-                else
-                {
-                    Toast.makeText(getActivity(), "Account no. could not fetched", Toast.LENGTH_SHORT).show();
 
-                }
 
-            }
-        }
-    });     //end of Acc no fetch
+        }); //end of onclicklistner
 
-            }
-        });//end of onclicklistner
+
 
         return v;
     }
@@ -557,12 +760,13 @@ public class CustRegNextFragment extends Fragment  {
             reqamount.requestFocus();
             return false;
         }
-       else if(doiStr.isEmpty())
+     /*  else if(doiStr.isEmpty())
         {
             doi.setError("Enter Date OF Issue");
            doi.requestFocus();
             return false;
         }
+        */
         else if(dorStr.isEmpty())
         {
             dor.setError("Enter Date Of Return");
@@ -581,12 +785,6 @@ public class CustRegNextFragment extends Fragment  {
             filedamount.requestFocus();
             return false;
         }
-        else if(expInstallStr.isEmpty())
-        {
-            expectedInstall.setError("Enter Expected Amount");
-            expectedInstall.requestFocus();
-            return false;
-        }
         else if(typeStr.isEmpty())
         {
             spinner.requestFocus();
@@ -603,37 +801,6 @@ public class CustRegNextFragment extends Fragment  {
         }
 
         return true;
-    }
-
-
-    //finds duration
-
-    public int monthsBetweenDates(Date startDate, Date endDate){
-
-        Calendar start = Calendar.getInstance();
-        start.setTime(startDate);
-
-        Calendar end = Calendar.getInstance();
-        end.setTime(endDate);
-
-        int monthsBetween = 0;
-        int dateDiff = end.get(Calendar.DAY_OF_MONTH)-start.get(Calendar.DAY_OF_MONTH);
-
-        if(dateDiff<0) {
-            int borrrow = end.getActualMaximum(Calendar.DAY_OF_MONTH);
-            dateDiff = (end.get(Calendar.DAY_OF_MONTH)+borrrow)-start.get(Calendar.DAY_OF_MONTH);
-            monthsBetween--;
-
-            if(dateDiff>0) {
-                monthsBetween++;
-            }
-        }
-        else {
-            monthsBetween++;
-        }
-        monthsBetween += end.get(Calendar.MONTH)-start.get(Calendar.MONTH);
-        monthsBetween  += (end.get(Calendar.YEAR)-start.get(Calendar.YEAR))*12;
-        return monthsBetween;
     }
 
 }

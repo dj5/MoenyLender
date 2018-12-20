@@ -47,7 +47,7 @@ public class CustColAdapter extends RecyclerView.Adapter<CustColAdapter.ViewHold
 
         holder.AccNo.setText(list.get(position).getAccountNo());
         holder.Aamount_recieved.setText(list.get(position).getAmountRecieved());
-
+        holder.LoanID.setText(list.get(position).getLoanId());
     }
 
     @Override
@@ -57,17 +57,17 @@ public class CustColAdapter extends RecyclerView.Adapter<CustColAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView Acchead,AccNo,Aamount_recieved;
+        TextView AccNo,Aamount_recieved,LoanID;
         CardView card;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            Acchead=itemView.findViewById(R.id.CustAcc);
+
             Aamount_recieved=itemView.findViewById(R.id.CustColAmount);
             AccNo=itemView.findViewById(R.id.CustAccNo);
             card=itemView.findViewById(R.id.CustColCard);
-
+            LoanID=itemView.findViewById(R.id.ColLoanIdVal);
         }
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.ashitosh.moneylender.Models.custModel;
 import com.example.ashitosh.moneylender.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,11 +30,11 @@ import javax.annotation.Nullable;
 public class CustDetailFragment extends Fragment {
 
 
-    private Button loanviewBtn;
+    private Button loanviewBtn,addLoanBtn;
     private TextView Custname,address,phone,email,AccNo,Loan;
-    private String activity;
+    private String activity,totalLoan;
     private FirebaseFirestore fs;
-
+    private String CurrentEmail;
     public CustDetailFragment() {
         // Required empty public constructor
     }
@@ -47,6 +48,7 @@ public class CustDetailFragment extends Fragment {
 
 
         loanviewBtn=v.findViewById(R.id.LoanBtn);
+        addLoanBtn=v.findViewById(R.id.AddLoanBtn);
 
         Custname=v.findViewById(R.id.CustDetailName);
         address=v.findViewById(R.id.CustDetailAddr);
@@ -67,6 +69,9 @@ public class CustDetailFragment extends Fragment {
         Loan.setText(data.getString("TotalLoans"));
         AccNo.setText(data.getString("Account"));
 
+        totalLoan=data.getString("TotalLoans");
+
+        CurrentEmail= Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
         loanviewBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +98,42 @@ public class CustDetailFragment extends Fragment {
             }
         });
 
+
+        if(CurrentEmail.equals("ashitosh.bhade@gmail.com") || CurrentEmail.equals("gavadedu.dhananjay@gmail.com"))
+        {
+              addLoanBtn.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            addLoanBtn.setVisibility(View.GONE);
+        }
+        addLoanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle data=new Bundle();
+                data.putString("AccountNo", String.valueOf(AccNo.getText().toString()));
+
+                data.putString("BtnId","AddLoan");
+                data.putString("TotalLoan",totalLoan);
+
+                CustRegNextFragment fragment=new CustRegNextFragment();
+
+                fragment.setArguments(data);
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().add(fragment,"Custhead").addToBackStack("head");
+
+                if(activity.equals("Owner")) {
+                    fragmentTransaction.replace(R.id.mainFrame, fragment);
+                }
+                else
+                {
+                    fragmentTransaction.replace(R.id.AgentmainFrame, fragment);
+
+                }
+                fragmentTransaction.commit();
+            }
+        });
 
         return v;
     }

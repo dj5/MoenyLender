@@ -27,19 +27,20 @@ import java.util.List;
 public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> implements Filterable
 {
 
-    List<AgentModel> list;
+    ArrayList<AgentModel> list,oldlist;
     FragmentManager manager;
     private AgentFilter agentFilter;
     String fragment;
-    public List<AgentModel> filteredUserList;
 
 
-    public AgentAdapter(List<AgentModel> list, FragmentManager supportFragmentManager,String fragment) {
+
+    public AgentAdapter(ArrayList<AgentModel> list, FragmentManager supportFragmentManager,String fragment) {
 
         this.list = list;
+        this.oldlist=list;
         manager=supportFragmentManager;
         this.fragment=fragment;
-        filteredUserList=new ArrayList<>();
+
     }
 
 
@@ -119,10 +120,16 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
 
     @Override
     public Filter getFilter() {
-        if(agentFilter == null)
+        if(agentFilter == null) {
             agentFilter = new AgentFilter(this, list);
+        }
         return agentFilter;
+    }
 
+
+    public void filterList(ArrayList<AgentModel> filteredList) {
+        list=filteredList;
+        notifyDataSetChanged();
     }
 
 
@@ -137,9 +144,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
 
             name=itemView.findViewById(R.id.Agent_Name);
             card=itemView.findViewById(R.id.AgentCard);
-           // address=itemView.findViewById(R.id.Agent_Addr);
-          //  email=itemView.findViewById(R.id.Agent_Email);
-         //   phone=itemView.findViewById(R.id.Agent_Phone);
+
         }
     }
 
@@ -153,45 +158,56 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
 
         private final List<AgentModel> originalList;
 
-        private final List<AgentModel> filteredList;
+        private List<AgentModel> filteredList;
 
-        private    List<AgentModel> filteredUserList;
+
 
         public AgentFilter(AgentAdapter adapter, List<AgentModel> originalList) {
             super();
             this.adapter = adapter;
-            this.originalList = new LinkedList<>(originalList);
-            this.filteredList = new ArrayList<>();
-            this.filteredUserList=new ArrayList<>();
+            this.originalList = new ArrayList<>(originalList);
+
         }
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            filteredList.clear();
+
             final FilterResults results = new FilterResults();
 
-            if (constraint.length() == 0) {
-                filteredList.addAll(originalList);
-            } else {
-                final String filterPattern = constraint.toString().trim();
+            if(constraint.length()>0 && constraint !=null)
+            {
 
-                for (final AgentModel user : originalList) {
-                    if (user.getName().contains(filterPattern)) {
-                        filteredList.add(user);
+                constraint=constraint.toString().toLowerCase();
+
+                filteredList=new ArrayList<>();
+
+                for(int i=0;i<originalList.size();i++)
+                {
+                    if(originalList.get(i).getName().toLowerCase().contains(constraint))
+                    {
+                        filteredList.add(originalList.get(i));
                     }
                 }
+
+                results.count=filteredList.size();
+                results.values=filteredList;
             }
-            results.values = filteredList;
-            results.count = filteredList.size();
+            else
+            {
+                results.count=oldlist.size();
+                results.values=oldlist;
+            }
+
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            adapter.filteredUserList.clear();
-            adapter.filteredUserList.addAll((ArrayList<AgentModel>) results.values);
-           // adapter.list=filteredUserList;
-            adapter.notifyDataSetChanged();
+
+            this.adapter.list=(ArrayList<AgentModel>)results.values;
+            this.adapter.notifyDataSetChanged();
+
         }
     }
+
 }

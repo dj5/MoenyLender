@@ -146,6 +146,15 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                         ft2.commit();
                         return true;
 
+                    case R.id.ManageAgent:
+
+                        ManageAgent frag3=new ManageAgent();
+                        android.support.v4.app.FragmentTransaction ft3= getSupportFragmentManager().beginTransaction()
+                                .add(frag3,"manageCust").addToBackStack("ManageCust");
+                        ft3.replace(R.id.mainFrame,frag3);
+                        ft3.commit();
+                        return true;
+
                     case R.id.logoutnav:
                         signOut();
                         return true;
@@ -168,8 +177,8 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                         setFragment(homeFrag);
                         return true;
 
-                    case R.id.ManageAgentNav:
-                        setFragment(manageAgent);
+                    case R.id.AccountNav:
+                        setFragment(ownerFrag);
                         return true;
 
 
@@ -215,6 +224,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     }
 
+    /*
 
     @Override
 
@@ -226,6 +236,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
         return true;
     }
 
+*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -238,14 +249,8 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                 mdrawerLayout.openDrawer(GravityCompat.START);
                 return true;
 
-            case R.id.owner_logout:
-                signOut();
-                return true;
 
-            case R.id.logoutnav:
-                Toast.makeText(Owner.this,"signed out",Toast.LENGTH_LONG).show();
-               // signOut();
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

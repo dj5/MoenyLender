@@ -7,15 +7,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Adapters.AgentAdapter;
 import com.example.ashitosh.moneylender.Models.AgentModel;
+import com.example.ashitosh.moneylender.Models.custModel;
 import com.example.ashitosh.moneylender.R;
 import com.example.ashitosh.moneylender.Activities.firestoreRecycle;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +48,9 @@ public class ManageAgent extends Fragment {
     private RecyclerView recyclerView;
 
     private AgentAdapter adapter;
-    private List<AgentModel> userList;
+    private ArrayList<AgentModel> userList;
+
+    private EditText search;
 
     public ManageAgent() {
         // Required empty public constructor
@@ -60,7 +66,7 @@ public class ManageAgent extends Fragment {
 
         reg=v.findViewById(R.id.AddAgentBtn);
         del=v.findViewById(R.id.DelAgentBtn);
-
+        search=v.findViewById(R.id.ManageAgentSearch);
 
 
         reg.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +135,65 @@ public class ManageAgent extends Fragment {
             }
         });
 
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //    adapter.getFilter().filter(s);
+                //    adapter.notifyDataSetChanged();
+                if (s.length()>0) {
+                    filter(s.toString());
+                }
+                else
+                {
+                    adapter.filterList(userList);
+                }
+            }
+        });
+
+
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus && search.getText().length()>0)
+                {
+                    filter(search.getText().toString());
+                    v.refreshDrawableState();
+                }
+                else if(!hasFocus && search.getText().length()<=0)
+                {
+                    adapter.filterList(userList);
+                    v.refreshDrawableState();
+                }
+
+            }
+        });
+
         return v;
     }
 
+    private void filter(String s) {
+
+        ArrayList<AgentModel> filteredList=new ArrayList<>();
+
+        for(AgentModel item:userList)
+        {
+            if(item.getName().toLowerCase().contains(s.toLowerCase()) || item.getEmail().toLowerCase().contains(s.toLowerCase()) || item.getAddress().toLowerCase().contains(s.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
+    }
 }

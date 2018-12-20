@@ -15,6 +15,11 @@
             android:title="Manage Client"
             android:icon="@drawable/account" />
 
+        <item
+            android:id="@+id/ManageAgent"
+            android:title="Manage Agent"
+            android:icon="@drawable/account" />
+
     </group>
     <group android:checkableBehavior="single"  >
         <item

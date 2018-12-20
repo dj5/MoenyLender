@@ -2,16 +2,36 @@ package com.example.ashitosh.moneylender.Models;
 
 public class CustColModel {
 
-    String AmountRecieved,DateOfCollection,AccountNo;
+    String AmountRecieved,DateOfCollection,LoanId,AccountNo;
 
-    public CustColModel() {
-    }
 
-    public CustColModel(String amountRecieved, String dateOfCollection, String accountNo) {
+    public CustColModel(String amountRecieved, String dateOfCollection, String loanId, String accountNo) {
         AmountRecieved = amountRecieved;
         DateOfCollection = dateOfCollection;
+        LoanId = loanId;
         AccountNo = accountNo;
     }
+
+    public String getAccountNo() {
+        return AccountNo;
+    }
+
+    public void setAccountNo(String accountNo) {
+        AccountNo = accountNo;
+    }
+
+    public CustColModel() {
+
+    }
+
+    public String getLoanId() {
+        return LoanId;
+    }
+
+    public void setLoanId(String loanId) {
+        LoanId = loanId;
+    }
+
 
     public String getAmountRecieved() {
         return AmountRecieved;
@@ -29,11 +49,4 @@ public class CustColModel {
         DateOfCollection = dateOfCollection;
     }
 
-    public String getAccountNo() {
-        return AccountNo;
-    }
-
-    public void setAccountNo(String accountNo) {
-        AccountNo = accountNo;
-    }
 }

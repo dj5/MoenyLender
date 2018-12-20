@@ -53,7 +53,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder>
         holder.intrest.setText(list.get(position).getInterest()+" %");
         holder.AmountToreturn.setText(list.get(position).getAmountToReturn()+"/- Rs");
         holder.PendingAmount.setText(list.get(position).getPendingAmount()+"/- Rs");
-
+        holder.LoanId.setText(list.get(position).getLoanId());
 
 
     }
@@ -66,7 +66,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder>
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView agent_name,doi,dor,expected_installment,filed_amount,intrest,loan_type,requested_amount;
-        TextView AmountToreturn,PendingAmount;
+        TextView AmountToreturn,PendingAmount,LoanId;
 
 
         public ViewHolder(View itemView) {
@@ -82,7 +82,7 @@ public class LoanAdapter extends RecyclerView.Adapter<LoanAdapter.ViewHolder>
             requested_amount=itemView.findViewById(R.id.LoanReqAmount);
             AmountToreturn=itemView.findViewById(R.id.Return);
             PendingAmount=itemView.findViewById(R.id.Pending);
-
+            LoanId=itemView.findViewById(R.id.LoanIdVal);
         }
     }
 }

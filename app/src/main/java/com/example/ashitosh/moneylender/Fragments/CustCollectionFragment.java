@@ -1,6 +1,7 @@
 package com.example.ashitosh.moneylender.Fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,8 @@ public class CustCollectionFragment extends Fragment {
     private CustColAdapter adapter;
     private List<CustColModel> userList;
     private String agentEmaill,type,docname;
-
+    private ArrayList<String> acclist;
+    private ProgressDialog pd;
     public CustCollectionFragment() {
         // Required empty public constructor
     }
@@ -53,7 +55,9 @@ public class CustCollectionFragment extends Fragment {
         fs= FirebaseFirestore.getInstance();
 
         userList=new ArrayList<>();
+        acclist=new ArrayList<>();
 
+        pd=new ProgressDialog(this.getActivity());
 
         docname= Objects.requireNonNull(getArguments()).getString("docname");
         type= Objects.requireNonNull(getArguments()).getString("InstallmentType");
@@ -66,16 +70,17 @@ public class CustCollectionFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-
-        Toast.makeText(this.getActivity(),"recycer, oncreate:"+agentEmaill,Toast.LENGTH_LONG).show();
+        pd.setMessage("Wait until Loading data");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
 
         fs.collection("MoneyLender").document("Agent_"+agentEmaill)
                 .collection(type).document(docname).collection("customers").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
                 if(e!=null)
                 {
+                    pd.dismiss();
                     Log.e("Error: "+e.getMessage(),"Error");
                 }
                 else
@@ -85,17 +90,50 @@ public class CustCollectionFragment extends Fragment {
                         if (doc.getType().equals(DocumentChange.Type.ADDED))
                         {
 
-                            Toast.makeText(getActivity(),"doc added:"+agentEmaill,Toast.LENGTH_LONG).show();
+                   //         Toast.makeText(getActivity(),"doc added:"+agentEmaill,Toast.LENGTH_LONG).show();
+                            acclist.add(doc.getDocument().getData().get("AccountNo").toString());
 
-                            CustColModel model=doc.getDocument().toObject(CustColModel.class);
-                            userList.add(model);
-
-                            String name=doc.getDocument().getString("Name");
-                            Log.d("name","name: "+name);
-
-                            adapter.notifyDataSetChanged();
                         }
                     }
+
+
+                    for (String acc:acclist )
+                    {
+
+                        fs.collection("MoneyLender").document("Agent_"+agentEmaill)
+                                .collection(type).document(docname).collection("customers")
+                                .document("client_"+acc)
+                                .collection("loans")
+                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                                        if(e!=null)
+                                        {
+                                            Log.e("Error: "+e.getMessage(),"Error");
+                                        }
+                                        else
+                                        {
+                                            for (DocumentChange doc: Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges())
+                                            {
+                                                if (doc.getType().equals(DocumentChange.Type.ADDED))
+                                                {
+
+                                                    CustColModel model=doc.getDocument().toObject(CustColModel.class);
+                                                    userList.add(model);
+
+                                                    String name=doc.getDocument().getString("Name");
+                                                    Log.d("name","name: "+name);
+
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+
+                    pd.dismiss();
                 }
             }
         });

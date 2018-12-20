@@ -68,6 +68,38 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:padding="2dp"
+                    android:text="@string/loan_id1"
+                    android:textColor="@color/background"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/LoanIdVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginTop="2dp"
+                    android:padding="2dp"
+                    android:text="@string/loan"
+                    android:textAlignment="center"
+                    android:textColor="@color/background"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:padding="2dp"
                     android:text="@string/loan_type"
                     android:textColor="@color/background"
                     android:textSize="16sp"

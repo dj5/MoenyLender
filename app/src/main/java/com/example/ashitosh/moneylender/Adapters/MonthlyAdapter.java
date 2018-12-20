@@ -16,6 +16,8 @@ import com.example.ashitosh.moneylender.Fragments.CustCollectionFragment;
 import com.example.ashitosh.moneylender.Models.MonthlyModel;
 import com.example.ashitosh.moneylender.R;
 
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.ViewHolder>
@@ -23,8 +25,8 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.ViewHold
 
   private   List<MonthlyModel> list;
   private   FragmentManager manager;
-  private   String email;
-  private   String date,day,month,year,col[];
+  private   String email,month,year;
+  private   LocalDate date;
   public MonthlyAdapter(List<MonthlyModel> list, FragmentManager supportFragmentManager, String agentEmaill) {
 
         this.list = list;
@@ -52,15 +54,12 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        date=list.get(position).getDate();
+        date= LocalDate.parse(list.get(position).getDate());
 
-        col=date.split("-");
-        day=col[0];
-        month=col[1];
-        year=col[2];
+        month= String.valueOf(date.getMonthOfYear());
+        year= String.valueOf(date.getYear());
 
-        holder.month.setText(month);
-        holder.year.setText(year);
+        holder.month.setText(month+"-"+year);
         holder.total_amount.setText(list.get(position).getTotalCollection()+" Rs");
 
 
@@ -97,16 +96,16 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView month,year,total_amount;
+        TextView month,total_amount;
 
         CardView card;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-           month=itemView.findViewById(R.id.MonthlyMonth);
+
             card=itemView.findViewById(R.id.MonthlyCard);
-            year=itemView.findViewById(R.id.MonthlyYear);
+            month=itemView.findViewById(R.id.MonthlyYear);
             total_amount=itemView.findViewById(R.id.MonthlyAmount);
 
 

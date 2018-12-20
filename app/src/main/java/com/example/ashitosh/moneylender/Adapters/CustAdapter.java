@@ -10,21 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.ashitosh.moneylender.CollectMoneyFragment;
 import com.example.ashitosh.moneylender.Fragments.CustCollectionFragment;
 import com.example.ashitosh.moneylender.Fragments.CustDetailFragment;
+import com.example.ashitosh.moneylender.Models.AgentModel;
 import com.example.ashitosh.moneylender.R;
 import com.example.ashitosh.moneylender.Models.custModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //********************************************************p***************
 public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
 {
 
-    List<custModel> list;
+    ArrayList<custModel> list;
     FragmentManager manager;
     String frag;
-    public CustAdapter(List<custModel> list, FragmentManager supportFragmentManager, String agentHome) {
+
+    public CustAdapter(ArrayList<custModel> list, FragmentManager supportFragmentManager, String agentHome) {
         this.list = list;
         manager=supportFragmentManager;
         this.frag=agentHome;
@@ -53,41 +57,52 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle data=new Bundle();
 
-                data.putString("CustName",list.get(position).getCustName());
-                data.putString("Address",list.get(position).getCustAddr());
-                data.putString("Phone",list.get(position).getCustPhone());
-                data.putString("CustEmail",list.get(position).getCustEmail());
-                data.putString("Account",list.get(position).getAccountNo());
-                data.putString("TotalLoans",list.get(position).getCustTotalLoan());
 
-                if(frag.equals("Owner")) {
-                    data.putString("fragment","Owner" );
+                Bundle data = new Bundle();
 
-                }
-                else
-                {
-                    data.putString("fragment","Agent");
-                }
+                data.putString("CustName", list.get(position).getCustName());
+                data.putString("Address", list.get(position).getCustAddr());
+                data.putString("Phone", list.get(position).getCustPhone());
+                data.putString("CustEmail", list.get(position).getCustEmail());
+                data.putString("Account", list.get(position).getAccountNo());
+                data.putString("TotalLoans", list.get(position).getCustTotalLoan());
 
-                CustDetailFragment fragment=new CustDetailFragment();
 
-                fragment.setArguments(data);
+                if (frag.equals("ActiveCustCollection")) {
+                    CollectMoneyFragment fragment = new CollectMoneyFragment();
+                    fragment.setArguments(data);
 
-                android.support.v4.app.FragmentTransaction fragmentTransaction=manager.beginTransaction().add(fragment,"Custhead").addToBackStack("head");
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = manager.beginTransaction().add(fragment, "ActiveCusthead").addToBackStack("Activehead");
 
-                if(frag.equals("Owner")) {
-                    fragmentTransaction.replace(R.id.mainFrame, fragment);
-
-                }
-                else
-                {
                     fragmentTransaction.replace(R.id.AgentmainFrame, fragment);
 
-                }
-                fragmentTransaction.commit();
+                    fragmentTransaction.commit();
 
+                }
+                else {
+                    if (frag.equals("Owner")) {
+                        data.putString("fragment", "Owner");
+
+                    } else {
+                        data.putString("fragment", "Agent");
+                    }
+
+                    CustDetailFragment fragment = new CustDetailFragment();
+
+                    fragment.setArguments(data);
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = manager.beginTransaction().add(fragment, "Custhead").addToBackStack("head");
+
+                    if (frag.equals("Owner")) {
+                        fragmentTransaction.replace(R.id.mainFrame, fragment);
+
+                    } else {
+                        fragmentTransaction.replace(R.id.AgentmainFrame, fragment);
+
+                    }
+                    fragmentTransaction.commit();
+                }
             }
         });
     }
@@ -112,4 +127,10 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
             account=itemView.findViewById(R.id.CustHeadAccNo);
         }
     }
+
+    public void filterList(ArrayList<custModel> filteredList) {
+        list=filteredList;
+        notifyDataSetChanged();
+    }
+
 }

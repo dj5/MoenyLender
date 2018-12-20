@@ -83,8 +83,6 @@ public class DailyFragment extends Fragment {
                         if (doc.getType().equals(DocumentChange.Type.ADDED))
                         {
 
-                            Toast.makeText(getActivity(),"doc added:"+agentEmaill,Toast.LENGTH_LONG).show();
-
                             dailyModel model=doc.getDocument().toObject(dailyModel.class);
                             userList.add(model);
 
@@ -97,7 +95,6 @@ public class DailyFragment extends Fragment {
                 }
             }
         });
-
 
         return v;
     }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -42,21 +43,23 @@ public class homeFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseFirestore fs;
     private AgentAdapter adapter;
-    private List<AgentModel> userList;
-    private Button csvbtn;
-   // private EditText search;
+    private ArrayList<AgentModel> userList;
+
+    private EditText search;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
         View v=inflater.inflate(R.layout.fragment_home, container, false);
 
-   //     search=v.findViewById(R.id.AgentSearch);
+
+
+        search=v.findViewById(R.id.AgentSearch);
 
         fs= FirebaseFirestore.getInstance();
 
         userList=new ArrayList<>(); 
 
-        csvbtn=v.findViewById(R.id.csvBtn);
 
         adapter= new AgentAdapter(userList, Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"HomeFrag");
 
@@ -65,21 +68,6 @@ public class homeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-
-        csvbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                csvFragment fragment=new csvFragment();
-
-
-                android.support.v4.app.FragmentTransaction fragmentTransaction= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
-                        .add(fragment,"csv").addToBackStack("csv");
-
-                fragmentTransaction.replace(R.id.mainFrame,fragment);
-                fragmentTransaction.commit();
-
-            }
-        });
 
 
         fs.collection("MoneyLender").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -109,7 +97,7 @@ public class homeFragment extends Fragment {
         });
 
 
-/*
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -123,12 +111,53 @@ public class homeFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                adapter.getFilter().filter(s);
+            //    adapter.getFilter().filter(s);
+            //    adapter.notifyDataSetChanged();
+                  if (s.length()>0) {
+                      filter(s.toString());
+                  }
+                  else
+                  {
+                      adapter.filterList(userList);
+                  }
             }
         });
-*/
+
+
+        search.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus && search.getText().length()>0)
+                {
+                    filter(search.getText().toString());
+                    v.refreshDrawableState();
+                }
+                else if(!hasFocus && search.getText().length()<=0)
+                {
+                    adapter.filterList(userList);
+                    v.refreshDrawableState();
+                }
+
+            }
+        });
+
         return v;
+    }
+
+    private void filter(String s) {
+
+        ArrayList<AgentModel> filteredList=new ArrayList<>();
+
+        for(AgentModel item:userList)
+        {
+            if(item.getName().toLowerCase().contains(s.toLowerCase()))
+            {
+                filteredList.add(item);
+            }
+        }
+
+        adapter.filterList(filteredList);
     }
 
 

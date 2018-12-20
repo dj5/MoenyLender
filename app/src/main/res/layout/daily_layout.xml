@@ -22,19 +22,33 @@
 
 
             <TextView
+                android:id="@+id/DailyDateHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                android:text="@string/date_of_collection"
+                android:textColor="@color/titlecolor"
+                android:textSize="14sp" />
+
+            <TextView
                 android:id="@+id/DailyDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="1dp"
                 android:padding="5dp"
                 android:text="@string/date"
                 android:textColor="@color/titlecolor"
                 android:textSize="14sp" />
 
         </LinearLayout>
+
 
         <TextView
             android:id="@+id/DailyTotal"

@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Activities.loginActivity;
+import com.example.ashitosh.moneylender.Fragments.ActiveCustCollectionFragment;
 import com.example.ashitosh.moneylender.Fragments.AgentDetailFragment;
 import com.example.ashitosh.moneylender.Fragments.OwnerAccount;
 import com.example.ashitosh.moneylender.Fragments.SearchFragment;
@@ -43,6 +44,8 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
     private OwnerAccount agentFrag;
     private CollectMoneyFragment collectMoneyFragment;
     private AgentDetailFragment agentdetail;
+    private ActiveCustCollectionFragment activeCustCollectionFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,7 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
         agentFrag=new OwnerAccount();
         collectMoneyFragment=new CollectMoneyFragment();
         agentdetail=new AgentDetailFragment();
+        activeCustCollectionFragment=new ActiveCustCollectionFragment();
 
         gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -92,7 +96,7 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
                         return true;
 
                     case R.id.AgentCollectNav:
-                        setFragment(collectMoneyFragment);
+                        setFragment(activeCustCollectionFragment);
                         return true;
 
                     case R.id.AgentAccountNav:

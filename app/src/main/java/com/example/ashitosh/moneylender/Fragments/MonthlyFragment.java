@@ -78,8 +78,6 @@ public class MonthlyFragment extends Fragment {
                         if (doc.getType().equals(DocumentChange.Type.ADDED))
                         {
 
-                            Toast.makeText(getActivity(),"doc added:"+agentEmaill,Toast.LENGTH_LONG).show();
-
                             MonthlyModel model=doc.getDocument().toObject(MonthlyModel.class);
                             userList.add(model);
 
