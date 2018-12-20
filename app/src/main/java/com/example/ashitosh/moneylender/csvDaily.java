@@ -53,6 +53,7 @@ public class csvDaily extends Fragment {
     private ProgressDialog pd;
     private String email;
     private FirebaseAuth f_auth;
+    private Button generate,read;
     public csvDaily() {
         // Required empty public constructor
     }
@@ -65,6 +66,9 @@ public class csvDaily extends Fragment {
         View v= inflater.inflate(R.layout.fragment_csv, container, false);
         fs= FirebaseFirestore.getInstance();
         f_auth=FirebaseAuth.getInstance();
+
+        generate=v.findViewById(R.id.GenerateCsvBtn);
+        read=v.findViewById(R.id.ReadCsvBtn);
 
         Bundle data=getArguments();
 
@@ -87,7 +91,7 @@ public class csvDaily extends Fragment {
         Toast.makeText(getActivity(),email,Toast.LENGTH_LONG).show();
 
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -136,8 +140,8 @@ if(email!=null)
         });
 
 
-        Button btn2 = v.findViewById(R.id.button2);
-        btn2.setOnClickListener(new View.OnClickListener() {
+
+        read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

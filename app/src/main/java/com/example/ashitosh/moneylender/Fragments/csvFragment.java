@@ -47,8 +47,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -73,7 +75,7 @@ public class csvFragment extends Fragment {
 
     private Button generateCsvBtn,readCsvBtn;
 
-    private ArrayList<LoanModel> custLoans;
+    private Map<String,LoanModel> custLoans;
     private ArrayList<custModel> custDetail;
 
     public csvFragment() {
@@ -92,7 +94,7 @@ public class csvFragment extends Fragment {
         custList= new ArrayList<>();
 
         custDetail=new ArrayList<>();
-        custLoans=new ArrayList<>();
+        custLoans=new HashMap<>();
 
         adapter=new LoanAdapter(userList);
 
@@ -394,24 +396,7 @@ public class csvFragment extends Fragment {
 
                                                 if(loanModel.getStatus().equals("1")) {
 
-                                                    custLoans.add(loanModel);
-
-                                                    double TotalLoan;
-                                                    if (loanModel.getLoanType().equals("Daily")) {
-                                                        TotalLoan = Double.parseDouble(loanModel.getFiledAmount());
-                                                    } else {
-
-                                                        LocalDate sdate = LocalDate.parse(loanModel.getDOI());
-                                                        LocalDate edate = LocalDate.parse(loanModel.getDOR());
-
-                                                        TotalLoan = interest(sdate, edate, Double.parseDouble(loanModel.getFiledAmount()), Double.parseDouble(loanModel.getInterest()));
-                                                    }
-
-                                                    String entry = detailModel.getAccountNo() + "," + detailModel.getCustName() + "," + loanModel.getLoanId() + "," + loanModel.getLoanType() + "," + loanModel.getFiledAmount() + "," + loanModel.getInterest() + "," + loanModel.getDOI() + "," + loanModel.getDOR() + "," + String.valueOf(TotalLoan);
-
-                                                    String[] entries = entry.split(","); // array of your values
-                                                    writer.writeNext(entries);
-
+                                                   custLoans.put(detailModel.getAccountNo(),loanModel);
                                                 }
                                             }
                                         }
@@ -421,6 +406,8 @@ public class csvFragment extends Fragment {
                     }
 
                 }
+
+                createCsv();
                 pd.dismiss();
             }
         });
@@ -429,33 +416,44 @@ public class csvFragment extends Fragment {
 
     }
 
-    /*
+
     private void createCsv() {
 
         try
         {
-
-
-
-            ita=userList.iterator();
+            ita=custDetail.iterator();
             int i=0;
-            writer = new CSVWriter(new FileWriter("/sdcard/cust.csv"), ',');
+            writer = new CSVWriter(new FileWriter("/sdcard/ActiveCustomer.csv"), ',');
 
-            String heading="No."+","+"Date Of Issue" +","+"Customer Name"+","+"Total Loan";
-            //   Toast.makeText(getActivity(),collection,Toast.LENGTH_LONG).show();
-            String[] head = heading.split(","); // array of your values
+            String heading="Acc No."+","+"Customer Name" +","+"Loan Id"+","+"Loan Type"+","+"Filed Amount"+","+"Interest Rate"+","+"Date Of Issue"+","+"Date Of Return"+","+"Total Loan";
+            String[] head = heading.split(","); // array of your valumes
             writer.writeNext(head);
 
             while(ita.hasNext()) {
                 i++;
-                LoanModel lm= (LoanModel) ita.next();
-                String entry=i+","+ lm.getDOI()+"," +custList.get(i-1)+","+lm.getFiledAmount();
-                Toast.makeText(getActivity(),entry,Toast.LENGTH_LONG).show();
+                custModel detailModel= (custModel) ita.next();
+
+                LoanModel loanModel=custLoans.get(detailModel.getAccountNo());
+
+                double TotalLoan;
+                if (loanModel.getLoanType().equals("Daily")) {
+                    TotalLoan = Double.parseDouble(loanModel.getFiledAmount());
+                } else {
+
+                    LocalDate sdate = LocalDate.parse(loanModel.getDOI());
+                    LocalDate edate = LocalDate.parse(loanModel.getDOR());
+
+                    TotalLoan = interest(sdate, edate, Double.parseDouble(loanModel.getFiledAmount()), Double.parseDouble(loanModel.getInterest()));
+                }
+
+
+                String entry = detailModel.getAccountNo() + "," + detailModel.getCustName() + "," + loanModel.getLoanId() + "," + loanModel.getLoanType() + "," + loanModel.getFiledAmount() + "," + loanModel.getInterest() + "," + loanModel.getDOI() + "," + loanModel.getDOR() + "," + String.valueOf(TotalLoan);
                 String[] entries = entry.split(","); // array of your values
                 writer.writeNext(entries);
+
+                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
             }
             writer.close();
-
         }
         catch (IOException e)
         {
@@ -463,7 +461,7 @@ public class csvFragment extends Fragment {
         }
     }
 
-    */
+
 
     private double interest(LocalDate sdate, LocalDate edate, double Amount, double interestRate)
     {
