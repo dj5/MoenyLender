@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sheetsActivity">
+    tools:context=".Fragments.csvFragment">
 
     <TextView
         android:id="@+id/csvSelectHead"
@@ -27,15 +27,37 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp" />
 
-
-    <Button
-        android:id="@+id/csvDate"
+    <TextView
+        android:id="@+id/AgentCsvNameHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/CsvSpinner"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/select_agent_name"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/AgentCsvSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/AgentCsvNameHead"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp" />
+
+
+    <Button
+        android:id="@+id/csvDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/AgentCsvSpinner"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@color/colorWidget"
         android:padding="2dp"
         android:text="@string/select_date"
@@ -50,7 +72,7 @@
         android:layout_below="@id/csvDate"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@color/colorWidget"
         android:padding="2dp"
         android:text="@string/generate_csv"
@@ -64,10 +86,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="290dp"
         android:background="@color/colorWidget"
-
         android:text="@string/read_csv"
+        android:textAlignment="center"
         android:textColor="@color/titlecolor"
         android:textSize="16sp" />
 

@@ -173,7 +173,7 @@ public class CustRegNextFragment extends Fragment  {
 
                                 returnMonth=month;
 
-                                dorStr=year+"-"+month+"-"+dayOfMonth;
+                                dorStr=year+"-"+(month+1)+"-"+dayOfMonth;
 
                                 try {
                                     edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);

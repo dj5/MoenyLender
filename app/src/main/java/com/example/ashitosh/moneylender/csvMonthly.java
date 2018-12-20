@@ -53,6 +53,7 @@ public class csvMonthly extends Fragment {
     private Iterator ita;
     private ProgressDialog pd;
     private String email;
+    private Button generate,read;
     private FirebaseAuth f_auth;
 
     public csvMonthly() {
@@ -64,9 +65,11 @@ public class csvMonthly extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_csv, container, false);
+        View v= inflater.inflate(R.layout.daily_csv_fragment, container, false);
         fs= FirebaseFirestore.getInstance();
         f_auth=FirebaseAuth.getInstance();
+        generate=v.findViewById(R.id.generateDaily);
+        read=v.findViewById(R.id.readDaily);
 
         Bundle data=getArguments();
 
@@ -85,9 +88,8 @@ public class csvMonthly extends Fragment {
         custList= new ArrayList<>();
         //adapter=new LoanAdapter(userList);
         final GenerateCsv g = new GenerateCsv();
-        Button btn = v.findViewById(R.id.button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -130,8 +132,8 @@ public class csvMonthly extends Fragment {
         });
 
 
-        Button btn2 = v.findViewById(R.id.button2);
-        btn2.setOnClickListener(new View.OnClickListener() {
+
+        read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

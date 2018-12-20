@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.opencsv:opencsv:3.8'
     implementation 'net.danlew:android.joda:2.10.1'
-    implementation files('build/libs/joda-time-2.10.1.jar')
+
 }
 
 apply plugin: 'com.google.gms.google-services'
