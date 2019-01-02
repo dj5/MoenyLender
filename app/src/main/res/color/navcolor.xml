@@ -2,8 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:color="@color/colorWidget"
-        android:state_checked="true"/>
+        android:state_checked="true" />
+
+    <item android:color="@color/titlecolor" android:state_checked="false"/>
 
     <item android:color="@color/colorPrimary"/>
-
 </selector>

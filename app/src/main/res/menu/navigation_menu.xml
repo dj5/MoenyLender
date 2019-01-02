@@ -9,6 +9,12 @@
         android:iconTint="@color/colorWidget"
         android:iconTintMode="src_atop"/>
 
+    <item
+        android:id="@+id/CsvNav"
+        android:title="@string/csv_files"
+        android:icon="@drawable/csv_icon"
+        android:iconTint="@color/colorWidget"
+        android:iconTintMode="src_atop"/>
 
 
     <item

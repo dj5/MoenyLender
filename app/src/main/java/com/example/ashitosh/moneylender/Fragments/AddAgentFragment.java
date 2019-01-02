@@ -1,7 +1,9 @@
 package com.example.ashitosh.moneylender.Fragments;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,16 +20,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ashitosh.moneylender.Activities.loginActivity;
 import com.example.ashitosh.moneylender.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.ProviderQueryResult;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -42,7 +52,8 @@ public class AddAgentFragment extends Fragment {
     private FirebaseFirestore fs;
     private CollectionReference ref;
     private Button reg;
-    private String nameStr,emailStr,phoneStr,addrStr;
+    private String nameStr,emailStr,phoneStr,addrStr,prevEmail,prevPass;
+    private ArrayList<String> provider;
     private Map<String,Object> fdata;
     private  RelativeLayout layout;
     private ProgressDialog pd;
@@ -77,6 +88,7 @@ public class AddAgentFragment extends Fragment {
 
             }
         });
+        provider=new ArrayList<>();
 
 
         return v;
@@ -108,31 +120,43 @@ public class AddAgentFragment extends Fragment {
             fdata.put("Email",emailStr);
             fdata.put("Phone",phoneStr);
             fdata.put("Address",addrStr);
-
+            fdata.put("Password","12345678");
 
             uploadData();
 
 
-            f_auth.createUserWithEmailAndPassword(emailStr,"12345678")
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            if(task.isSuccessful())
-                            {
-                                Toast.makeText(getActivity(),"Agent Account Created",Toast.LENGTH_LONG).show();
+            prevEmail= Objects.requireNonNull(f_auth.getCurrentUser()).getEmail();
 
-                            }
+            f_auth.fetchProvidersForEmail(Objects.requireNonNull(prevEmail)).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                @Override
+                public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                    if (task.isSuccessful())
+                    {
+                        int size= Objects.requireNonNull(task.getResult().getProviders()).size();
+
+
+                        Toast.makeText(getActivity(), "Provideres: "+task.getResult().getProviders(), Toast.LENGTH_SHORT).show();
+
+                        provider.addAll(task.getResult().getProviders());
+
+                        if (provider.isEmpty())
+                        {
+                            Toast.makeText(getActivity(), "No provider found", Toast.LENGTH_SHORT).show();
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
+                        else
+                        {
+                            create();
+                        }
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
-
-                    Toast.makeText(getActivity(),"failed to register agent",Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(getActivity(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+
 
 
         }
@@ -140,6 +164,95 @@ public class AddAgentFragment extends Fragment {
 
 
 
+    }
+
+    private void create()
+    {
+
+        f_auth.createUserWithEmailAndPassword(emailStr,"12345678")
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(task.isSuccessful())
+                        {
+                            Toast.makeText(getActivity(),"Agent Account Created",Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                Toast.makeText(getActivity(),"failed to register agent",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
+        if (provider.contains("google.com")) {
+
+
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(Objects.requireNonNull(this.getActivity()));
+            AuthCredential credential = GoogleAuthProvider.getCredential(Objects.requireNonNull(account).getIdToken(), null);
+
+            f_auth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    if (task.isSuccessful())
+                    {
+                        Toast.makeText(getActivity(), "Resigned In", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    Toast.makeText(getActivity(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else
+        {
+
+            prevPass=loginActivity.passstr;
+
+            if (validate()) {
+                f_auth.signInWithEmailAndPassword(prevEmail, prevPass)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Resigned In", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                        Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+
+    }
+
+    private boolean validate() {
+
+        if (prevEmail==null)
+        {
+            Toast.makeText(getActivity(), "prev email not found", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (prevPass==null)
+        {
+            Toast.makeText(getActivity(), "prev pass is empty", Toast.LENGTH_SHORT).show();
+            return false;
+
+        }
+        return true;
     }
 
     private void uploadData() {
@@ -176,6 +289,15 @@ public class AddAgentFragment extends Fragment {
                             pd.setMessage("successfully uploaded");
                             pd.hide();
                             pd.dismiss();
+
+
+                            ManageAgent manageAgent=new ManageAgent();
+
+                            android.support.v4.app.FragmentTransaction transaction= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                                    .add(manageAgent,"ManageAgent").addToBackStack("ManageAgent");
+
+                            transaction.replace(R.id.mainFrame,manageAgent);
+                            transaction.commit();
 
                             Toast.makeText(getActivity(),"Agent data successfully uploaded",Toast.LENGTH_LONG).show();
 

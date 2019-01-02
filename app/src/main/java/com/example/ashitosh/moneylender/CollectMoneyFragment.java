@@ -36,6 +36,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -133,6 +135,7 @@ public class CollectMoneyFragment extends Fragment {
         pendings=new HashMap<>();
 
 
+        JodaTimeAndroid.init(this.getActivity());
 
         DateTimeZone zone=DateTimeZone.forID("Asia/Kolkata");
         DateTime dateTime=new DateTime(zone);

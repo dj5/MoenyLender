@@ -80,6 +80,21 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
                     fragmentTransaction.commit();
 
                 }
+                else if (frag.equals("ClientsFragment"))
+                {
+
+                    data.putString("fragment", "Owner");
+
+                    CustDetailFragment fragment = new CustDetailFragment();
+
+                    fragment.setArguments(data);
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = manager.beginTransaction().add(fragment, "Custhead").addToBackStack("head");
+
+                    fragmentTransaction.replace(R.id.mainFrame, fragment);
+
+                    fragmentTransaction.commit();
+                }
                 else {
                     if (frag.equals("Owner")) {
                         data.putString("fragment", "Owner");

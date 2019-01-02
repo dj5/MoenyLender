@@ -1,5 +1,7 @@
 package com.example.ashitosh.moneylender;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.ashitosh.moneylender.Activities.Owner;
 import com.example.ashitosh.moneylender.Activities.loginActivity;
 import com.example.ashitosh.moneylender.Fragments.ActiveCustCollectionFragment;
 import com.example.ashitosh.moneylender.Fragments.AgentDetailFragment;
@@ -138,11 +141,40 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         if(item.getItemId()==R.id.owner_logout)
         {
-            signOut();
+           askToExit();
         }
         return true;
     }
 
+
+    public void askToExit()
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Are you sure want to Log out?");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        revokeAccess();
+                        signOut();
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
 
     private void signOut() {
 
@@ -156,6 +188,14 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
         });
     }
 
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(gac).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                Toast.makeText(Agent.this,"Access Revoked",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void sendToStart() {
 
         Intent intent=new Intent(Agent.this,loginActivity.class);

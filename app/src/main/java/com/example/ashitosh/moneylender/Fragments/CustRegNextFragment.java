@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
@@ -137,6 +139,8 @@ public class CustRegNextFragment extends Fragment  {
 
         //Selects date of Issue
 
+
+        JodaTimeAndroid.init(this.getActivity());
 
         DateTimeZone zone=DateTimeZone.forID("Asia/Kolkata");
         DateTime dateTime=new DateTime(zone);

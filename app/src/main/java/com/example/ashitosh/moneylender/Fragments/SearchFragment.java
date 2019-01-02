@@ -61,7 +61,7 @@ public class SearchFragment extends Fragment {
         View v=inflater.inflate(R.layout.fragment_search, container, false);
 
         addcust=v.findViewById(R.id.CustAdd);
-        delcust=v.findViewById(R.id.CustDel);
+   //     delcust=v.findViewById(R.id.CustDel);
         search=v.findViewById(R.id.ManageClientSearch);
 
         fs= FirebaseFirestore.getInstance();
@@ -119,6 +119,7 @@ public class SearchFragment extends Fragment {
             }
         });
 
+        /*
         delcust.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,7 +133,7 @@ public class SearchFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-
+*/
 
         search.addTextChangedListener(new TextWatcher() {
             @Override

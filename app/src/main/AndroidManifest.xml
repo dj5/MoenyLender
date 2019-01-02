@@ -32,7 +32,16 @@
 
         <activity
             android:name=".Activities.loginActivity"
-            android:parentActivityName=".Activities.MainActivity" />
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".Activities.MainActivity" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
 
         <!-- Up button -->
         <meta-data
@@ -40,18 +49,17 @@
             android:value="com.example.ashitosh.moneylender.Activities.MainActivity" />
         />
         <activity android:name=".Activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Activities.Owner"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Activities.firestoreRecycle" />
         <activity android:name=".sheetsActivity" />
-        <activity android:name=".Agent"></activity>
+
+        <activity android:name=".Agent"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name=".forgetpassword"></activity>
     </application>
 

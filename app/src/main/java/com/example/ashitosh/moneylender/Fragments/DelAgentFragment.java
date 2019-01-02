@@ -108,6 +108,13 @@ public class DelAgentFragment extends Fragment {
                                 snackbar.setDuration(4000).dismiss();
                                 snackbar.show();
 */
+                                ManageAgent manageAgent=new ManageAgent();
+
+                                android.support.v4.app.FragmentTransaction transaction= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+                                        .add(manageAgent,"ManageAgent").addToBackStack("ManageAgent");
+
+                                transaction.replace(R.id.mainFrame,manageAgent);
+                                transaction.commit();
 
                                 Toast.makeText(getActivity(),"Agent successfully deleted",Toast.LENGTH_LONG).show();
 

@@ -104,6 +104,8 @@
     <string name="generate_csv">Generate Csv</string>
     <string name="select_date">select Date</string>
     <string name="select_agent_name">Select Agent Name</string>
+    <string name="csv_files">Csv files</string>
+    <string name="clients">Clients</string>
 
 
 </resources>

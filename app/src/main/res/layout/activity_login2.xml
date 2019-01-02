@@ -15,6 +15,7 @@
         android:background="@color/colorPrimary"
         android:gravity="top"
         app:title="log in"
+        app:titleMarginStart="@dimen/default_gap"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar">
 
 

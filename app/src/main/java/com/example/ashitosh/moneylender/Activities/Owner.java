@@ -1,5 +1,7 @@
 package com.example.ashitosh.moneylender.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenuView;
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Fragments.ActiveClientFragment;
+import com.example.ashitosh.moneylender.Fragments.AgentClient;
 import com.example.ashitosh.moneylender.Fragments.OwnerAccount;
 import com.example.ashitosh.moneylender.Fragments.SearchFragment;
 import com.example.ashitosh.moneylender.Fragments.ManageAgent;
@@ -54,7 +57,8 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
     private OwnerAccount ownerFrag;
     private DrawerLayout mdrawerLayout;
     private NavigationView navigationView;
-
+    private csvFragment csvFragment;
+    private AgentClient agentClient;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +83,8 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         manageAgent=new ManageAgent();
         ownerFrag=new OwnerAccount();
-
+        csvFragment=new csvFragment();
+        agentClient=new AgentClient();
         //******************************************************
 
         mdrawerLayout=findViewById(R.id.drawer_layout);
@@ -117,7 +122,9 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                     case R.id.csvfile:
 
                         csvFragment fragment=new csvFragment();
-
+                        Bundle data=new Bundle();
+                        data.putString("frag","Owner");
+                        fragment.setArguments(data);
 
                         android.support.v4.app.FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction()
                                 .add(fragment,"ActiveCust").addToBackStack("ActiveCust");
@@ -155,8 +162,13 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                         ft3.commit();
                         return true;
 
+                    case R.id.AgentClients:
+
+                        setFragment(agentClient);
+                        return true;
+
                     case R.id.logoutnav:
-                        signOut();
+                        askToExit();
                         return true;
 
                 }
@@ -181,6 +193,13 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                         setFragment(ownerFrag);
                         return true;
 
+                    case R.id.CsvNav:
+
+                        Bundle data=new Bundle();
+                        data.putString("frag","Owner");
+                        csvFragment.setArguments(data);
+                        setFragment(csvFragment);
+                        return true;
 
                     default:    return false;
                 }
@@ -224,6 +243,35 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
     }
 
+
+    public void askToExit()
+    {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Are you sure want to Log out?");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        revokeAccess();
+                        signOut();
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
     /*
 
     @Override
@@ -270,6 +318,14 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
         });
     }
 
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(gac).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                Toast.makeText(Owner.this,"Access Revoked",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void sendToStart() {
 
         Intent intent=new Intent(Owner.this,loginActivity.class);

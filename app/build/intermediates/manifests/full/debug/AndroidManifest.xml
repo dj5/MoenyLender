@@ -55,7 +55,14 @@
 
         <activity
             android:name="com.example.ashitosh.moneylender.Activities.loginActivity"
-            android:parentActivityName="com.example.ashitosh.moneylender.Activities.MainActivity" />
+            android:parentActivityName="com.example.ashitosh.moneylender.Activities.MainActivity"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- Up button -->
         <meta-data
@@ -63,18 +70,15 @@
             android:value="com.example.ashitosh.moneylender.Activities.MainActivity" />
         />
         <activity android:name="com.example.ashitosh.moneylender.Activities.MainActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.example.ashitosh.moneylender.Activities.Owner"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.example.ashitosh.moneylender.Activities.firestoreRecycle" />
         <activity android:name="com.example.ashitosh.moneylender.sheetsActivity" />
-        <activity android:name="com.example.ashitosh.moneylender.Agent" />
+        <activity
+            android:name="com.example.ashitosh.moneylender.Agent"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.example.ashitosh.moneylender.forgetpassword" />
 
         <meta-data

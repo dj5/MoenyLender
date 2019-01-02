@@ -99,7 +99,7 @@ public class CustDetailFragment extends Fragment {
         });
 
 
-        if(CurrentEmail.equals("ashitosh.bhade@gmail.com") || CurrentEmail.equals("gavadedu.dhananjay@gmail.com"))
+        if(CurrentEmail.equals("ashitosh.bhade@gmail.com") || CurrentEmail.equals("gavadedu.dhananjay@gmail.com") || CurrentEmail.equals("dj5@gmail.com") )
         {
               addLoanBtn.setVisibility(View.VISIBLE);
         }
@@ -107,6 +107,7 @@ public class CustDetailFragment extends Fragment {
         {
             addLoanBtn.setVisibility(View.GONE);
         }
+
         addLoanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

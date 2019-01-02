@@ -1,7 +1,6 @@
 package com.example.ashitosh.moneylender.Fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,15 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Adapters.AgentAdapter;
 import com.example.ashitosh.moneylender.Models.AgentModel;
-import com.example.ashitosh.moneylender.Models.custModel;
 import com.example.ashitosh.moneylender.R;
-import com.example.ashitosh.moneylender.Activities.firestoreRecycle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -30,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -61,7 +55,7 @@ public class ManageAgent extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_settings, container, false);
+        View v= inflater.inflate(R.layout.manage_agent, container, false);
 
 
         reg=v.findViewById(R.id.AddAgentBtn);

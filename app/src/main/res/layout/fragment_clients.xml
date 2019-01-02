@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.ClientsFragment">
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/clients"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/clientHead" />
+
+
+    <EditText
+        android:layout_height="45dp"
+        android:layout_width="match_parent"
+        android:id="@+id/ClientSearch"
+        android:hint="@string/search_customer"
+        android:layout_below="@id/clientHead"
+        android:inputType="text"
+        android:layout_marginTop="10dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ClientRecycleList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ClientSearch"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        android:scrollbars="vertical" />
+
+
+</RelativeLayout>

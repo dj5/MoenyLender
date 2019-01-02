@@ -54,6 +54,7 @@ public class csvDaily extends Fragment {
     private String email;
     private FirebaseAuth f_auth;
     private Button generate,read;
+    private ArrayList<String> temp;
     public csvDaily() {
         // Required empty public constructor
     }
@@ -69,6 +70,8 @@ public class csvDaily extends Fragment {
 
         generate=v.findViewById(R.id.generateDaily);
         read=v.findViewById(R.id.readDaily);
+
+        temp=new ArrayList<>();
 
         Bundle data=getArguments();
 
@@ -100,7 +103,7 @@ public class csvDaily extends Fragment {
                pd.show();
 
 
-if(email!=null)
+    if(email!=null)
 
     fs.collection("MoneyLender").document("Agent_"+email).collection("Daily").addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -116,10 +119,14 @@ if(email!=null)
                             {
                                 if (doc.getType().equals(DocumentChange.Type.ADDED))
                                 {
-                                    AgentDaily model=doc.getDocument().toObject(AgentDaily.class);
-                                    userList.add(model);
-                             //       Toast.makeText(getActivity(),doc.getDocument().getString(""),Toast.LENGTH_LONG).show();
+                                    if (!temp.contains(doc.getDocument().getString("Date"))) {
 
+                                        temp.add(doc.getDocument().getString("Date"));
+
+                                        AgentDaily model = doc.getDocument().toObject(AgentDaily.class);
+                                        userList.add(model);
+                                        //       Toast.makeText(getActivity(),doc.getDocument().getString(""),Toast.LENGTH_LONG).show();
+                                    }
                                 }
 
 
@@ -180,9 +187,9 @@ if(email!=null)
             ita=userList.iterator();
             int i=0;
             writer = new CSVWriter(new FileWriter("/sdcard/agentDaily.csv"), ',');
+            writer.flushQuietly();
 
-
-            String heading="No."+","+"Day Of Collection" +","+"Total Collection";
+            String heading="No."+","+"Date Of Collection" +","+"Total Collection";
             //   Toast.makeText(getActivity(),collection,Toast.LENGTH_LONG).show();
             String[] head = heading.split(","); // array of your values
             writer.writeNext(head);

@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
@@ -18,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Activities.GenerateCsv;
@@ -30,6 +34,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.opencsv.CSVWriter;
+
+import org.joda.time.LocalDate;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -55,7 +61,8 @@ public class csvMonthly extends Fragment {
     private String email;
     private Button generate,read;
     private FirebaseAuth f_auth;
-
+    private RelativeLayout layout;
+    private ArrayList<String> temp;
     public csvMonthly() {
         // Required empty public constructor
     }
@@ -70,8 +77,15 @@ public class csvMonthly extends Fragment {
         f_auth=FirebaseAuth.getInstance();
         generate=v.findViewById(R.id.generateDaily);
         read=v.findViewById(R.id.readDaily);
+        layout=v.findViewById(R.id.DailyRelativeLayout);
 
-        Bundle data=getArguments();
+        temp=new ArrayList<>();
+
+        //********************************************************
+
+        //**********************************************************
+
+        final Bundle data=getArguments();
 
         if(Objects.requireNonNull(Objects.requireNonNull(data).getString("frag")).equals("Owner"))
         {
@@ -111,13 +125,24 @@ public class csvMonthly extends Fragment {
                             {
                                 if (doc.getType().equals(DocumentChange.Type.ADDED))
                                 {
-                                        AgentMonthly model=doc.getDocument().toObject(AgentMonthly.class);
-                                        userList.add(model);
+
+                                        LocalDate date= LocalDate.parse(doc.getDocument().getString("Date"));
+
+                                        String month= String.valueOf(date.getMonthOfYear()+date.getYear());
+
+                                        if (!temp.contains(month)) {
+                                            AgentMonthly model = doc.getDocument().toObject(AgentMonthly.class);
+                                            userList.add(model);
+                                        }
                                 }
                             }
 
-                            createCsv();
+                            if (!userList.isEmpty()) {
+                                createCsv();
+                            }else
+                            {
 
+                            }
                             pd.dismiss();
                         }
                     }
@@ -171,6 +196,7 @@ public class csvMonthly extends Fragment {
             ita=userList.iterator();
             int i=0;
             writer = new CSVWriter(new FileWriter("/sdcard/agentMonth.csv"), ',');
+            writer.flushQuietly();
 
             String heading="No."+","+"Month Of Collection" +","+"Total Collection";
             //   Toast.makeText(getActivity(),collection,Toast.LENGTH_LONG).show();

@@ -116,7 +116,11 @@ public class AgentHome extends Fragment {
         CustCsv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 csvFragment fragment=new csvFragment();
+                Bundle data=new Bundle();
+                data.putString("frag","Agent");
+                fragment.setArguments(data);
 
                 android.support.v4.app.FragmentTransaction fragmentTransaction= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
                         .add(fragment,"csvCust").addToBackStack("csvCust");

@@ -1,5 +1,6 @@
 package com.example.ashitosh.moneylender.Adapters;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
@@ -42,12 +43,13 @@ public class CustColAdapter extends RecyclerView.Adapter<CustColAdapter.ViewHold
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CustColAdapter.ViewHolder holder, int position) {
 
         holder.AccNo.setText(list.get(position).getAccountNo());
         holder.Aamount_recieved.setText(list.get(position).getAmountRecieved());
-        holder.LoanID.setText(list.get(position).getLoanId());
+        holder.LoanID.setText(list.get(position).getLoanId()+" /-Rs");
     }
 
     @Override

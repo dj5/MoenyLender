@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.ashitosh.moneylender.AgentDetail;
 import com.example.ashitosh.moneylender.Fragments.AgentDetailFragment;
+import com.example.ashitosh.moneylender.Fragments.ClientsFragment;
 import com.example.ashitosh.moneylender.Models.AgentModel;
 import com.example.ashitosh.moneylender.Fragments.CollectionFragment;
 import com.example.ashitosh.moneylender.R;
@@ -94,6 +95,20 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
 
                    fragmentTransaction.commit();
 
+               }
+               else if (fragment.equals("AgentClient"))
+               {
+                   ClientsFragment fragment = new ClientsFragment();
+
+                   Bundle d=new Bundle();
+                   d.putString("AgentEmail",list.get(position).getEmail());
+
+                   fragment.setArguments(d);
+                   android.support.v4.app.FragmentTransaction fragmentTransaction = manager.beginTransaction().add(fragment, "AgentClient").addToBackStack("AgentClient");
+
+                   fragmentTransaction.replace(R.id.mainFrame, fragment);
+
+                   fragmentTransaction.commit();
                }
                else {
 
