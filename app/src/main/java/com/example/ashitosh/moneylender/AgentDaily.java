@@ -1,6 +1,6 @@
 package com.example.ashitosh.moneylender;
 
-class AgentDaily {
+public class AgentDaily {
 
     private String Date,TotalCollection;
 

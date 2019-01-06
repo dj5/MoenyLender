@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.ashitosh.moneylender.Agent;
 import com.example.ashitosh.moneylender.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -19,6 +20,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -57,9 +59,31 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onStart();
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(googleSignInAccount ==null)
+        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user!=null)
         {
-           sendToStart();
+           String email=user.getEmail();
+
+           if (Objects.requireNonNull(email).equals("ashitosh.bhade@gmail.com") || Objects.requireNonNull(email).equals("dj5@gmail.com"))
+           {
+               Intent intent=new Intent(this.getApplicationContext(),Owner.class);
+               startActivity(intent);
+               finish();
+           }
+           else
+           {
+               Intent intent=new Intent(this.getApplicationContext(),Agent.class);
+               startActivity(intent);
+               finish();
+           }
+        }
+        else if(googleSignInAccount ==null)
+        {
+            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
+            startActivity(intent);
+            finish();
+
         }
     }
 

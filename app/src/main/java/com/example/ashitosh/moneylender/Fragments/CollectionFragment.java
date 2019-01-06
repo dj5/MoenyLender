@@ -11,24 +11,16 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.example.ashitosh.moneylender.R;
 import com.example.ashitosh.moneylender.csvDaily;
 import com.example.ashitosh.moneylender.csvMonthly;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Nullable;
 
 /**
  * A simple {@link Fragment} subclass.

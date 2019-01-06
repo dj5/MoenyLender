@@ -186,6 +186,8 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
                 sendToStart();
             }
         });
+
+        FirebaseAuth.getInstance().signOut();
     }
 
     private void revokeAccess() {

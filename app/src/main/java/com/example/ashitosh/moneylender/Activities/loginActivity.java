@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,6 +49,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.security.Permission;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -81,6 +83,46 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
     //private GoogleApiClient gac;
 
     private TextView forgetPass;
+
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        FirebaseApp.initializeApp(this);
+
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user!=null)
+        {
+            String email=user.getEmail();
+
+            Toast.makeText(this, "User:"+ Objects.requireNonNull(user).getEmail(), Toast.LENGTH_SHORT).show();
+
+            if (Objects.requireNonNull(email).equals("ashitosh.bhade@gmail.com") || Objects.requireNonNull(email).equals("dj5@gmail.com"))
+            {
+                Intent intent=new Intent(this.getApplicationContext(),Owner.class);
+                startActivity(intent);
+                finish();
+            }
+            else
+            {
+                Intent intent=new Intent(this.getApplicationContext(),Agent.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+        else if(googleSignInAccount !=null)
+        {
+            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -118,7 +160,6 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
 
 
         gac=new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
@@ -333,26 +374,9 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
-/*
-    @Override
-    public void onStart() {
 
-        super.onStart();
 
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
-        if(googleSignInAccount !=null)
-        {
-            Intent activity=new Intent(loginActivity.this,MainActivity.class);
-
-            startActivity(activity);
-            finish();
-        }
-
-    }
-*/
 
 
     @Override

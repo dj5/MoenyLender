@@ -84,8 +84,26 @@ public class AddAgentFragment extends Fragment {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerAgent();
 
+                fs=FirebaseFirestore.getInstance();
+
+                ref=fs.collection("MoneyLender");
+
+                fdata=new HashMap<>();
+
+                nameStr=name.getText().toString();
+                emailStr=email.getText().toString();
+                phoneStr=phone.getText().toString();
+                addrStr=address.getText().toString();
+
+                if (!isCheckEmail(emailStr))
+                {
+                    registerAgent();
+                }
+                else
+                {
+                    email.setError("Email already registered");
+                }
             }
         });
         provider=new ArrayList<>();
@@ -94,19 +112,36 @@ public class AddAgentFragment extends Fragment {
         return v;
     }
 
+    public boolean isCheckEmail(final String email)
+    {
+        final boolean[] flag = {false};
+
+        f_auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<ProviderQueryResult> task)
+            {
+                boolean check = Objects.requireNonNull(task.getResult().getProviders()).isEmpty();
+
+                if(check)
+                {
+                    flag[0] =true;
+                }
+
+                else
+                {
+                    Toast.makeText(getActivity(), "This email has been registered.", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+        return flag[0];
+    }
+
+
     private void registerAgent() {
 
 
-        fs=FirebaseFirestore.getInstance();
-
-        ref=fs.collection("MoneyLender");
-
-        fdata=new HashMap<>();
-
-        nameStr=name.getText().toString();
-        emailStr=email.getText().toString();
-        phoneStr=phone.getText().toString();
-        addrStr=address.getText().toString();
 
         if(isDataFilled())
         {

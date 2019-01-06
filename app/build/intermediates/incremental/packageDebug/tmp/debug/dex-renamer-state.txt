@@ -1,10 +1,10 @@
-#Wed Jan 02 12:59:33 IST 2019
-path.2=classes2.dex
-path.1=classes.dex
+#Sun Jan 06 23:55:18 IST 2019
+path.2=classes3.dex
+path.1=classes2.dex
 path.0=classes.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
-base.2=/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/25
-base.1=/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/24
-base.0=/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/25
+base.2=/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/55
+base.1=/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/55
+base.0=/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/transforms/dexMerger/debug/55

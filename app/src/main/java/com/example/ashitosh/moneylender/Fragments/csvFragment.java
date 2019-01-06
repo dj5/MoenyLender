@@ -2,6 +2,8 @@ package com.example.ashitosh.moneylender.Fragments;
 
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -11,10 +13,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
@@ -33,6 +38,8 @@ import android.widget.Toast;
 import com.example.ashitosh.moneylender.Activities.GenerateCsv;
 import com.example.ashitosh.moneylender.Adapters.LoanAdapter;
 import com.example.ashitosh.moneylender.BuildConfig;
+import com.example.ashitosh.moneylender.Manifest;
+import com.example.ashitosh.moneylender.Models.CustColModel;
 import com.example.ashitosh.moneylender.Models.CustColModel;
 import com.example.ashitosh.moneylender.Models.LoanModel;
 import com.example.ashitosh.moneylender.Models.custModel;
@@ -101,7 +108,8 @@ public class csvFragment extends Fragment {
     private int mMonth,mYear,mDay;
 
     private ArrayList agentList,agentEmailList;
-    private ArrayList<CustColModel> dailyColList,monthlyColList;
+    private ArrayList<CustColModel> dailyColList;
+    private ArrayList<CustColModel>monthlyColList;
     private Map<String,Object> custNames;
     private ArrayList<Map<String,Object>> monthlyTotalCol,dailyTotalCol;
     private TextView agentHead;
@@ -231,8 +239,8 @@ public class csvFragment extends Fragment {
 
                     dateBtn.setVisibility(View.VISIBLE);
                     if (requestor.equals("Owner")) {
-                        agentSpinner.setVisibility(View.VISIBLE);
-                        agentHead.setVisibility(View.VISIBLE);
+                        agentSpinner.setVisibility(View.INVISIBLE);
+                        agentHead.setVisibility(View.INVISIBLE);
                     }
                 }
                 else if(csvType.equals("Monthly Total Collection"))
@@ -240,8 +248,8 @@ public class csvFragment extends Fragment {
 
                     dateBtn.setVisibility(View.VISIBLE);
                     if (requestor.equals("Owner")) {
-                        agentSpinner.setVisibility(View.VISIBLE);
-                        agentHead.setVisibility(View.VISIBLE);
+                        agentSpinner.setVisibility(View.INVISIBLE);
+                        agentHead.setVisibility(View.INVISIBLE);
                     }
                 }
             }
@@ -273,92 +281,73 @@ public class csvFragment extends Fragment {
             @Override
             public void onClick(final View v) {
 
+                if (checkPermission()) {
 
-                if (agentList.contains("No Agents Found"))
-                {
-                    warn(v,"agent");
-                }
-                else if(csvType.equals("Active Customer Accounts"))
-                {
-                  //  custDetail.clear();
-                  //  custLoans.clear();
+                    if (agentList.contains("No Agents Found")) {
+                        warn(v, "agent");
+                    } else if (csvType.equals("Active Customer Accounts")) {
+                        //  custDetail.clear();
+                        //  custLoans.clear();
 
-                    GenerateCustomerCsv();
+                        GenerateCustomerCsv();
 
-                }
-                else if (dateText==null)
-                {
-                    warn(v,"date");
-                }
-                else if(csvType.equals("Agent`s Daily Collection"))
-                {
-                    if(dateText!=null && !agentName.isEmpty() && !custNames.isEmpty()) {
+                    } else if (dateText == null) {
+                        warn(v, "date");
+                    } else if (csvType.equals("Agent`s Daily Collection")) {
+                        if (dateText != null && !agentName.isEmpty() && !custNames.isEmpty()) {
 
-                    //    dailyColList.clear();
-                        generateDailyCsv();
-                    }
-                    else
-                    {
-                        if (dateText.isEmpty()) {
-                            dateBtn.setText("Please Select Date");
-                            dateBtn.setError("Select Date");
-                            v.refreshDrawableState();
+                            //    dailyColList.clear();
+                            generateDailyCsv();
+                        } else {
+                            if (dateText.isEmpty()) {
+                                dateBtn.setText("Please Select Date");
+                                dateBtn.setError("Select Date");
+                                v.refreshDrawableState();
+                            }
                         }
-                    }
-                }
-                else if(csvType.equals("Agent`s Monthly Collection"))
-                {
+                    } else if (csvType.equals("Agent`s Monthly Collection")) {
 
-                    if(dateText!=null && !agentName.isEmpty() && !localDate.toString().isEmpty() && !custNames.isEmpty()) {
-                    //    monthlyColList.clear();
-                        generateMonthlyCsv();
-                    }
-                    else
-                    {
-                        if (dateText.isEmpty()) {
-                            dateBtn.setText("Please Select Date");
-                            dateBtn.setError("Select Date");
-                            v.refreshDrawableState();
+                        if (dateText != null && !agentName.isEmpty() && !localDate.toString().isEmpty() && !custNames.isEmpty()) {
+
+                            generateMonthlyCsv();
+                        } else {
+                            if (dateText.isEmpty()) {
+                                dateBtn.setText("Please Select Date");
+                                dateBtn.setError("Select Date");
+                                v.refreshDrawableState();
+                            }
                         }
-                    }
-                }
-                else if(csvType.equals("Monthly Total Collection"))
-                {
-                        month= String.valueOf(localDate.getMonthOfYear())+String.valueOf(localDate.getYear());
+                    } else if (csvType.equals("Monthly Total Collection")) {
+                        month = String.valueOf(localDate.getMonthOfYear()) + String.valueOf(localDate.getYear());
 
                         if (!month.isEmpty() && !dateText.isEmpty() && !localDate.toString().isEmpty()) {
 
-                      //      monthlyTotalCol.clear();
-                            Toast.makeText(getActivity(), "Making call to daily", Toast.LENGTH_SHORT).show();
-
                             generateTotalMonthCsv();
-                        }
-                        else
-                            {
-                                if (dateText.isEmpty()) {
-                                    dateBtn.setText("Please Select Date");
-                                    dateBtn.setError("Select Date");
-                                    v.refreshDrawableState();
-                                }
+                        } else {
+                            if (dateText.isEmpty()) {
+                                dateBtn.setText("Please Select Date");
+                                dateBtn.setError("Select Date");
+                                v.refreshDrawableState();
                             }
-                }
+                        }
+                    } else if (csvType.equals("Daily Total Collection")) {
 
-                else if(csvType.equals("Daily Total Collection"))
-                {
+                        if (!localDate.toString().isEmpty() && !dateText.isEmpty()) {
 
-                    if (!localDate.toString().isEmpty() && !dateText.isEmpty() ) {
-
-                     //   dailyTotalCol.clear();
-                        generateTotalDailyCsv();
-                    }
-                    else
-                    {
-                        if (dateText.isEmpty()) {
-                            dateBtn.setText("Please Select Date");
-                            dateBtn.setError("Select Date");
-                            v.refreshDrawableState();
+                            //   dailyTotalCol.clear();
+                            generateTotalDailyCsv();
+                        } else {
+                            if (dateText.isEmpty()) {
+                                dateBtn.setText("Please Select Date");
+                                dateBtn.setError("Select Date");
+                                v.refreshDrawableState();
+                            }
                         }
                     }
+                }
+                else
+                {
+                    requestPermission();
                 }
             }
         });
@@ -379,8 +368,20 @@ public class csvFragment extends Fragment {
                             @SuppressLint("SimpleDateFormat")
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                String mont, day;
+                                mont=String.valueOf(month+1);
+                                day = String.valueOf(dayOfMonth);
+                                if(month+1<10 )
+                                {
+                                    mont= "0"+String.valueOf(month+1);
+                                }
+                                if(dayOfMonth<10 )
+                                {
+                                    day= "0"+String.valueOf(dayOfMonth);
+                                }
 
-                                dateText=year+"-"+(month+1)+"-"+dayOfMonth;
+
+                                dateText=year+"-"+mont+"-"+day;
                                 dateBtn.setText("Date: "+dateText);
 
                                 localDate= LocalDate.parse(dateText);
@@ -416,13 +417,25 @@ public class csvFragment extends Fragment {
                 }
                 else if(csvType.equals("Agent`s Daily Collection"))
                 {
-                    uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID+".provider",new File(Environment.getExternalStorageDirectory().getPath()+"/"+"Date_"+dateText+".csv"));
+                    if (requestor.equals("Owner")) {
+                        uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory().getPath() + "/" + "Date_" + dateText + ".csv"));
+                    }
+                    else
+                    {
+                        uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory().getPath() + "/" + "AgentDailyCol_" + dateText + ".csv"));
 
+                    }
                 }
                 else if(csvType.equals("Agent`s Monthly Collection"))
                 {
-                    uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID+".provider",new File(Environment.getExternalStorageDirectory().getPath()+"/"+"Month_"+dateText+".csv"));
+                    if (requestor.equals("Owner")) {
+                        uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory().getPath() + "/" + "Month_" + dateText + ".csv"));
+                    }
+                    else
+                    {
+                        uri = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), BuildConfig.APPLICATION_ID + ".provider", new File(Environment.getExternalStorageDirectory().getPath() + "/" + "AgentMonthlyCol_" + dateText + ".csv"));
 
+                    }
                 }
                 else if(csvType.equals("Monthly Total Collection"))
                 {
@@ -454,6 +467,68 @@ public class csvFragment extends Fragment {
 
         return v;
 
+    }
+
+    //****************************************************************
+
+    public boolean checkPermission()
+    {
+        final Activity context=getActivity();
+
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), android.Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void requestPermission()
+    {
+        final Activity context=getActivity();
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(context), android.Manifest.permission.READ_EXTERNAL_STORAGE))
+        {
+            new AlertDialog.Builder(this.getActivity())
+                    .setTitle("Permission Needed")
+                    .setMessage("Storage Permission is required to generate Csv file")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(context, new String []{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(context, new String []{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode==1)
+        {
+            if (grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
 
     //****************************************************************
@@ -507,30 +582,30 @@ public class csvFragment extends Fragment {
                             tempTotalDaily.add(AgentEmail);
 
                             if (!AgentEmail.isEmpty() && !dateText.isEmpty()) {
-                            fs.collection("MoneyLender").document("Agent_" + AgentEmail)
-                                    .collection("Daily")
-                                    .document("Date_" + dateText)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                fs.collection("MoneyLender").document("Agent_" + AgentEmail)
+                                        .collection("Daily")
+                                        .document("Date_" + dateText)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                                            if (task.isSuccessful()) {
-                                                Map<String, Object> data = new HashMap<>();
+                                                if (task.isSuccessful()) {
+                                                    Map<String, Object> data = new HashMap<>();
 
-                                                data.put(AgentName, task.getResult().getString("TotalCollection"));
-                                                dailyTotalCol.add(data);
+                                                    data.put(AgentName, task.getResult().getString("TotalCollection"));
+                                                    dailyTotalCol.add(data);
+                                                }
                                             }
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
 
-                                    Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                        Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                        }
+                            }
                         }
                     }
                 }
@@ -588,7 +663,7 @@ public class csvFragment extends Fragment {
                 String[] entries = entry.split(","); // array of your values
                 writer.writeNext(entries);
 
-                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
+      //          Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
             }
 
             String entry = ""+ ","+"Total:- "+","+ total;
@@ -596,6 +671,9 @@ public class csvFragment extends Fragment {
             writer.writeNext(entries);
 
             writer.close();
+
+            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Successfully Csv file created", Toast.LENGTH_SHORT).show();
+
         }
         catch (IOException e)
         {
@@ -617,6 +695,7 @@ public class csvFragment extends Fragment {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
+
                 for(DocumentChange doc: Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges())
                 {
                     if (doc.getType().equals(DocumentChange.Type.ADDED)) {
@@ -624,37 +703,36 @@ public class csvFragment extends Fragment {
                         String AgentEmail = doc.getDocument().getData().get("Email").toString();
                         final String AgentName=doc.getDocument().getData().get("Name").toString();
 
-                        if (tempTotalMonthly.contains(AgentEmail))
+                        if (!tempTotalMonthly.contains(AgentEmail))
                         {
                             tempTotalMonthly.add(AgentEmail);
 
-                            Toast.makeText(getActivity(), "adding: "+AgentEmail, Toast.LENGTH_SHORT).show();
 
-                        if (!AgentEmail.isEmpty() && !month.isEmpty()) {
-                            fs.collection("MoneyLender").document("Agent_" + AgentEmail)
-                                    .collection("Monthly")
-                                    .document("Month_" + month)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (!AgentEmail.isEmpty() && !month.isEmpty()) {
+                                fs.collection("MoneyLender").document("Agent_" + AgentEmail)
+                                        .collection("Monthly")
+                                        .document("Month_" + month)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                                            if (task.isSuccessful()) {
-                                                Map<String, Object> data = new HashMap<>();
+                                                if (task.isSuccessful()) {
+                                                    Map<String, Object> data = new HashMap<>();
 
-                                                data.put(AgentName, task.getResult().getString("TotalCollection"));
-                                                monthlyTotalCol.add(data);
+                                                    data.put(AgentName, task.getResult().getString("TotalCollection"));
+                                                    monthlyTotalCol.add(data);
+                                                }
                                             }
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
 
-                                    Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                        Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                        }
+                            }
                         }
                     }
                 }
@@ -712,14 +790,15 @@ public class csvFragment extends Fragment {
                 String[] entries = entry.split(","); // array of your values
                 writer.writeNext(entries);
 
-                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
-            }
+           }
 
             String entry = ""+ ","+"Total:- "+","+ total;
             String[] entries = entry.split(","); // array of your values
             writer.writeNext(entries);
 
             writer.close();
+            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Successfully Csv file created", Toast.LENGTH_SHORT).show();
+
         }
         catch (IOException e)
         {
@@ -756,27 +835,27 @@ public class csvFragment extends Fragment {
 
                                     tempMonthly.add(accno);
 
-                                if(!accno.isEmpty()) {
-                                    fs.collection("MoneyLender").document("Agent_" + email)
-                                            .collection("Monthly")
-                                            .document("Month_" + localDate.getMonthOfYear() + localDate.getYear())
-                                            .collection("customers")
-                                            .document("client_" + accno)
-                                            .collection("loans")
-                                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                                    if(!accno.isEmpty()) {
+                                        fs.collection("MoneyLender").document("Agent_" + email)
+                                                .collection("Monthly")
+                                                .document("Month_" + localDate.getMonthOfYear() + localDate.getYear())
+                                                .collection("customers")
+                                                .document("client_" + accno)
+                                                .collection("loans")
+                                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                                                    for (DocumentChange doc : Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges()) {
-                                                        if (doc.getType().equals(DocumentChange.Type.ADDED)) {
-                                                            CustColModel model = doc.getDocument().toObject(CustColModel.class);
-                                                            monthlyColList.add(model);
+                                                        for (DocumentChange doc : Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges()) {
+                                                            if (doc.getType().equals(DocumentChange.Type.ADDED)) {
+                                                                CustColModel model = doc.getDocument().toObject(CustColModel.class);
+                                                                monthlyColList.add(model);
 
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
-                                }
+                                                });
+                                    }
                                 }
                             }
                         }
@@ -794,6 +873,11 @@ public class csvFragment extends Fragment {
                             }
 
                         }
+                        else
+                        {
+                            Toast.makeText(getActivity(), "No New record found", Toast.LENGTH_SHORT).show();
+
+                        }
                         pd.dismiss();
                     }
                 });
@@ -806,8 +890,15 @@ public class csvFragment extends Fragment {
             ita=monthlyColList.iterator();
             int i=0;
 
+            if (requestor.equals("Owner")) {
+                writer = new CSVWriter(new FileWriter("/sdcard/" + "Month_" + dateText + ".csv"), ',');
+            }
+            else
+            {
+                writer = new CSVWriter(new FileWriter("/sdcard/" + "AgentMonthlyCol" + dateText + ".csv"), ',');
 
-            writer = new CSVWriter(new FileWriter("/sdcard/"+"Month_"+dateText+".csv"), ',');
+            }
+
             writer.flushQuietly();
 
             String heading="Acc No." +","+"Customer Name"+","+"Loan Id"+","+"Month Of Collection"+","+"Amount Recieved";
@@ -830,7 +921,7 @@ public class csvFragment extends Fragment {
                 String[] entries = entry.split(","); // array of your values
                 writer.writeNext(entries);
 
-                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
             }
 
             String entry = "" + ","+""+","+"" + "," + "Total: " + "," +total;
@@ -838,6 +929,9 @@ public class csvFragment extends Fragment {
             writer.writeNext(entries);
 
             writer.close();
+
+            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Successfully Csv file created", Toast.LENGTH_SHORT).show();
+
         }
         catch (IOException e)
         {
@@ -853,27 +947,27 @@ public class csvFragment extends Fragment {
         pd.setCanceledOnTouchOutside(false);
         pd.show();
 
+
         fs.collection("MoneyLender").document("Agent_"+email)
-                    .collection("Daily")
-                    .document("Date_"+dateText)
-                    .collection("customers")
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                .collection("Daily")
+                .document("Date_"+dateText)
+                .collection("customers")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                            for (DocumentChange doc: Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges())
+
+                        for (DocumentChange doc: Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges())
+                        {
+
+                            if (doc.getType().equals(DocumentChange.Type.ADDED))
+                            {
+                                String accno=doc.getDocument().getData().get("AccountNo").toString();
+
+                                if (!tempDaily.contains(accno))
                                 {
 
-                                if (doc.getType().equals(DocumentChange.Type.ADDED))
-                                {
-                                    String accno=doc.getDocument().getData().get("AccountNo").toString();
-
-                                    Toast.makeText(getActivity(), "adding: "+accno, Toast.LENGTH_SHORT).show();
-
-                                    if (!tempDaily.contains(accno))
-                                    {
-
-                                        tempDaily.add(accno);
+                                    tempDaily.add(accno);
 
                                     if(!accno.isEmpty()) {
                                         fs.collection("MoneyLender").document("Agent_" + email)
@@ -888,40 +982,42 @@ public class csvFragment extends Fragment {
 
                                                         for (DocumentChange doc : Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges()) {
                                                             if (doc.getType().equals(DocumentChange.Type.ADDED)) {
+
                                                                 CustColModel model = doc.getDocument().toObject(CustColModel.class);
                                                                 dailyColList.add(model);
 
                                                             }
+
                                                         }
                                                     }
                                                 });
                                     }
-                                    }
                                 }
                             }
-
-                            if (!dailyColList.isEmpty())
-                            {
-
-                                File csv=new File("/sdcard/" + "Date_" + dateText + ".csv");
-
-                                if (csv.exists())
-                                {
-                                    boolean c=csv.delete();
-                                    createDailyCsv();
-                                }
-                                else {
-                                    createDailyCsv();
-                                }
-                            }
-                            else
-                            {
-                                Toast.makeText(getActivity(), "No record found", Toast.LENGTH_SHORT).show();
-                            }
-
-                            pd.dismiss();
                         }
-                    });
+
+                        if (!dailyColList.isEmpty())
+                        {
+
+                            File csv=new File("/sdcard/" + "Date_" + dateText + ".csv");
+
+                            if (csv.exists())
+                            {
+                                boolean c=csv.delete();
+                                createDailyCsv();
+                            }
+                            else {
+                                createDailyCsv();
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(getActivity(), "No New record found", Toast.LENGTH_SHORT).show();
+                        }
+
+                        pd.dismiss();
+                    }
+                });
     }
 
 
@@ -932,7 +1028,13 @@ public class csvFragment extends Fragment {
             ita=dailyColList.iterator();
             int i=0;
 
-            writer = new CSVWriter(new FileWriter("/sdcard/" + "Date_" + dateText + ".csv"), ',');
+            if (requestor.equals("Owner")) {
+                writer = new CSVWriter(new FileWriter("/sdcard/" + "Date_" + dateText + ".csv"), ',');
+            }
+            else
+            {
+                writer = new CSVWriter(new FileWriter("/sdcard/" + "MyDailyCol_" + dateText + ".csv"), ',');
+            }
 
             writer.flushQuietly();
 
@@ -955,13 +1057,15 @@ public class csvFragment extends Fragment {
                 String[] entries = entry.split(","); // array of your values
                 writer.writeNext(entries);
 
-                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
             }
             String entry =""+","+""+ "," + ""+ "," + "Total:" + "," +total;
             String[] entries = entry.split(","); // array of your values
             writer.writeNext(entries);
-
             writer.close();
+
+            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Successfully Csv file created", Toast.LENGTH_SHORT).show();
+
         }
         catch (IOException e)
         {
@@ -1068,30 +1172,35 @@ public class csvFragment extends Fragment {
                     {
                         final custModel detailModel=doc.getDocument().toObject(custModel.class);
 
-                            if (!tempCust.contains(detailModel.getAccountNo())) {
+                        if (!tempCust.contains(detailModel.getAccountNo())) {
 
-                                tempCust.add(detailModel.getAccountNo());
-                                custDetail.add(detailModel);
+                            tempCust.add(detailModel.getAccountNo());
+                            custDetail.add(detailModel);
 
-                                fs.collection("clients").document("client_" + detailModel.getAccountNo())
-                                        .collection("loans")
-                                        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                            fs.collection("clients").document("client_" + detailModel.getAccountNo())
+                                    .collection("loans")
+                                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                                                for (DocumentChange doc : Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges()) {
-                                                    if (doc.getType().equals(DocumentChange.Type.ADDED)) {
-                                                        LoanModel loanModel = doc.getDocument().toObject(LoanModel.class);
+                                            for (DocumentChange doc : Objects.requireNonNull(queryDocumentSnapshots).getDocumentChanges()) {
+                                                if (doc.getType().equals(DocumentChange.Type.ADDED)) {
 
-                                                        if (loanModel.getStatus().equals("1")) {
-                                                            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), detailModel.getAccountNo() + loanModel.getLoanType(), Toast.LENGTH_SHORT).show();
-                                                            custLoans.put(detailModel.getAccountNo(), loanModel);
+                                                    LoanModel loanModel = doc.getDocument().toObject(LoanModel.class);
+
+                                                    if (loanModel!=null) {
+                                                        if (loanModel.getStatus()!=null) {
+
+                                                            if (loanModel.getStatus().equals("1")) {
+                                                                custLoans.put(detailModel.getAccountNo(), loanModel);
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
-                                        });
-                            }
+                                        }
+                                    });
+                        }
                     }
 
                 }
@@ -1106,7 +1215,6 @@ public class csvFragment extends Fragment {
                         if (csv.delete()) {
 
                             createCustomerCsv();
-
                         }
                     }
                     else {
@@ -1114,6 +1222,9 @@ public class csvFragment extends Fragment {
                         createCustomerCsv();
                     }
 
+                }else
+                {
+                    Toast.makeText(getActivity(), "No New Records found", Toast.LENGTH_SHORT).show();
                 }
                 pd.dismiss();
             }
@@ -1164,9 +1275,11 @@ public class csvFragment extends Fragment {
                 String[] entries = entry.split(","); // array of your values
                 writer.writeNext(entries);
 
-             //   Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), entry, Toast.LENGTH_SHORT).show();
             }
             writer.close();
+
+            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Successfully Csv file created", Toast.LENGTH_SHORT).show();
+
         }
         catch (IOException e)
         {
@@ -1180,22 +1293,19 @@ public class csvFragment extends Fragment {
     private double interest(LocalDate sdate, LocalDate edate, double Amount, double interestRate)
     {
 
-            int months= Months.monthsBetween(sdate,edate).getMonths();
+        int months= Months.monthsBetween(sdate,edate).getMonths();
 
-            Double SI = (Amount * interestRate * months) / (100);
+        Double SI = (Amount * interestRate * months) / (100);
 
-            double TotalAmount = Amount + SI;
+        double TotalAmount = Amount + SI;
 
-            DecimalFormat dec = new DecimalFormat("#0.00");
+        DecimalFormat dec = new DecimalFormat("#0.00");
 
-            TotalAmount = Double.valueOf(dec.format(TotalAmount));
+        TotalAmount = Double.valueOf(dec.format(TotalAmount));
 
-            //calculating expected Amount
+        //calculating expected Amount
 
-            return TotalAmount;
-        }
-
+        return TotalAmount;
     }
 
-
-
+}

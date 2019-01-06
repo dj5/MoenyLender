@@ -48,8 +48,8 @@ public class CustColAdapter extends RecyclerView.Adapter<CustColAdapter.ViewHold
     public void onBindViewHolder(@NonNull CustColAdapter.ViewHolder holder, int position) {
 
         holder.AccNo.setText(list.get(position).getAccountNo());
-        holder.Aamount_recieved.setText(list.get(position).getAmountRecieved());
-        holder.LoanID.setText(list.get(position).getLoanId()+" /-Rs");
+        holder.Aamount_recieved.setText(list.get(position).getAmountRecieved()+" /-Rs");
+        holder.LoanID.setText(list.get(position).getLoanId());
     }
 
     @Override

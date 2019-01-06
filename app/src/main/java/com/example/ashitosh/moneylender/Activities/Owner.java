@@ -316,6 +316,8 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                 sendToStart();
             }
         });
+
+        FirebaseAuth.getInstance().signOut();
     }
 
     private void revokeAccess() {

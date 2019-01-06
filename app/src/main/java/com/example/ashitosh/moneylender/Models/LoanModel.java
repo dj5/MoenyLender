@@ -2,7 +2,7 @@ package com.example.ashitosh.moneylender.Models;
 
 public class LoanModel {
 
-    String Status,AgentName,DOI,DOR,ExpectedInstallment,FiledAmount,Interest,LoanType,ReqAmount,AmountToReturn,PendingAmount,LoanId;
+   private String Status,AgentName,DOI,DOR,ExpectedInstallment,FiledAmount,Interest,LoanType,ReqAmount,AmountToReturn,PendingAmount,LoanId;
 
 
     public LoanModel() {

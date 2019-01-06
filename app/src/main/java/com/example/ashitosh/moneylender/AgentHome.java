@@ -1,8 +1,6 @@
 package com.example.ashitosh.moneylender;
 
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -16,12 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.ashitosh.moneylender.Adapters.AgentAdapter;
 import com.example.ashitosh.moneylender.Adapters.CustAdapter;
 import com.example.ashitosh.moneylender.Fragments.csvFragment;
-import com.example.ashitosh.moneylender.Models.AgentModel;
 import com.example.ashitosh.moneylender.Models.custModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -31,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 

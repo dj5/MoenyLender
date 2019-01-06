@@ -2,7 +2,7 @@ package com.example.ashitosh.moneylender.Models;
 
 public class CustColModel {
 
-    String AmountRecieved,DateOfCollection,LoanId,AccountNo;
+   private String AmountRecieved,DateOfCollection,LoanId,AccountNo;
 
 
     public CustColModel(String amountRecieved, String dateOfCollection, String loanId, String accountNo) {

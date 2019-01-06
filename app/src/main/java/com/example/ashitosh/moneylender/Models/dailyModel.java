@@ -2,7 +2,7 @@ package com.example.ashitosh.moneylender.Models;
 
 public class dailyModel {
 
-    String Date,TotalCollection;
+   private String Date,TotalCollection;
 
     public dailyModel() {
     }
