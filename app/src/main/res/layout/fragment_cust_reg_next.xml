@@ -20,6 +20,11 @@
         app:cardMaxElevation="50dp"
         app:contentPadding="10dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -40,73 +45,136 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/AccTypeHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CustregHead2"
+                android:layout_marginBottom="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Select Account Type"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <Spinner
                 android:id="@+id/CustInstallType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustregHead2"
+                android:layout_below="@id/AccTypeHead"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:ems="10"
                 tools:ignore="HardcodedText" />
 
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/LFNOLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CustInstallType"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/LFNO"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="LF NO."
+                    android:inputType="number|numberDecimal"
+                    android:textSize="14sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/CustReqAmountLayout"
+                android:layout_below="@id/LFNOLayout"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <EditText
                 android:id="@+id/CustReqAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_below="@id/CustInstallType"
-
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:ems="10"
+                android:textSize="14sp"
                 android:hint="@string/requested_amount"
                 android:inputType="number|numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
 
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/CustDiscountLayout"
+                android:layout_below="@id/CustReqAmountLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
+
+            <EditText
+                android:id="@+id/CustDiscount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="14sp"
+                android:hint="Discount Amount"
+                android:inputType="number|numberDecimal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/CustFiledAmountLayout"
+                android:layout_below="@id/CustDiscountLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
             <EditText
                 android:id="@+id/CustFiledAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustReqAmount"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:ems="10"
+                android:textSize="14sp"
                 android:hint="@string/filed_amount"
                 android:inputType="number|numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/CustRegInterestLayout"
+                android:layout_below="@id/CustFiledAmountLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
 
             <EditText
                 android:id="@+id/CustRegInterest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustFiledAmount"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:ems="10"
+                android:textSize="14sp"
                 android:hint="@string/interest_rate"
                 android:inputType="number|numberDecimal" />
 
-
-            <Button
-                android:id="@+id/CustDOR"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/CustRegInterest"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:hint="@string/date_of_return"
-                android:text="@string/select_date_of_return"/>
+            </android.support.design.widget.TextInputLayout>
 
             <RadioGroup
                 android:id="@+id/CustRadioGrp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustDOR"
+                android:layout_below="@id/CustRegInterestLayout"
                 android:layout_marginEnd="10dp"
                 android:orientation="horizontal"
                 android:layout_marginStart="10dp"
@@ -134,11 +202,85 @@
                     android:textAlignment="center"/>
             </RadioGroup>
 
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/LoanMonthLayout"
+                android:layout_below="@id/CustRadioGrp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
+
+            <EditText
+                android:id="@+id/LoanMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="14sp"
+                android:hint="Months"
+                android:inputType="number|numberDecimal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/FileOpeningDateLayout"
+                android:layout_below="@id/LoanMonthLayout"
+                android:layout_width="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content">
+            <EditText
+                    android:id="@+id/FileOpeningDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:ems="10"
+                    android:textSize="14sp"
+                    android:hint="File Opening Date"
+                    android:inputType="number|numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/FileClosingDateLayout"
+                android:layout_below="@id/FileOpeningDateLayout"
+                android:layout_width="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/FileClosingDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textSize="14sp"
+                android:hint="File Closing Date"
+                android:inputType="number|numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/CustAgentNameHead"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/FileClosingDateLayout"
+                android:layout_marginBottom="1dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Select Agent Name"
+                android:textAlignment="center"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <Spinner
                 android:id="@+id/CustAgentName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustRadioGrp"
+                android:layout_below="@id/CustAgentNameHead"
                 android:layout_marginBottom="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
@@ -162,5 +304,6 @@
                 android:textColor="@android:color/background_light" />
         </RelativeLayout>
 
+        </ScrollView>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

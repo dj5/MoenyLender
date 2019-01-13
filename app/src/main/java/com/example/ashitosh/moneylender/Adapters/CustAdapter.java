@@ -68,6 +68,12 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
                 data.putString("Account", list.get(position).getAccountNo());
                 data.putString("TotalLoans", list.get(position).getCustTotalLoan());
 
+                data.putString("CustAdharId", list.get(position).getCustAdharId());
+                data.putString("CustDob", list.get(position).getCustDob());
+                data.putString("GuarantorName", list.get(position).getGuarantorName());
+                data.putString("GuarantorMob", list.get(position).getGuarantorMob());
+                data.putString("GuarantorAddr", list.get(position).getGuarantorAddr());
+
 
                 if (frag.equals("ActiveCustCollection")) {
                     CollectMoneyFragment fragment = new CollectMoneyFragment();

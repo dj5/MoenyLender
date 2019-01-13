@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,7 +28,6 @@ import com.example.ashitosh.moneylender.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -47,7 +47,6 @@ import org.joda.time.Months;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -64,22 +63,23 @@ public class CustRegNextFragment extends Fragment  {
 
 
     private Spinner spinner,agentSpinner;
-    private EditText reqamount,filedamount,interest;
+    private EditText reqamount,discount,LfNo,interest,FiledAmount,LoanMonths,FileOpeningDate,FileClosingDate;
     private ArrayAdapter<String> adapter,agentAdapter;
     private List<String> type,agentList,agentEmailList;
     private Button regbtn,dor;
     private FirebaseFirestore fs;
 
-    private String typeStr,agentEmail,reqamountStr,expInstallStr,interestStr,doiStr,dorStr,agentnameStr,filedamountStr;
+    private String typeStr,agentEmail,reqamountStr,expInstallStr,interestStr,discountstr,doiStr,dorStr,agentnameStr,filedamountStr;
 
-    private String AccountNo,Address,custName,phone,custemail,AmountToReturn,PendingAmount;
+    private String AccountNo,AdharId,CustDob,GuarantorName,GuarantorMob,GuarantorAddr,Address,custName,phone,custemail,AmountToReturn,PendingAmount;
 
     private ProgressDialog pd;
     private int loanno=0;
     private RadioGroup group;
     private RadioButton hundred,twoHundred;
     public Date sdate,edate;
-    private String totalLoan;
+    public LocalDate StartingDate,ClosingDate;
+    private String totalLoan,FileOpeningDateStr,FileClosingDateStr,MonthStr;
     private String btnId,addLoanAccNo,days;
     private int mYear, mMonth, mDay;
     private int issueMonth,returnMonth,issueYear,returnYear;
@@ -104,11 +104,17 @@ public class CustRegNextFragment extends Fragment  {
 
 
         reqamount=v.findViewById(R.id.CustReqAmount);
-        filedamount=v.findViewById(R.id.CustFiledAmount);
+        discount=v.findViewById(R.id.CustDiscount);
+        FiledAmount=v.findViewById(R.id.CustFiledAmount);
+        LfNo=v.findViewById(R.id.LFNO);
+
         interest=v.findViewById(R.id.CustRegInterest);
       //  doi=v.findViewById(R.id.CustDOI);
-        dor=v.findViewById(R.id.CustDOR);
+        LoanMonths=v.findViewById(R.id.LoanMonth);
         regbtn=v.findViewById(R.id.CustRegBtn);
+
+        FileOpeningDate=v.findViewById(R.id.FileOpeningDate);
+        FileClosingDate=v.findViewById(R.id.FileClosingDate);
 
         fs=FirebaseFirestore.getInstance();
 
@@ -145,6 +151,12 @@ public class CustRegNextFragment extends Fragment  {
 
         totalLoan=data.getString("TotalLoan");
 
+        AdharId=data.getString("CustAdhar");
+        CustDob=data.getString("CustDob");
+        GuarantorName=data.getString("GuarantorName");
+        GuarantorMob=data.getString("GuarantorMob");
+        GuarantorAddr=data.getString("GurantorAddr");
+
         Toast.makeText(getActivity().getApplicationContext(), "BtnId: "+btnId, Toast.LENGTH_SHORT).show();
 
         //Selects date of Issue
@@ -158,16 +170,81 @@ public class CustRegNextFragment extends Fragment  {
 
         try {
 
-            sdate=new SimpleDateFormat("dd/MM/yyyy").parse(doiStr);
-            doiStr=sdate.toString();
+      //      sdate=new SimpleDateFormat("dd/MM/yyyy").parse(doiStr);
+      //      doiStr=sdate.toString();
+
+            if (!doiStr.isEmpty())
+            {
+                sdate=new SimpleDateFormat("dd/MM/yyyy").parse(doiStr);
+                FileOpeningDate.setText(doiStr);
+
+            }else
+            {
+                FileOpeningDate.setError("Could Not Found Date");
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        LoanMonths.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if(LoanMonths.getText().toString().isEmpty())
+                {
+                    LoanMonths.setError("Enter Months");
+                    LoanMonths.setFocusable(true);
+                }
+                else if(Integer.parseInt(LoanMonths.getText().toString())<=0)
+                {
+                    LoanMonths.setError("Months Should be greater");
+                    LoanMonths.setEnabled(true);
+                }
+                else if(!doiStr.isEmpty())
+                {
+                    FileOpeningDate.setText(doiStr);
+                    FileOpeningDate.setEnabled(false);
+
+                    LocalDate temp=new LocalDate(doiStr);
+
+                    LocalDate end=temp.plusMonths(Integer.parseInt(LoanMonths.getText().toString()));
+                    dorStr=end.toString();
+
+                    if(!dorStr.isEmpty())
+                    {
+                        FileClosingDate.setText(dorStr);
+                        FileClosingDate.setFocusable(false);
+
+                        try {
+                            edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    else
+                    {
+                        LoanMonths.setError("Could Not Found File Closing date");
+                        LoanMonths.setFocusable(false);
+                    }
+                }
+            }
+        });
+
 
 //Selects date Of Return
-
+/*
         dor.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("NewApi")
             @Override
@@ -204,7 +281,7 @@ public class CustRegNextFragment extends Fragment  {
 
         });
 
-
+*/
         //Fetch Agent Names
         fs.collection("MoneyLender").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -244,15 +321,18 @@ public class CustRegNextFragment extends Fragment  {
 
                 if(typeStr.equals("Daily"))
                 {
+                    ClearForm();
+
                     interest.setVisibility(View.GONE);
                     group.setVisibility(View.VISIBLE);
-                    dor.setEnabled(false);
-                    dor.setVisibility(View.GONE);
+                    LoanMonths.setEnabled(false);
+                    LoanMonths.setVisibility(View.GONE);
                 }
                 if(typeStr.equals("Monthly"))
                 {
-                    dor.setEnabled(true);
-                    dor.setVisibility(View.VISIBLE);
+                    ClearForm();
+                    LoanMonths.setEnabled(true);
+                    LoanMonths.setVisibility(View.VISIBLE);
                     interest.setVisibility(View.VISIBLE);
                     group.setVisibility(View.GONE);
                 }
@@ -274,6 +354,13 @@ public class CustRegNextFragment extends Fragment  {
 
                 try {
                     edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
+
+                    FileOpeningDate.setText(doiStr);
+                    FileOpeningDate.setEnabled(false);
+
+                    FileClosingDate.setText(dorStr);
+                    FileClosingDate.setEnabled(false);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -288,6 +375,12 @@ public class CustRegNextFragment extends Fragment  {
 
                 try {
                     edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
+
+                    FileOpeningDate.setText(doiStr);
+                    FileOpeningDate.setEnabled(false);
+
+                    FileClosingDate.setText(dorStr);
+                    FileClosingDate.setEnabled(false);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -310,7 +403,60 @@ public class CustRegNextFragment extends Fragment  {
         });
 
 
+        discount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                discount.setError(null);
+
+                if (reqamount.getText().toString().isEmpty())
+                {
+                    reqamount.setError("Enter Requested Amount");
+                    reqamount.setFocusable(true);
+                }
+                else if (discount.getText().toString().isEmpty())
+                {
+                    discount.setError("Enter Discount Amount");
+                    discount.setFocusable(true);
+                }
+                else if(Double.parseDouble(discount.getText().toString())<=0)
+                {
+                   discount.setError("Discount shound be Greater");
+                   discount.setFocusable(true);
+                }
+                else if (Double.parseDouble(reqamount.getText().toString())<Double.parseDouble(discount.getText().toString()))
+                {
+                    discount.setError("Discount Amount is Greater Than Requested Amount");
+                    discount.setFocusable(true);
+                }
+                else if (Double.parseDouble(reqamount.getText().toString())==Double.parseDouble(discount.getText().toString()))
+                {
+                    discount.setError("Discount Amount is same as Requested Amount");
+                    discount.setFocusable(true);
+                }
+                else
+                {
+
+                    double filedAmount=Double.parseDouble(reqamount.getText().toString())-Double.parseDouble(s.toString());
+                    FiledAmount.setText(String.valueOf(filedAmount));
+                    filedamountStr=FiledAmount.getText().toString();
+                    FiledAmount.setEnabled(false);
+                }
+
+
+            }
+        });
 
 
         //Uploading customer Insformation
@@ -350,6 +496,11 @@ public class CustRegNextFragment extends Fragment  {
                                                 Custdata.put("CustName", custName);
                                                 Custdata.put("CustPhone", phone);
                                                 Custdata.put("CustTotalLoan", "1");
+                                                Custdata.put("CustAdharId",AdharId);
+                                                Custdata.put("CustDob",CustDob);
+                                                Custdata.put("GuarantorName",GuarantorName);
+                                                Custdata.put("GuarantorMob",GuarantorMob);
+                                                Custdata.put("GuarantorAddr",GuarantorAddr);
 
                                                 //Registering Clint
                                                 fs.collection("clients").document("client_" + AccountNo).set(Custdata, SetOptions.merge())
@@ -385,7 +536,7 @@ public class CustRegNextFragment extends Fragment  {
                                                 //Cust Loan Registration
                                                 reqamountStr = reqamount.getText().toString();
                                                 interestStr = interest.getText().toString();
-                                                filedamountStr = filedamount.getText().toString();
+                                                discountstr=discount.getText().toString();
 
                                                 if (typeStr.equals("Daily")) {
                                                     interestStr = "0";
@@ -504,6 +655,12 @@ public class CustRegNextFragment extends Fragment  {
                                                     loanData.put("ReqAmount", reqamountStr);
                                                     loanData.put("AmountToReturn", AmountToReturn);
                                                     loanData.put("PendingAmount", PendingAmount);
+                                                    loanData.put("LFNO", LfNo.getText().toString());
+                                                    loanData.put("Discount",discount.getText().toString());
+                                                    loanData.put("FileOpeningDate", FileOpeningDate.getText().toString());
+                                                    loanData.put("FileClosingDate", FileClosingDate.getText().toString());
+
+
 
                                                     if (Double.parseDouble(AmountToReturn) > 0) {
                                                         loanData.put("Status", "1");
@@ -605,7 +762,7 @@ public class CustRegNextFragment extends Fragment  {
                                             //Cust Loan Registration
                                             reqamountStr = reqamount.getText().toString();
                                             interestStr = interest.getText().toString();
-                                            filedamountStr = filedamount.getText().toString();
+                                            discountstr = discount.getText().toString();
 
                                             if (typeStr.equals("Daily")) {
                                                 interestStr = "0";
@@ -700,6 +857,9 @@ public class CustRegNextFragment extends Fragment  {
                                                 loanData.put("ReqAmount", reqamountStr);
                                                 loanData.put("AmountToReturn", AmountToReturn);
                                                 loanData.put("PendingAmount", PendingAmount);
+                                                loanData.put("LFNO", LfNo.getText().toString());
+                                                loanData.put("Discount",discount.getText().toString());
+                                                loanData.put("TotalMonths",LoanMonths.getText().toString());
 
                                                 if (Double.parseDouble(AmountToReturn) > 0) {
                                                     loanData.put("Status", "1");
@@ -798,9 +958,28 @@ public class CustRegNextFragment extends Fragment  {
 
 
 
+    private void ClearForm()
+    {
+        reqamount.setText(null);
+        discount.setText(null);
+        FiledAmount.setText(null);
+        interest.setText(null);
+        LoanMonths.setText(null);
+        discount.setText(null);
+        FileOpeningDate.setText(null);
+        FileClosingDate.setText(null);
+        group.clearCheck();
+
+    }
+
     private boolean isValid() {
 
-        if(reqamountStr.isEmpty())
+        if (LfNo.getText().toString().isEmpty())
+        {
+            LfNo.setError("Enter LF No.");
+            LfNo.setFocusable(true);
+        }
+        else if(reqamountStr.isEmpty())
         {
             reqamount.setError("Enter Requested Amount");
             reqamount.requestFocus();
@@ -813,30 +992,51 @@ public class CustRegNextFragment extends Fragment  {
             return false;
         }
         */
+
+        else if (discount.getText().toString().isEmpty())
+        {
+            discount.setError("Enter Discount Amount");
+            discount.setFocusable(true);
+            return false;
+        }
+        else if (Double.parseDouble(reqamount.getText().toString())<Double.parseDouble(discount.getText().toString()))
+        {
+            discount.setError("Discount Amount is Greater Than Requested Amount");
+            discount.setFocusable(true);
+            return false;
+        }
+        else if (Double.parseDouble(reqamount.getText().toString())==Double.parseDouble(discount.getText().toString()))
+        {
+            discount.setError("Discount Amount is same as Requested Amount");
+            discount.setFocusable(true);
+            return false;
+        }
         else if(dorStr==null)
         {
 
-            if (dor.isEnabled()) {
-                Toast.makeText(getActivity(), "Select Date Of Return", Toast.LENGTH_SHORT).show();
+            if (LoanMonths.isEnabled()) {
+                Toast.makeText(getActivity(), "Select Months", Toast.LENGTH_SHORT).show();
             }else
             {
                 Toast.makeText(getActivity(), "Select No. of Days", Toast.LENGTH_SHORT).show();
             }
-                    return false;
 
+            return false;
+        }
+        else if (typeStr.equals("Monthly")) {
+
+            if (Integer.parseInt(LoanMonths.getText().toString()) <= 0) {
+                LoanMonths.setError("Months Should be greater");
+                LoanMonths.setEnabled(true);
+            }
         }
         else if(interestStr.isEmpty())
         {
-            interest.setText("Enter Interest Rate");
+            interest.setError("Enter Interest Rate");
             interest.requestFocus();
             return false;
         }
-        else if(filedamountStr.isEmpty())
-        {
-            filedamount.setError("Enter Filed Amount");
-            filedamount.requestFocus();
-            return false;
-        }
+
         else if(typeStr.isEmpty())
         {
             spinner.requestFocus();

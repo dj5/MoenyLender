@@ -99,21 +99,21 @@ public class ActiveClientFragment extends Fragment {
                                                   {
                                                       Map<String,Object> data=doc1.getDocument().getData();
 
-                                                      status=data.get("Status").toString();
+                                                      if(data.get("Status")!=null) {
+                                                          status = data.get("Status").toString();
 
-                                                      if(status.equals("1"))
-                                                      {
-                                                          if(fl==0) {
+                                                          if (status.equals("1")) {
+                                                              if (fl == 0) {
 
-                                                              fl=1;
-                                                              custModel model = doc.getDocument().toObject(custModel.class);
-                                                              userList.add(model);
-                                                              String name = doc.getDocument().getString("Name");
-                                                              Log.d("name", "name: " + name);
-                                                              adapter.notifyDataSetChanged();
+                                                                  fl = 1;
+                                                                  custModel model = doc.getDocument().toObject(custModel.class);
+                                                                  userList.add(model);
+                                                                  String name = doc.getDocument().getString("Name");
+                                                                  Log.d("name", "name: " + name);
+                                                                  adapter.notifyDataSetChanged();
+                                                              }
                                                           }
                                                       }
-
                                                   }
                                               }
 

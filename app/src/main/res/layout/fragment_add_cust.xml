@@ -22,34 +22,49 @@
         app:cardMaxElevation="50dp"
         app:contentPadding="10dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/CustregHead"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
-
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/register_customer"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/CustRegDetailHead"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_below="@id/CustregHead"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Customer Details"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+
             <EditText
                 android:id="@+id/CustName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustregHead"
+                android:layout_below="@id/CustRegDetailHead"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="5dp"
                 android:ems="10"
+                android:textSize="14sp"
                 android:hint="@string/customer_name"
                 android:inputType="textPersonName" />
 
@@ -57,54 +72,146 @@
                 android:id="@+id/CustEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:layout_below="@id/CustName"
-
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:ems="10"
+                android:textSize="14sp"
                 android:hint="Customer Email"
                 android:inputType="textEmailAddress" />
 
             <EditText
-                android:id="@+id/CustPhone"
+                android:id="@+id/CustAdharId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/CustEmail"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:ems="10"
+                android:hint="Customer Adhar ID"
+                android:inputType="number"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/CustPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CustAdharId"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:textSize="14sp"
                 android:hint="Customer Phone"
                 android:inputType="phone" />
 
+
             <EditText
-                android:id="@+id/CustAddr"
+                android:id="@+id/CustDOB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/CustPhone"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
+                android:ems="10"
+                android:hint="DOB"
+                android:inputType="date"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/CustAddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CustDOB"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"
                 android:hint="@string/customer_address"
                 android:inputType="text" />
 
+
+            <TextView
+                android:id="@+id/GuarantorDetailHead"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_below="@id/CustAddr"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:text="Guarantor Details"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:layout_below="@id/GuarantorDetailHead"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:background="#000000"
+                android:gravity="center" />
+
+
+            <EditText
+                android:id="@+id/GuarantorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/divider1"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="Full Name"
+                android:textSize="14sp"
+                android:inputType="text" />
+
+
+            <EditText
+                android:id="@+id/GuarantorMob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/GuarantorName"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="Mobile No."
+                android:inputType="phone"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/GuarantorAddr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/GuarantorMob"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="Full Address"
+                android:textSize="14sp"
+                android:inputType="text" />
 
             <Button
                 android:id="@+id/Next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustAddr"
+                android:layout_below="@id/GuarantorAddr"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="7dp"
                 android:background="@color/colorWidget"
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="@string/next"
                 android:textColor="@android:color/background_light" />
         </RelativeLayout>
+        </ScrollView>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

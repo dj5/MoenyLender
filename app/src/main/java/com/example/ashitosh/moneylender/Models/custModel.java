@@ -6,20 +6,25 @@ import com.google.firebase.firestore.ServerTimestamp;
 
 public class custModel {
 
-    private String AccountNo, CustEmail,CustAddr,CustName,CustPhone,CustTotalLoan;
+    private String AccountNo, CustEmail,CustAddr,CustName,CustPhone,CustTotalLoan,CustAdharId,CustDob,GuarantorName,GuarantorMob,GuarantorAddr;
 
 
     public custModel() {
         //constructor for firestore
     }
 
-    public custModel(String accountNo, String custEmail, String custAddr, String custName, String custPhone, String custTotalLoan) {
+    public custModel(String accountNo, String custEmail, String custAddr, String custName, String custPhone, String custTotalLoan, String custAdharId, String custDob, String guarantorName, String guarantorMob, String guarantorAddr) {
         AccountNo = accountNo;
         CustEmail = custEmail;
         CustAddr = custAddr;
         CustName = custName;
         CustPhone = custPhone;
         CustTotalLoan = custTotalLoan;
+        CustAdharId = custAdharId;
+        CustDob = custDob;
+        GuarantorName = guarantorName;
+        GuarantorMob = guarantorMob;
+        GuarantorAddr = guarantorAddr;
     }
 
     public String getAccountNo() {
@@ -68,5 +73,45 @@ public class custModel {
 
     public void setCustTotalLoan(String custTotalLoan) {
         CustTotalLoan = custTotalLoan;
+    }
+
+    public String getCustAdharId() {
+        return CustAdharId;
+    }
+
+    public void setCustAdharId(String custAdharId) {
+        CustAdharId = custAdharId;
+    }
+
+    public String getCustDob() {
+        return CustDob;
+    }
+
+    public void setCustDob(String custDob) {
+        CustDob = custDob;
+    }
+
+    public String getGuarantorName() {
+        return GuarantorName;
+    }
+
+    public void setGuarantorName(String guarantorName) {
+        GuarantorName = guarantorName;
+    }
+
+    public String getGuarantorMob() {
+        return GuarantorMob;
+    }
+
+    public void setGuarantorMob(String guarantorMob) {
+        GuarantorMob = guarantorMob;
+    }
+
+    public String getGuarantorAddr() {
+        return GuarantorAddr;
+    }
+
+    public void setGuarantorAddr(String guarantorAddr) {
+        GuarantorAddr = guarantorAddr;
     }
 }

@@ -106,6 +106,8 @@
     <string name="select_agent_name">Select Agent Name</string>
     <string name="csv_files">Csv files</string>
     <string name="clients">Clients</string>
+    <string name="customer_id">Customer Id</string>
+    <string name="customer_email">Customer Email</string>
 
 
 </resources>

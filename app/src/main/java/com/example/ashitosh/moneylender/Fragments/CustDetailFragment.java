@@ -31,7 +31,7 @@ public class CustDetailFragment extends Fragment {
 
 
     private Button loanviewBtn,addLoanBtn;
-    private TextView Custname,address,phone,email,AccNo,Loan;
+    private TextView Custname,address,phone,email,AccNo,Loan,CustAdhar,CustDob,GuarantorName,GuarantorMob,GuarantorAddr;
     private String activity,totalLoan;
     private FirebaseFirestore fs;
     private String CurrentEmail;
@@ -57,6 +57,13 @@ public class CustDetailFragment extends Fragment {
         Loan=v.findViewById(R.id.CustDetailLoans);
         AccNo=v.findViewById(R.id.CustDetailAcc);
 
+        CustAdhar=v.findViewById(R.id.CustDetailAdhar);
+        CustDob=v.findViewById(R.id.CustDetailDob);
+        GuarantorName=v.findViewById(R.id.GuarantorDetailName);
+        GuarantorMob=v.findViewById(R.id.GuarantorDetailMob);
+        GuarantorAddr=v.findViewById(R.id.GuarantorDetailAddr);
+
+
         fs= FirebaseFirestore.getInstance();
 
         Bundle data=getArguments();
@@ -70,6 +77,12 @@ public class CustDetailFragment extends Fragment {
         AccNo.setText(data.getString("Account"));
 
         totalLoan=data.getString("TotalLoans");
+
+        CustAdhar.setText(data.getString("CustAdharId"));
+        CustDob.setText(data.getString("CustDob"));
+        GuarantorName.setText(data.getString("GuarantorName"));
+        GuarantorMob.setText(data.getString("GuarantorMob"));
+        GuarantorAddr.setText(data.getString("GuarantorAddr"));
 
         CurrentEmail= Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 

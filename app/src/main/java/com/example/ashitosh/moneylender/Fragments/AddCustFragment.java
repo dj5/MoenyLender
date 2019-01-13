@@ -31,9 +31,9 @@ import java.util.Map;
 public class AddCustFragment extends Fragment {
 
 
-    private EditText name,email,phone,address;
+    private EditText name,email,phone,address,adharID,Dob,GuarantorName,GuarantorMob,GuarantorAddr;
     private Button next;
-    private String nameStr,emailStr,phoneStr,addressStr;
+    private String nameStr,emailStr,phoneStr,addressStr,adharStr,dobStr,gNameStr,gMobStr,gAddrStr;
     private FirebaseFirestore fs;
 
     public AddCustFragment() {
@@ -52,6 +52,12 @@ public class AddCustFragment extends Fragment {
         email=v.findViewById(R.id.CustEmail);
         phone=v.findViewById(R.id.CustPhone);
         address=v.findViewById(R.id.CustAddr);
+        adharID=v.findViewById(R.id.CustAdharId);
+        Dob=v.findViewById(R.id.CustDOB);
+
+        GuarantorName=v.findViewById(R.id.GuarantorName);
+        GuarantorMob=v.findViewById(R.id.GuarantorMob);
+        GuarantorAddr=v.findViewById(R.id.GuarantorAddr);
 
         next=v.findViewById(R.id.Next);
 
@@ -67,6 +73,12 @@ public class AddCustFragment extends Fragment {
                 phoneStr=phone.getText().toString();
                 addressStr=address.getText().toString();
 
+                adharStr=adharID.getText().toString();
+                dobStr=Dob.getText().toString();
+                gNameStr=GuarantorName.getText().toString();
+                gMobStr=GuarantorMob.getText().toString();
+                gAddrStr=GuarantorAddr.getText().toString();
+
 
                 if(isValid())
                 {
@@ -79,7 +91,11 @@ public class AddCustFragment extends Fragment {
                     data.putString("CustAddr",addressStr);
                     data.putString("BtnId","FirstLoan");
 
-
+                    data.putString("CustAdhar",adharStr);
+                    data.putString("CustDob",dobStr);
+                    data.putString("GuarantorName",gNameStr);
+                    data.putString("GuarantorMob",gMobStr);
+                    data.putString("GurantorAddr",gAddrStr);
 
                     CustRegNextFragment fragment=new CustRegNextFragment();
 
@@ -138,8 +154,50 @@ public class AddCustFragment extends Fragment {
             address.requestFocus();
             return false;
         }
-
-
+        else if(adharStr.isEmpty())
+        {
+            adharID.setError("Enter Adhar Id");
+            adharID.requestFocus();
+            return false;
+        }
+        else if(!adharStr.isEmpty())
+        {
+            if (adharStr.length()!=12) {
+                adharID.setError("Invalid Adhar Id");
+                adharID.requestFocus();
+                return false;
+            }
+        }
+        else if(dobStr.isEmpty())
+        {
+            Dob.setError("Enter DOB");
+            Dob.requestFocus();
+            return false;
+        }
+        else if(gNameStr.isEmpty())
+        {
+            GuarantorName.setError("Enter Guarantor Name");
+            GuarantorName.requestFocus();
+            return false;
+        }
+        else if(gAddrStr.isEmpty())
+        {
+            GuarantorAddr.setError("Enter Guarantor Address");
+            GuarantorAddr.requestFocus();
+            return false;
+        }
+        else if(gMobStr.isEmpty())
+        {
+            GuarantorMob.setError("Enter Mobile No.");
+            GuarantorMob.requestFocus();
+            return false;
+        }
+        else if(gMobStr.length()!=10)
+        {
+            GuarantorMob.setError("Invalid Mobile No.");
+            GuarantorMob.requestFocus();
+            return false;
+        }
         return true;
     }
 

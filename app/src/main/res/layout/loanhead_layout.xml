@@ -258,7 +258,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:padding="2dp"
-                    android:text="Date Of Issue: "
+                    android:text="File Opening Date:"
                     android:textColor="@color/background"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -291,7 +291,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:padding="2dp"
-                    android:text="Date Of Return"
+                    android:text="File Closing Date:"
                     android:textColor="@color/background"
                     android:textSize="16sp"
                     android:textStyle="bold" />

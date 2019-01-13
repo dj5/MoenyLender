@@ -34,14 +34,14 @@ public final class R {
         public static final int powered_by_google_light = 0x7f07009e;
     }
     public static final class id {
-        public static final int place_autocomplete_clear_button = 0x7f080167;
-        public static final int place_autocomplete_powered_by_google = 0x7f080168;
-        public static final int place_autocomplete_prediction_primary_text = 0x7f080169;
-        public static final int place_autocomplete_prediction_secondary_text = 0x7f08016a;
-        public static final int place_autocomplete_progress = 0x7f08016b;
-        public static final int place_autocomplete_search_button = 0x7f08016c;
-        public static final int place_autocomplete_search_input = 0x7f08016d;
-        public static final int place_autocomplete_separator = 0x7f08016e;
+        public static final int place_autocomplete_clear_button = 0x7f080181;
+        public static final int place_autocomplete_powered_by_google = 0x7f080182;
+        public static final int place_autocomplete_prediction_primary_text = 0x7f080183;
+        public static final int place_autocomplete_prediction_secondary_text = 0x7f080184;
+        public static final int place_autocomplete_progress = 0x7f080185;
+        public static final int place_autocomplete_search_button = 0x7f080186;
+        public static final int place_autocomplete_search_input = 0x7f080187;
+        public static final int place_autocomplete_separator = 0x7f080188;
     }
     public static final class layout {
         public static final int place_autocomplete_fragment = 0x7f0a0075;
@@ -50,7 +50,7 @@ public final class R {
         public static final int place_autocomplete_progress = 0x7f0a0078;
     }
     public static final class string {
-        public static final int place_autocomplete_clear_button = 0x7f0f00e2;
-        public static final int place_autocomplete_search_hint = 0x7f0f00e3;
+        public static final int place_autocomplete_clear_button = 0x7f0f00e4;
+        public static final int place_autocomplete_search_hint = 0x7f0f00e5;
     }
 }
