@@ -632,6 +632,23 @@ public class CollectMoneyFragment extends Fragment {
                 {
                     pendingamount= String.valueOf(Double.parseDouble(pendingamount)-temp);
                 }
+                else if(temp>Double.parseDouble(pendingamount))
+                {
+                    pendingamount="0";
+                    ExpectedInstallment=ExpectedInstallment-temp;
+
+
+                    Toast.makeText(getActivity(), "Expected lessened", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else if((Double.parseDouble(amounttext) > ExpectedInstallment))
+            {
+                double temp=Double.parseDouble(amounttext) - ExpectedInstallment;
+
+                    ExpectedInstallment = ExpectedInstallment - temp;
+
+
+                Toast.makeText(getActivity(), "Expected lessened"+ ExpectedInstallment, Toast.LENGTH_SHORT).show();
             }
             else {
                 pendingamount = String.valueOf(pendingamount);
@@ -641,6 +658,7 @@ public class CollectMoneyFragment extends Fragment {
         DecimalFormat dec=new DecimalFormat("#0.00");
 
         data.put("PendingAmount",String.valueOf(dec.format(Double.parseDouble(pendingamount))));
+        data.put("ExpectedInstallment",String.valueOf(ExpectedInstallment));
 
         if((AmountToReturn>=0))
         {

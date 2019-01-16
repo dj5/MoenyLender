@@ -624,9 +624,9 @@ public class CustRegNextFragment extends Fragment  {
 
                                                         Double rate = Double.parseDouble(interestStr);
 
-                                                        Double SI = (Double.parseDouble(filedamountStr) * rate * months) / (100);
+                                                        Double SI = (Double.parseDouble(filedamountStr) * (rate/100)) ;
 
-                                                        Double Amount = Double.parseDouble(filedamountStr) + SI;
+                                                        Double Amount =  SI*months;
 
                                                         DecimalFormat dec = new DecimalFormat("#0.00");
 
@@ -826,9 +826,9 @@ public class CustRegNextFragment extends Fragment  {
 
                                                     Double rate = Double.parseDouble(interestStr);
 
-                                                    Double SI = (Double.parseDouble(filedamountStr) * rate * months) / (100);
+                                                    Double SI = (Double.parseDouble(filedamountStr) * (rate/100));
 
-                                                    Double Amount = Double.parseDouble(filedamountStr) + SI;
+                                                    Double Amount = Double.parseDouble(filedamountStr)+ SI;
 
                                                     DecimalFormat dec = new DecimalFormat("#0.00");
 
