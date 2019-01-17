@@ -24,6 +24,7 @@
       android:background="@color/colorPrimary"
       app:title="MoneyLender"
       app:titleMarginStart="@dimen/default_gap"
+
       app:titleTextColor="@color/titlecolor"/>
 
     <android.support.design.widget.BottomNavigationView

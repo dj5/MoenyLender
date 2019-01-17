@@ -16,6 +16,9 @@
         app:cardElevation="10dp"
         app:contentPadding="3dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -100,6 +103,38 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
                     android:padding="2dp"
+                    android:text="LF No.: "
+                    android:textColor="@color/background"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/LfNoVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginTop="2dp"
+                    android:padding="2dp"
+                    android:text="LfNo"
+                    android:textAlignment="center"
+                    android:textColor="@color/background"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:padding="2dp"
                     android:text="@string/loan_type"
                     android:textColor="@color/background"
                     android:textSize="16sp"
@@ -146,6 +181,37 @@
                     android:layout_marginTop="2dp"
                     android:padding="2dp"
                     android:text="@string/phone"
+                    android:textColor="@color/background"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:padding="2dp"
+                    android:text="Total Discount: "
+                    android:textColor="@color/background"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/DiscountVal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginTop="2dp"
+                    android:padding="2dp"
+                    android:text="discount"
                     android:textColor="@color/background"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -379,6 +445,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
+        </ScrollView>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

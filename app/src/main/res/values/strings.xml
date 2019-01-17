@@ -108,6 +108,7 @@
     <string name="clients">Clients</string>
     <string name="customer_id">Customer Id</string>
     <string name="customer_email">Customer Email</string>
+    <string name="password">Password:</string>
 
 
 </resources>

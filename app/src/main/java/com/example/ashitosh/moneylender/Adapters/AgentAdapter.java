@@ -86,7 +86,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
 
                    data.putString("agentPhone",list.get(position).getPhone());
                    data.putString("agentAddress",list.get(position).getAddress());
-
+                   data.putString("agentPass",list.get(position).getPassword());
 
                    fragment.setArguments(data);
                    android.support.v4.app.FragmentTransaction fragmentTransaction = manager.beginTransaction().add(fragment, "Agent").addToBackStack("Agents");

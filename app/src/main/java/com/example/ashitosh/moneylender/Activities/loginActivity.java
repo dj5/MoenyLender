@@ -144,8 +144,7 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
         forgetPass=findViewById(R.id.forgetPass);
         //google signin button
 
-        gsignin  = findViewById(R.id.googleSignIn);
-        gsignin.setSize(SIZE_STANDARD);
+
 
         pd=new ProgressDialog(this);
 
@@ -154,6 +153,10 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
         f_user=f_auth.getCurrentUser();
 
         //**************************google sign in***********************8
+/*
+        gsignin  = findViewById(R.id.googleSignIn);
+        gsignin.setSize(SIZE_STANDARD);
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
                  gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -179,7 +182,7 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
 
             }
         });
-
+*/
 
         signinbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -367,6 +370,7 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
                     }
                 });
     }
+
 
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(gac);

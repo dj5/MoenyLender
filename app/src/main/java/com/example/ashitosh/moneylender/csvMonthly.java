@@ -141,7 +141,16 @@ public class csvMonthly extends Fragment {
                             }
 
                             if (!userList.isEmpty()) {
-                                createCsv();
+
+                                csvDaily obj=new csvDaily();
+
+                                if (obj.checkPermission()) {
+                                    createCsv();
+                                }else
+                                {
+                                    obj.requestPermission();
+                                    createCsv();
+                                }
                             }else
                             {
 

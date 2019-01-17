@@ -43,60 +43,89 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/AgentName"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/AgentNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/regHead"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:hint="@string/agent_name"
-                android:inputType="textPersonName" />
+                android:layout_marginTop="15dp">
 
-            <EditText
-                android:id="@+id/AgentEmail"
+                <EditText
+                    android:id="@+id/AgentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:ems="10"
+                    android:hint="@string/agent_name"
+                    android:inputType="textPersonName" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/AgentEmailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/AgentNameLayout"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
 
-                android:layout_below="@id/AgentName"
+                <EditText
+                    android:id="@+id/AgentEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
+                    android:ems="10"
+                    android:hint="@string/agent_email"
+                    android:inputType="textEmailAddress" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/AgentPhoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AgentEmailLayout"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/AgentPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:ems="10"
+                    android:hint="@string/agent_phone"
+                    android:inputType="phone" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AgentPhoneLayout"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/agent_email"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/AgentPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/AgentEmail"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/agent_phone"
-                android:inputType="phone" />
-
+                android:id="@+id/AgentAddrLayout">
             <EditText
                 android:id="@+id/AgentAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/AgentPhone"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:hint="@string/agent_address"
                 android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/AgentRegBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/AgentAddr"
+                android:layout_below="@id/AgentAddrLayout"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"

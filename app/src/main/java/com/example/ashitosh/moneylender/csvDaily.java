@@ -1,8 +1,11 @@
 package com.example.ashitosh.moneylender;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -10,7 +13,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -136,8 +141,14 @@ public class csvDaily extends Fragment {
 
                             }
 
-                            createCsv();
-
+                            if(checkPermission()) {
+                                createCsv();
+                            }
+                            else
+                            {
+                                requestPermission();
+                                createCsv();
+                            }
                             pd.dismiss();
                         }
                     }
@@ -217,4 +228,46 @@ public class csvDaily extends Fragment {
 
     }
 
+
+    public boolean checkPermission()
+    {
+        final Activity context=getActivity();
+
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(context), android.Manifest.permission.READ_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void requestPermission()
+    {
+        final Activity context=getActivity();
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(Objects.requireNonNull(context), android.Manifest.permission.READ_EXTERNAL_STORAGE))
+        {
+            new AlertDialog.Builder(this.getActivity())
+                    .setTitle("Permission Needed")
+                    .setMessage("Storage Permission is required to generate Csv file")
+                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(context, new String []{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    }).create().show();
+
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(context, new String []{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+        }
+
+    }
 }

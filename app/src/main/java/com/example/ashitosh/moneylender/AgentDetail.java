@@ -25,10 +25,10 @@ import java.util.Objects;
  */
 public class AgentDetail extends Fragment {
 
-    private TextView name,email,phone,address;
+    private TextView name,email,phone,address,pass;
     private FirebaseFirestore fs;
     private FirebaseAuth f_auth;
-    private String namestr,emailstr,phonestr,addrstr;
+    private String namestr,emailstr,phonestr,addrstr,passtr;
     private ProgressDialog pd;
 
     public AgentDetail() {
@@ -46,6 +46,7 @@ public class AgentDetail extends Fragment {
         email=v.findViewById(R.id.AgentDetailEmail2);
         phone=v.findViewById(R.id.AgentDetailPhone2);
         address=v.findViewById(R.id.AgentDetailAddr2);
+        pass=v.findViewById(R.id.AgentPass);
 
         pd=new ProgressDialog(getActivity());
 
@@ -58,20 +59,47 @@ public class AgentDetail extends Fragment {
         phonestr=data.getString("agentPhone");
         addrstr=data.getString("agentAddress");
         namestr=data.getString("agentName");
+        passtr=data.getString("agentPass");
 
-            if(!Objects.requireNonNull(namestr).isEmpty() && ! emailstr.isEmpty() && !phonestr.isEmpty() && !Objects.requireNonNull(addrstr).isEmpty())
-            {
+        if (verify())
+        {
                 name.setText(namestr);
                 email.setText(emailstr);
                 phone.setText(phonestr);
                 address.setText(addrstr);
-
-            }
-
+                pass.setText(passtr);
+        }
 
         return v;
     }
 
 
+    private boolean verify()
+    {
+        if(Objects.requireNonNull(namestr).isEmpty())
+        {
+            Toast.makeText(getActivity(), "Agent Name not identified", Toast.LENGTH_SHORT).show();
+            return false;
+        }else  if (emailstr.isEmpty())
+        {
+            Toast.makeText(getActivity(), "Agent Email not identified", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else  if (phonestr.isEmpty())
+        {
+            Toast.makeText(getActivity(), "Agent Phone not identified", Toast.LENGTH_SHORT).show();
+            return false;
+        }else  if (addrstr.isEmpty())
+        {
+            Toast.makeText(getActivity(), "Agent Address not identified", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else  if (passtr.isEmpty())
+        {
+            Toast.makeText(getActivity(), "Agent Password not identified", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
 
 }

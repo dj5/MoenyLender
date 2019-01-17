@@ -2,15 +2,36 @@ package com.example.ashitosh.moneylender.Models;
 
 public class LoanModel {
 
-   private String Status,AgentName,DOI,DOR,ExpectedInstallment,FiledAmount,Interest,LoanType,ReqAmount,AmountToReturn,PendingAmount,LoanId;
+   private String Status,AgentName,DOI,DOR,ExpectedInstallment,FiledAmount,Interest,LoanType,ReqAmount,AmountToReturn,PendingAmount,LoanId,LFNO,Discount;
 
+    public LoanModel(String LFNO, String discount) {
+        this.LFNO = LFNO;
+        Discount = discount;
+    }
 
     public LoanModel() {
+    }
+
+    public String getLFNO() {
+        return LFNO;
+    }
+
+    public void setLFNO(String LFNO) {
+        this.LFNO = LFNO;
+    }
+
+    public String getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(String discount) {
+        Discount = discount;
     }
 
     public LoanModel(String status, String agentName, String DOI, String DOR, String expectedInstallment, String filedAmount, String interest, String loanType, String reqAmount, String amountToReturn, String pendingAmount, String loanId) {
         Status = status;
         AgentName = agentName;
+
         this.DOI = DOI;
         this.DOR = DOR;
         ExpectedInstallment = expectedInstallment;

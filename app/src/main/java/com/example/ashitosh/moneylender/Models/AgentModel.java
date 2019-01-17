@@ -6,17 +6,18 @@ import java.util.List;
 
 public class AgentModel {
 
-    private String Name,Address,Email,Phone;
+    private String Name,Address,Email,Phone,Password;
 
     public AgentModel() {
         //fore firestore
     }
 
-    public AgentModel(String name, String address, String email, String phone) {
+    public AgentModel(String name, String address, String email, String phone, String password) {
         Name = name;
         Address = address;
         Email = email;
         Phone = phone;
+        Password = password;
     }
 
     public String getName() {
@@ -49,5 +50,13 @@ public class AgentModel {
 
     public void setPhone(String phone) {
         Phone = phone;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
     }
 }

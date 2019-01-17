@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cardview_light_background"
     tools:context=".CollectMoneyFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,16 +16,16 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="27dp"
+        android:text="@string/amount_collection1"
         android:textColor="#000"
-        android:textStyle="bold"
-        android:text="@string/amount_collection1" />
+        android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/AccLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/AccLayout"
         android:layout_below="@id/ColHead"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
@@ -37,8 +38,8 @@
             android:layout_marginTop="5dp"
             android:padding="2dp"
             android:text="Account No"
-            android:textStyle="bold"
-            android:textColor="#000" />
+            android:textColor="#000"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/accValue"
@@ -48,7 +49,8 @@
             android:layout_marginStart="80dp"
             android:layout_marginTop="5dp"
             android:padding="2dp"
-            android:text="@string/account_no" />
+            android:text="@string/account_no"
+            android:textColor="@android:color/black" />
 
     </LinearLayout>
 
@@ -59,7 +61,7 @@
         android:layout_below="@id/AccLayout"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:padding="2dp"
         android:text="@string/loan_id"
         android:textColor="#000"
@@ -72,157 +74,205 @@
         android:layout_below="@id/ActiveLoanHead"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="2dp" />
 
-    <LinearLayout
-        android:id="@+id/LoanTypeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ActiveLoanSpinner"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/LoanTypeHead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:text="Loan Type: "
-            android:textColor="#000"
-            android:textStyle="bold" />
+            android:layout_below="@id/ActiveLoanSpinner"
 
-        <TextView
-            android:id="@+id/LoanType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:text="Type" />
+            android:layout_marginTop="5dp">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/LoanTypeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
 
+                android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/ExpectLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/LoanTypeLayout"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/LoanTypeHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="Loan Type: "
+                    android:textColor="#000"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/ExpectAmountHead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:text="Expected Amount: "
-            android:textColor="#000"
-            android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/LoanType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="Type"
+                    android:textColor="#000"/>
 
-        <TextView
-            android:id="@+id/ExpectAmount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:text="ExpectValue" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/AmountToReturnLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/LoanTypeLayout"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/AmountToReturnHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="Remaining Balance: "
+                    android:textColor="#000"
+                    android:textStyle="bold" />
 
-    <LinearLayout
-        android:id="@+id/PendingLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ExpectLayout"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/AmountToReturn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="balance"
+                    android:textColor="#000" />
 
-        <TextView
-            android:id="@+id/PrevPendingHead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:text="Previous Pending: "
-            android:textColor="#000"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/prevPending"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
-            android:padding="2dp"
-            android:text="PendingValue" />
-
-    </LinearLayout>
+            </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/AmountText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/PendingLayout"
-        android:text="@string/amount"
-        android:textStyle="bold"
-        android:textColor="#000" />
+            <LinearLayout
+                android:id="@+id/ExpectLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AmountToReturnLayout"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/AmountCollect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/AmountText"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:hint="@string/enter_amount"
-        android:inputType="number|numberDecimal" />
+                <TextView
+                    android:id="@+id/ExpectAmountHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="Expected Amount: "
+                    android:textColor="#000"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ExpectAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="ExpectValue"
+                    android:textColor="#000"/>
+
+            </LinearLayout>
 
 
-    <Button
-        android:id="@+id/pay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/AmountCollect"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorWidget"
-        android:text="@string/collect_amount"
-        android:textColor="@color/titlecolor" />
+            <LinearLayout
+                android:id="@+id/PendingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ExpectLayout"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/lastDateOfCol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pay"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:text="Last date Of Collection"
-        android:textColor="#000" />
+                <TextView
+                    android:id="@+id/PrevPendingHead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="Previous Pending: "
+                    android:textColor="#000"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/prevPending"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="5dp"
+                    android:padding="2dp"
+                    android:text="PendingValue"
+                    android:textColor="#000" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/AmountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/PendingLayout"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/amount"
+                android:textColor="#000"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/AmountCollect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AmountText"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:hint="@string/enter_amount"
+                android:inputType="number|numberDecimal"
+                android:textColor="@android:color/black" />
+
+
+            <Button
+                android:id="@+id/pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/AmountCollect"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorWidget"
+                android:text="@string/collect_amount"
+                android:textColor="@color/titlecolor" />
+
+            <TextView
+                android:id="@+id/lastDateOfCol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pay"
+                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:text="Last date Of Collection"
+                android:textColor="@android:color/holo_blue_dark" />
+
+        </RelativeLayout>
 
 
 </RelativeLayout>

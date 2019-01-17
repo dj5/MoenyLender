@@ -22,42 +22,57 @@
     </android.support.v7.widget.Toolbar>
 
 
-    <EditText
-        android:id="@+id/login_email"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/Login_Toolbar"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="70dp"
+        android:id="@+id/login_emailLayout">
+    <EditText
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF189FCD"
+        android:textColorHint="#FF189FCD"
+        android:textColorHighlight="#FF189FCD"
         android:ems="10"
         android:hint="@string/enter_email"
         android:inputType="textEmailAddress"
         android:textColor="@android:color/black" />
+    </android.support.design.widget.TextInputLayout>
 
-
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_emailLayout"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/Login_PassLayout">
     <EditText
         android:id="@+id/Login_Pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/login_email"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+        android:backgroundTint="#FF189FCD"
         android:ems="10"
         android:hint="@string/enter_password"
+        android:textColorHint="#FF189FCD"
+        android:textColorHighlight="#FF189FCD"
         android:inputType="textPersonName|textPassword"
         android:textColor="@android:color/black" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/Login_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_below="@id/Login_PassLayout"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/Login_Pass"
-        android:background="@color/colorWidget"
+        android:background="@android:color/holo_blue_dark"
         android:elevation="6dp"
         android:text="@string/log_in"
         android:textColor="@color/common_google_signin_btn_text_dark_default" />
@@ -71,27 +86,7 @@
         android:layout_marginStart="140dp"
         android:layout_marginTop="10dp"
         android:text="@string/forgot_password"
-        android:textColor="@color/colorWidget" />
+        android:textColor="@android:color/holo_blue_light" />
 
-    <TextView
-        android:id="@+id/or"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/forgetPass"
-        android:layout_marginStart="182dp"
-        android:layout_marginTop="10dp"
-        android:text="Or"
-        android:textColor="@color/colorWidget" />
-
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/googleSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/or"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:elevation="10dp" />
 
 </RelativeLayout>

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         app:title="MoneyLender"
+
         app:titleTextColor="@color/titlecolor"/>
 
     <android.support.design.widget.BottomNavigationView

@@ -240,7 +240,7 @@ MERGED from [com.google.android.gms:play-services-measurement-base:16.0.0] /home
 	android:roundIcon
 		ADDED from /home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/AndroidManifest.xml:20:9-54
 	android:icon
-		ADDED from /home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/AndroidManifest.xml:18:9-43
+		ADDED from /home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/AndroidManifest.xml:18:9-38
 	android:allowBackup
 		ADDED from /home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/src/main/AndroidManifest.xml:17:9-35
 	android:theme

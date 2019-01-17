@@ -55,90 +55,129 @@
                 android:textSize="16sp" />
 
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/CustRegDetailHead"
+                android:id="@+id/CustNameLayout">
             <EditText
                 android:id="@+id/CustName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustRegDetailHead"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+
                 android:ems="10"
                 android:textSize="14sp"
                 android:hint="@string/customer_name"
                 android:inputType="textPersonName" />
 
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@+id/CustNameLayout"
+                android:id="@+id/CustEmailLayout">
             <EditText
                 android:id="@+id/CustEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustName"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+
                 android:ems="10"
                 android:textSize="14sp"
                 android:hint="Customer Email"
                 android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
 
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/CustEmailLayout"
+                android:id="@+id/CustAdharIdLayout">
             <EditText
                 android:id="@+id/CustAdharId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustEmail"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+
                 android:ems="10"
                 android:hint="Customer Adhar ID"
                 android:inputType="number"
                 android:textSize="14sp" />
 
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/CustAdharIdLayout"
+                android:id="@+id/CustPhoneLayout">
             <EditText
                 android:id="@+id/CustPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustAdharId"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+
+
                 android:ems="10"
                 android:textSize="14sp"
                 android:hint="Customer Phone"
                 android:inputType="phone" />
+            </android.support.design.widget.TextInputLayout>
 
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/CustPhoneLayout"
+                android:id="@+id/CustDOBLayout">
             <EditText
                 android:id="@+id/CustDOB"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustPhone"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+
                 android:ems="10"
                 android:hint="DOB"
                 android:inputType="date"
                 android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/CustDOBLayout"
+                android:id="@+id/CustAddrLayout">
             <EditText
                 android:id="@+id/CustAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CustDOB"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+
                 android:textSize="14sp"
                 android:hint="@string/customer_address"
                 android:inputType="text" />
-
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/GuarantorDetailHead"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:layout_below="@id/CustAddr"
+                android:layout_below="@id/CustAddrLayout"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:text="Guarantor Details"
@@ -160,48 +199,64 @@
                 android:gravity="center" />
 
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/divider1"
+                android:id="@+id/GuarantorNameLayout">
             <EditText
                 android:id="@+id/GuarantorName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/divider1"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:hint="Full Name"
                 android:textSize="14sp"
                 android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
 
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/GuarantorNameLayout"
+                android:id="@+id/GuarantorMobLayout">
             <EditText
                 android:id="@+id/GuarantorMob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/GuarantorName"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:hint="Mobile No."
                 android:inputType="phone"
                 android:textSize="14sp" />
+            </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/GuarantorMobLayout"
+                android:id="@+id/GuarantorAddrLayout">
             <EditText
                 android:id="@+id/GuarantorAddr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/GuarantorMob"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
                 android:hint="Full Address"
                 android:textSize="14sp"
                 android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/Next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/GuarantorAddr"
+                android:layout_below="@id/GuarantorAddrLayout"
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
