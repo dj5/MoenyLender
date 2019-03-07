@@ -21,12 +21,18 @@ import com.example.ashitosh.moneylender.Fragments.OwnerAccount;
 import com.example.ashitosh.moneylender.Fragments.SearchFragment;
 import com.example.ashitosh.moneylender.Fragments.ManageAgent;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -48,6 +54,43 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
     private CollectMoneyFragment collectMoneyFragment;
     private AgentDetailFragment agentdetail;
     private ActiveCustCollectionFragment activeCustCollectionFragment;
+    private FirebaseUser user;
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        FirebaseApp.initializeApp(this);
+
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+        user=FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        //   FirebaseAuth.getInstance().signOut();
+
+        if (user!=null)
+        {
+            String email=user.getEmail();
+
+            Toast.makeText(this, "User:"+ Objects.requireNonNull(user).getEmail(), Toast.LENGTH_SHORT).show();
+
+        }
+        else if(googleSignInAccount !=null)
+        {
+            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
+            startActivity(intent);
+            finish();
+        }else
+        {
+            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,4 +252,6 @@ public class Agent extends AppCompatActivity implements GoogleApiClient.OnConnec
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(getApplicationContext(),"Connection failed",Toast.LENGTH_LONG).show();
     }
+
+
 }

@@ -1,3 +1,0 @@
-# Referenced at /home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/manifests/full/debug/AndroidManifest.xml:36
--keep class android.support.multidex.MultiDexApplication { <init>(...); }
-

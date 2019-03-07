@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.ashitosh.moneylender.Agent;
 import com.example.ashitosh.moneylender.Fragments.ActiveClientFragment;
 import com.example.ashitosh.moneylender.Fragments.AgentClient;
 import com.example.ashitosh.moneylender.Fragments.OwnerAccount;
@@ -29,12 +30,16 @@ import com.example.ashitosh.moneylender.Fragments.csvFragment;
 import com.example.ashitosh.moneylender.Fragments.homeFragment;
 import com.example.ashitosh.moneylender.R;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -59,6 +64,45 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
     private NavigationView navigationView;
     private csvFragment csvFragment;
     private AgentClient agentClient;
+    private FirebaseUser user;
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        FirebaseApp.initializeApp(this);
+
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+        user=FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        //   FirebaseAuth.getInstance().signOut();
+
+        if (user!=null)
+        {
+            String email=user.getEmail();
+
+            Toast.makeText(this, "User:"+ Objects.requireNonNull(user).getEmail(), Toast.LENGTH_SHORT).show();
+
+        }
+        else if(googleSignInAccount !=null)
+        {
+            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
+            startActivity(intent);
+            finish();
+        }else
+        {
+            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,7 +171,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
                         fragment.setArguments(data);
 
                         android.support.v4.app.FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction()
-                                .add(fragment,"ActiveCust").addToBackStack("ActiveCust");
+                                .add(fragment,"csvFile").addToBackStack("csvFile");
 
                         fragmentTransaction.replace(R.id.mainFrame,fragment);
                         fragmentTransaction.commit();
@@ -138,7 +182,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                         ActiveClientFragment frag1=new ActiveClientFragment();
                         android.support.v4.app.FragmentTransaction ft1= getSupportFragmentManager().beginTransaction()
-                                .add(frag1,"ActiveCust").addToBackStack("ActiveCust");
+                                .add(frag1,"ActiveCleintt").addToBackStack("ActiveClient");
                         ft1.replace(R.id.mainFrame,frag1);
                         ft1.commit();
                         return true;
@@ -157,7 +201,7 @@ public class Owner extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                         ManageAgent frag3=new ManageAgent();
                         android.support.v4.app.FragmentTransaction ft3= getSupportFragmentManager().beginTransaction()
-                                .add(frag3,"manageCust").addToBackStack("ManageCust");
+                                .add(frag3,"manageAgent").addToBackStack("ManageAgent");
                         ft3.replace(R.id.mainFrame,frag3);
                         ft3.commit();
                         return true;

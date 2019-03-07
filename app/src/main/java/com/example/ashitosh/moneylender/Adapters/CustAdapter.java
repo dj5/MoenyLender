@@ -26,12 +26,19 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
 
     ArrayList<custModel> list;
     FragmentManager manager;
-    String frag;
+    String frag,agentEmail;
 
     public CustAdapter(ArrayList<custModel> list, FragmentManager supportFragmentManager, String agentHome) {
         this.list = list;
         manager=supportFragmentManager;
         this.frag=agentHome;
+    }
+
+    public CustAdapter(ArrayList<custModel> list, String email, FragmentManager supportFragmentManager, String agentHome) {
+        this.list = list;
+        manager=supportFragmentManager;
+        this.frag=agentHome;
+        this.agentEmail=email;
     }
 
 
@@ -68,6 +75,7 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
                 data.putString("Account", list.get(position).getAccountNo());
                 data.putString("TotalLoans", list.get(position).getCustTotalLoan());
 
+
                 data.putString("CustAdharId", list.get(position).getCustAdharId());
                 data.putString("CustDob", list.get(position).getCustDob());
                 data.putString("GuarantorName", list.get(position).getGuarantorName());
@@ -90,6 +98,12 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
                 {
 
                     data.putString("fragment", "Owner");
+                    if (!agentEmail.isEmpty()) {
+
+                        data.putString("AgentEmail", agentEmail);
+                    }
+
+
 
                     CustDetailFragment fragment = new CustDetailFragment();
 
@@ -107,6 +121,7 @@ public class CustAdapter extends RecyclerView.Adapter<CustAdapter.ViewHolder>
 
                     } else {
                         data.putString("fragment", "Agent");
+                        data.putString("AgentEmail",agentEmail);
                     }
 
                     CustDetailFragment fragment = new CustDetailFragment();

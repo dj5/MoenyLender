@@ -9,6 +9,13 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+   <android.support.v4.widget.SwipeRefreshLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:id="@+id/swipeRefreshCollection">
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
     <TextView
         android:id="@+id/ColHead"
         android:layout_width="wrap_content"
@@ -34,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:padding="2dp"
             android:text="Account No"
@@ -60,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/AccLayout"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:padding="2dp"
         android:text="@string/loan_id"
@@ -74,6 +81,8 @@
         android:layout_below="@id/ActiveLoanHead"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
+        android:backgroundTint="@color/colorWidget"
+
         android:layout_marginTop="2dp" />
 
 
@@ -273,6 +282,7 @@
                 android:textColor="@android:color/holo_blue_dark" />
 
         </RelativeLayout>
-
+       </RelativeLayout>
+   </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

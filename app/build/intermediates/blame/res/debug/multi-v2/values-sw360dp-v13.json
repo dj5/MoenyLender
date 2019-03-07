@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-sw360dp-v13/values-sw360dp-v13.xml",
+            "outputFile": "/home/ashitosh/Videos/MoneyLender/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-sw360dp-v13/values-sw360dp-v13.xml",
             "map": [
                 {
-                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/firebase-ui-auth-3.2.2.aar/c1e7510874fe74b7bd15099e61964e10/res/values-sw360dp-v13/values-sw360dp-v13.xml",
+                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/firebase-ui-auth-3.2.2.aar/f3c42cf3ca69083ca0b6c09f953901e0/res/values-sw360dp-v13/values-sw360dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8",
                         "startColumns": "4,4,4,4,4,4,4",

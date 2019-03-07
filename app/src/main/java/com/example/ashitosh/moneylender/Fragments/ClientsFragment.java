@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Adapters.CustAdapter;
 import com.example.ashitosh.moneylender.Models.custModel;
@@ -55,19 +56,24 @@ public class ClientsFragment extends Fragment {
 
         userList=new ArrayList<>();
 
+        Bundle data=getArguments();
+
+        email= Objects.requireNonNull(data).getString("AgentEmail");
 
         search=v.findViewById(R.id.ClientSearch);
 
-        adapter= new CustAdapter(userList, Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"ClientsFragment");
-
+        if (!email.isEmpty()) {
+            adapter = new CustAdapter(userList, email, Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "ClientsFragment");
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Agent email empty", Toast.LENGTH_SHORT).show();
+        }
         recyclerView=v.findViewById(R.id.ClientRecycleList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        Bundle data=getArguments();
-
-        email= Objects.requireNonNull(data).getString("AgentEmail");
 
 
 //gets Daily ACtive customer

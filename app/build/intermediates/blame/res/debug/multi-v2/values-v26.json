@@ -1,29 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/ashitosh/Documents/MoneyLenderv2/MoneyLender/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v26/values-v26.xml",
+            "outputFile": "/home/ashitosh/Videos/MoneyLender/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-v26/values-v26.xml",
             "map": [
                 {
-                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/firebase-ui-auth-3.2.2.aar/c1e7510874fe74b7bd15099e61964e10/res/values-v26/values-v26.xml",
-                    "from": {
-                        "startLines": "2,6,10,14",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,253,438,631",
-                        "endLines": "5,9,13,21",
-                        "endColumns": "12,12,12,12",
-                        "endOffsets": "248,433,626,1035"
-                    },
-                    "to": {
-                        "startLines": "22,26,30,34",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "1330,1528,1713,1906",
-                        "endLines": "25,29,33,41",
-                        "endColumns": "12,12,12,12",
-                        "endOffsets": "1523,1708,1901,2310"
-                    }
-                },
-                {
-                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/design-27.1.1.aar/a43f40d9bfa2b8dbb1d76a26956eab31/res/values-v26/values-v26.xml",
+                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/design-27.1.1.aar/ca7745c859d2448b5af4787e5e36ac27/res/values-v26/values-v26.xml",
                     "from": {
                         "startLines": "2,6",
                         "startColumns": "4,4",
@@ -42,7 +23,26 @@
                     }
                 },
                 {
-                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/c8532f83980ced74154a09be97f943ed/res/values-v26/values-v26.xml",
+                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/firebase-ui-auth-3.2.2.aar/f3c42cf3ca69083ca0b6c09f953901e0/res/values-v26/values-v26.xml",
+                    "from": {
+                        "startLines": "2,6,10,14",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,253,438,631",
+                        "endLines": "5,9,13,21",
+                        "endColumns": "12,12,12,12",
+                        "endOffsets": "248,433,626,1035"
+                    },
+                    "to": {
+                        "startLines": "22,26,30,34",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "1330,1528,1713,1906",
+                        "endLines": "25,29,33,41",
+                        "endColumns": "12,12,12,12",
+                        "endOffsets": "1523,1708,1901,2310"
+                    }
+                },
+                {
+                    "source": "/home/ashitosh/.gradle/caches/transforms-1/files-1.1/appcompat-v7-27.1.1.aar/b11951496136263959baa0ccfaf99bbf/res/values-v26/values-v26.xml",
                     "from": {
                         "startLines": "2,3,4,8,12,16",
                         "startColumns": "4,4,4,4,4,4",

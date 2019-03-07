@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
@@ -42,6 +44,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Months;
 
@@ -61,6 +64,7 @@ import javax.annotation.Nullable;
 public class CollectMoneyFragment extends Fragment {
 
 
+    private SwipeRefreshLayout refreshLayout;
     private EditText amount;
     private Button pay;
     private String acctext,amounttext,pendingamount,datetext;
@@ -75,7 +79,7 @@ public class CollectMoneyFragment extends Fragment {
 
     private String agentEmail,loantype,customerName;
 
-    private TextView Accno,LoanType,ReturnAmount,ExpectedAmount,prevPending,prevDateOfCol,amountHead;
+    private TextView Accno,prevPendingHead,ExpectedAmountHead,LoanType,ReturnAmount,ExpectedAmount,prevPending,prevDateOfCol,amountHead;
 
     private FirebaseAuth firebaseAuth;
 
@@ -87,7 +91,7 @@ public class CollectMoneyFragment extends Fragment {
 
     private ArrayAdapter<String> adapter;
 
-    private Map<String,String> typeText,expectText,pendings,issueDate,RemainingAmount;
+    private Map<String,String> typeText,Interests,expectText,pendings,issueDate,endDate,RemainingAmount,lagData;
 
     private String loanIdtext;
 
@@ -97,8 +101,8 @@ public class CollectMoneyFragment extends Fragment {
     public int flag=0;
     private String status;
 
-    int pendingMonths;
-    private LocalDate lastDateOfCol,dateOfCol;
+    int pendingMonths,monthsLeft,daysLeft;
+    private LocalDate lastDateOfCol,dateOfCol,dor;
 
     public CollectMoneyFragment() {
         // Required empty public constructor
@@ -121,9 +125,14 @@ public class CollectMoneyFragment extends Fragment {
         prevDateOfCol=v.findViewById(R.id.lastDateOfCol);
         amountHead=v.findViewById(R.id.AmountText);
         ReturnAmount=v.findViewById(R.id.AmountToReturn);
-
+        prevPendingHead=v.findViewById(R.id.PrevPendingHead);
         fs=FirebaseFirestore.getInstance();
         firebaseAuth=FirebaseAuth.getInstance();
+        ExpectedAmountHead=v.findViewById(R.id.ExpectAmountHead);
+
+        final DecimalFormat dec=new DecimalFormat("#0.00");
+
+        refreshLayout=v.findViewById(R.id.swipeRefreshCollection);
 
         agentEmail= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
 
@@ -141,7 +150,13 @@ public class CollectMoneyFragment extends Fragment {
         pendings=new HashMap<>();
         issueDate=new HashMap<>();
         RemainingAmount=new HashMap<>();
+        lagData=new HashMap<>();
+        endDate=new HashMap<>();
+        Interests=new HashMap<>();
 
+        FirebaseFirestoreSettings settings=new FirebaseFirestoreSettings.Builder().setPersistenceEnabled(true).build();
+
+        fs.setFirestoreSettings(settings);
 
         JodaTimeAndroid.init(this.getActivity());
 
@@ -156,10 +171,25 @@ public class CollectMoneyFragment extends Fragment {
         mYear= String.valueOf(dateTime.getYear());
 
 
+        if(Integer.parseInt(mMonth)<10)
+        {
+            mMonth="0"+mMonth;
+        }
+
+        Toast.makeText(getActivity(), "Month: "+mMonth, Toast.LENGTH_SHORT).show();
+
         pd.setMessage("Wait until Loading Details");
         pd.setCanceledOnTouchOutside(false);
 
         pd.show();
+
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                prevPending.setText(String.valueOf(pendingMoney));
+            }
+        });
 
         //Fetch Agent Names
         fs.collection("clients").document("client_"+acctext).collection("loans")
@@ -183,15 +213,22 @@ public class CollectMoneyFragment extends Fragment {
                                     String status=doc.getDocument().getString("Status");
                                     String doi=doc.getDocument().getString("DOI");
                                     String remaining=doc.getDocument().getString("AmountToReturn");
+                                    String interest=doc.getDocument().getString("Interest");
+                                    String Email=doc.getDocument().getString("AgentEmail");
 
-                                    if(Objects.requireNonNull(status).equals("1")) {
+                                    String dor=doc.getDocument().getString("DOR");
+
+                                    if(Objects.requireNonNull(status).equals("1") && Objects.requireNonNull(agentEmail).equals(Email) ) {
                                         LoanId.add(id);
                                         typeText.put(id, type);
                                         expectText.put(id, expectAmount);
                                         pendings.put(id,pending);
                                         issueDate.put(id,doi);
+                                        endDate.put(id,dor);
                                         RemainingAmount.put(id,remaining);
+                                        Interests.put(id,interest);
                                     }
+
                                 }
                             }
 
@@ -208,6 +245,7 @@ public class CollectMoneyFragment extends Fragment {
 
 
         LoanIdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -215,38 +253,90 @@ public class CollectMoneyFragment extends Fragment {
                 pd.setCanceledOnTouchOutside(false);
                 pd.show();
 
+
                 loanIdtext=parent.getItemAtPosition(position).toString();
                 LoanType.setText(typeText.get(loanIdtext));
                 loantype=typeText.get(loanIdtext);
                 ExpectedAmount.setText(expectText.get(loanIdtext));
-                ExpectedInstallment =Double.parseDouble(ExpectedAmount.getText().toString());
                 prevPending.setText(pendings.get(loanIdtext));
-                ReturnAmount.setText(RemainingAmount.get(loanIdtext));
+                ReturnAmount.setText(dec.format(Double.parseDouble(RemainingAmount.get(loanIdtext))));
+
+             //   getAccountDetail();
+
+                ExpectedInstallment = Double.parseDouble(expectText.get(loanIdtext));
+
+                AmountToReturn= Double.parseDouble(RemainingAmount.get(loanIdtext));
+
+                interest= Double.parseDouble(Interests.get(loanIdtext));
+
+          //      pendingMoney=Double.parseDouble(pendings.get(loanIdtext));
+
 
                 if(loantype.equals("Daily"))
                 {
-                    fs.collection("MoneyLender").document("Agent_" + agentEmail)
-                            .collection(loantype).document("Date_" + datetext)
-                            .collection("customers").document("client_" + acctext)
-                            .collection("loans")
-                            .document("loan_"+loanIdtext)
+
+
+                    prevPending.setVisibility(View.VISIBLE);
+                    prevPendingHead.setVisibility(View.VISIBLE);
+
+
+                    ExpectedAmountHead.setText("Expected Installment");
+
+                    fs.collection("CollectionDates").document("cust_" + acctext).collection(typeText.get(loanIdtext))
+                            .document(loanIdtext)
                             .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if (task.isSuccessful())
                             {
-                                if(task.getResult().contains("DateOfCollection")) {
 
-                                    lastDateOfCol = LocalDate.parse(task.getResult().getString("DateOfCollection"));
 
-                                    if (dateOfCol.equals(lastDateOfCol) && loantype.equals("Daily")) {
+                                if(task.getResult().contains("LastDateOfCollection")) {
+
+
+                                    lastDateOfCol = LocalDate.parse(task.getResult().getString("LastDateOfCollection"));
+
+                                    Days days;
+                                    days=Days.daysBetween(lastDateOfCol,dateOfCol);
+
+
+                                    if(days.getDays()>1)
+                                    {
+
+
+                                        pendingMoney = Double.parseDouble(pendings.get(loanIdtext)) + ((AmountToReturn / (Days.daysBetween(lastDateOfCol,LocalDate.parse(endDate.get(loanIdtext))).getDays())) * days.getDays());
+                                        prevPending.setText(String.valueOf(dec.format(pendingMoney)));
+
+
+                                    }
+                                    else
+                                    {
+                                        pendingMoney= Double.parseDouble(pendings.get(loanIdtext));
+                                        prevPending.setText(String.valueOf(dec.format(pendingMoney)));
+
+                                    }
+
+                                    prevPending.refreshDrawableState();
+                                    prevPending.invalidate();
+                                    prevPending.requestLayout();
+                                    v.refreshDrawableState();
+
+                                    if ((days.getDays()==0 || (days.getDays()<0)) && loantype.equals("Daily")) {
 
                                         amountHead.setVisibility(View.GONE);
                                         amount.setVisibility(View.GONE);
                                         pay.setVisibility(View.GONE);
 
-                                        prevDateOfCol.setText("Amount for this Loan Id is Already paid today");
+                                        if(days.getDays() <0 )
+                                        {
+                                            prevDateOfCol.setText("Amount for this Loan Id is Already paid on: "+datetext);
+
+                                        }
+                                        else {
+                                            prevDateOfCol.setText("Amount for this Loan Id is Already paid today: " + datetext);
+                                        }
+
                                         prevDateOfCol.setTextColor(Color.RED);
                                         v.refreshDrawableState();
                                     }
@@ -262,13 +352,53 @@ public class CollectMoneyFragment extends Fragment {
                                 }
                                 else
                                 {
-                                    amountHead.setVisibility(View.VISIBLE);
-                                    amount.setVisibility(View.VISIBLE);
-                                    pay.setVisibility(View.VISIBLE);
-                                    prevDateOfCol.setText("First time Collection for thid loan Id");
-                                    prevDateOfCol.setTextColor(Color.BLACK);
-                                    v.refreshDrawableState();
+
+                                    Days days;
+                                    LocalDate issue = new LocalDate(issueDate.get(loanIdtext));
+                                    days = Days.daysBetween(issue, dateOfCol);
+
+
+
+                                    if (days.getDays() == 0) {
+                                        amountHead.setVisibility(View.GONE);
+                                        amount.setVisibility(View.GONE);
+                                        pay.setVisibility(View.GONE);
+
+                                        prevDateOfCol.setText("Amount cant be Collected today: "+datetext);
+                                        prevDateOfCol.setTextColor(Color.RED);
+
+                                        pd.dismiss();
+                                        v.refreshDrawableState();
+
+                                    }
+                                    else
+                                    {
+                                        if(days.getDays()>1) {
+                                            pendingMoney = Double.parseDouble(pendings.get(loanIdtext)) + ((AmountToReturn / (Days.daysBetween(issue,LocalDate.parse(endDate.get(loanIdtext))).getDays())) * days.getDays());
+                                            prevPending.setText(String.valueOf(dec.format(pendingMoney)));
+
+
+                                        }
+                                        else
+                                        {
+                                            prevPending.setText(String.valueOf(dec.format(pendingMoney)));
+
+                                        }
+
+                                        prevPending.refreshDrawableState();
+                                        prevPending.invalidate();
+                                        prevPending.requestLayout();
+                                        v.refreshDrawableState();
+
+                                        amountHead.setVisibility(View.VISIBLE);
+                                        amount.setVisibility(View.VISIBLE);
+                                        pay.setVisibility(View.VISIBLE);
+                                        prevDateOfCol.setText("First time Collection for thid loan Id");
+                                        prevDateOfCol.setTextColor(Color.BLACK);
+                                        v.refreshDrawableState();
+                                    }
                                 }
+
 
                                 pd.dismiss();
                             }
@@ -287,122 +417,163 @@ public class CollectMoneyFragment extends Fragment {
                 else if(loantype.equals("Monthly")) {
 
 
-                        fs.collection("MoneyLender").document("Agent_" + agentEmail)
-                                .collection(loantype).document("Month_" + mMonth + mYear)
-                                .collection("customers").document("client_" + acctext)
-                                .collection("loans")
-                                .document("loan_" + loanIdtext)
-                                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
+                    ExpectedAmountHead.setText("Reamining Interest");
 
-                                    if (task.getResult().contains("DateOfCollection")) {
+                    prevPending.setVisibility(View.GONE);
+                    prevPendingHead.setVisibility(View.GONE);
 
-                                        lastDateOfCol = LocalDate.parse(task.getResult().getString("DateOfCollection"));
-                                        Months months;
-                                        months = Months.monthsBetween(lastDateOfCol, dateOfCol);
+                 //   Toast.makeText(getActivity(), "Expected amount: "+ExpectedInstallment+" interest: "+interest, Toast.LENGTH_SHORT).show();
 
-                                        pendingMonths=months.getMonths();
+                    fs.collection("CollectionDates").document("cust_" + acctext).collection(typeText.get(loanIdtext))
+                            .document(loanIdtext)
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
 
 
-                                        if (Double.parseDouble(pendings.get(loanIdtext))==0 && pendingMonths>=1)
+                                if (task.getResult().contains("LastDateOfCollection")) {
+
+
+                                    lastDateOfCol = LocalDate.parse(task.getResult().getString("LastDateOfCollection"));
+                                    Months months;
+                                    months = Months.monthsBetween(lastDateOfCol, dateOfCol);
+
+                               //     Toast.makeText(getActivity(), "months"+months.getMonths(), Toast.LENGTH_SHORT).show();
+                                    pendingMonths=months.getMonths();
+
+
+                                    Toast.makeText(getActivity(), "pending month: "+(months.getMonths()-1), Toast.LENGTH_SHORT).show();
+
+                                     if (pendingMonths==0)
+                                     {
+                                         pendingMoney=Double.parseDouble(pendings.get(loanIdtext));
+
+                                        prevPending.setText(String.valueOf(pendingMoney));
+                                        v.refreshDrawableState();
+                                     }
+                                    else if (pendingMonths==1)
+                                    {
+
+                                        prevPending.setText(String.valueOf(ExpectedInstallment));
+                                       v.refreshDrawableState();
+                                    }
+                                    else if (pendingMonths>1)
+                                    {
+
+                                        ExpectedInstallment=ExpectedInstallment+(AmountToReturn*(interest/100))*(pendingMonths-1);
+
+                                        Toast.makeText(getActivity(), "Expected amount: "+ExpectedInstallment+" interest: "+interest, Toast.LENGTH_SHORT).show();
+
+                                        prevPending.setText(String.valueOf(ExpectedInstallment));
+
+                                    }
+
+                                    prevPending.refreshDrawableState();
+                                    prevPending.invalidate();
+                                    prevPending.requestLayout();
+
+                                    v.refreshDrawableState();
+
+                                    if (((months.getMonths() == 0)||(months.getMonths()<0)) && loantype.equals("Monthly")) {
+
+                                        amountHead.setVisibility(View.GONE);
+                                        amount.setVisibility(View.GONE);
+                                        pay.setVisibility(View.GONE);
+
+                                        if(months.getMonths()<0)
                                         {
-                                            pendingMoney = (ExpectedInstallment * Double.parseDouble(String.valueOf(pendingMonths)));
+                                            prevDateOfCol.setText("Amount for this Loan Id is Already paid in month: "+datetext);
 
-                                        }
-                                        else if (Double.parseDouble(pendings.get(loanIdtext))==0 && pendingMonths==0)
-                                        {
-                                            pendingMoney=0;
-                                        }
-                                        else if (Double.parseDouble(pendings.get(loanIdtext))>0 && pendingMonths>=1)
-                                        {
-                                            pendingMoney = (ExpectedInstallment * Double.parseDouble(String.valueOf(pendingMonths)));//+Double.parseDouble(pendings.get(loanIdtext));
-
-                                        }
-                                        else if (Double.parseDouble(pendings.get(loanIdtext))>0 && pendingMonths==0)
-                                        {
-
-                                        }
-
-                                        if (pendingMonths==0)
-                                        {
-                                            prevPending.setText(pendings.get(loanIdtext));
                                         }
                                         else
                                         {
-                                            prevPending.setText(String.valueOf(pendingMoney));
+                                            prevDateOfCol.setText("Amount for this Loan Id is Already paid in this month: "+datetext);
 
                                         }
+                                        prevDateOfCol.setTextColor(Color.RED);
 
+                                        v.refreshDrawableState();
 
-                                        if ((months.getMonths() == 0) && loantype.equals("Monthly")) {
+                                    } else {
 
-                                            amountHead.setVisibility(View.GONE);
-                                            amount.setVisibility(View.GONE);
-                                            pay.setVisibility(View.GONE);
+                                        amountHead.setVisibility(View.VISIBLE);
+                                        amount.setVisibility(View.VISIBLE);
+                                        pay.setVisibility(View.VISIBLE);
 
-                                            prevDateOfCol.setText("Amount for this Loan Id is Already paid in this month");
-                                            prevDateOfCol.setTextColor(Color.RED);
+                                        prevDateOfCol.setText("Last amount Collected on Month " + lastDateOfCol.toString());
+                                        prevDateOfCol.setTextColor(Color.BLACK);
+                                        v.refreshDrawableState();
+                                    }
+                                }
+                                else
+                                {
 
-                                            v.refreshDrawableState();
+                                    Months months;
+                                    LocalDate issue = new LocalDate(issueDate.get(loanIdtext));
+                                    months = Months.monthsBetween(issue, dateOfCol);
 
-                                        } else {
+                                    pendingMonths=months.getMonths();
 
-                                            amountHead.setVisibility(View.VISIBLE);
-                                            amount.setVisibility(View.VISIBLE);
-                                            pay.setVisibility(View.VISIBLE);
+                                    if (pendingMonths == 0) {
+                                        amountHead.setVisibility(View.GONE);
+                                        amount.setVisibility(View.GONE);
+                                        pay.setVisibility(View.GONE);
 
-                                            prevDateOfCol.setText("Last amount Collected on Month " + lastDateOfCol.toString());
-                                            prevDateOfCol.setTextColor(Color.BLACK);
-                                            v.refreshDrawableState();
-                                        }
+                                        prevPending.setText(String.valueOf(pendingMoney));
+
+                                        prevDateOfCol.setText("Amount cant be Collected in This Month: "+datetext);
+                                        prevDateOfCol.setTextColor(Color.RED);
+
+                                        pd.dismiss();
+                                        v.refreshDrawableState();
+
                                     }
                                     else
+                                    {
+
+                                        if (pendingMonths==1)
+                                        {
+                                            prevPending.setText(String.valueOf(ExpectedInstallment));
+
+                                        }
+                                        else if (pendingMonths>1)
                                         {
 
-                                            Months months;
-                                            LocalDate issue = new LocalDate(issueDate.get(loanIdtext));
-                                            months = Months.monthsBetween(issue, dateOfCol);
+                                            ExpectedInstallment=ExpectedInstallment+(AmountToReturn*(interest/100))*(pendingMonths-1);
 
-                                            if (months.getMonths() == 0) {
-                                                amountHead.setVisibility(View.GONE);
-                                                amount.setVisibility(View.GONE);
-                                                pay.setVisibility(View.GONE);
+                                            Toast.makeText(getActivity(), "Expected Amount: "+ExpectedInstallment, Toast.LENGTH_SHORT).show();
+                                           // pendingMoney=ExpectedInstallment;
+                                             prevPending.setText(String.valueOf(ExpectedInstallment));
+                                            v.refreshDrawableState();
+                                        }
 
-                                                prevDateOfCol.setText("Amount cant be Collected in This Month");
-                                                prevDateOfCol.setTextColor(Color.RED);
-
-                                                pd.dismiss();
-                                                v.refreshDrawableState();
-
-                                            }
-                                            else
-                                            {
-                                                pendingMoney = (ExpectedInstallment * Double.parseDouble(String.valueOf(months.getMonths()))) + Double.parseDouble(pendings.get(loanIdtext));
-                                                prevPending.setText(String.valueOf(pendingMoney));
-
-                                                amountHead.setVisibility(View.VISIBLE);
-                                                amount.setVisibility(View.VISIBLE);
-                                                pay.setVisibility(View.VISIBLE);
-                                                prevDateOfCol.setText("First time Collection for thid loan Id");
-                                                prevDateOfCol.setTextColor(Color.BLACK);
-                                                v.refreshDrawableState();
-                                            }
-
+                                        amountHead.setVisibility(View.VISIBLE);
+                                        amount.setVisibility(View.VISIBLE);
+                                        pay.setVisibility(View.VISIBLE);
+                                        prevDateOfCol.setText("First time Collection for thid loan Id");
+                                        prevDateOfCol.setTextColor(Color.BLACK);
 
                                     }
-                                    pd.dismiss();
+
+                                    prevPending.refreshDrawableState();
+                                    prevPending.invalidate();
+                                    prevPending.requestLayout();
+
+                                    v.refreshDrawableState();
+
                                 }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
                                 pd.dismiss();
-                                Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            pd.dismiss();
+                            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
 
@@ -420,6 +591,12 @@ public class CollectMoneyFragment extends Fragment {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                dor= LocalDate.parse(endDate.get(loanIdtext));
+
+                monthsLeft=Months.monthsBetween(dateOfCol,dor).getMonths();
+
+                daysLeft=Days.daysBetween(dateOfCol,dor).getDays();
 
                 pd.setMessage("Wait until uploading data");
                 pd.setCanceledOnTouchOutside(false);
@@ -478,7 +655,7 @@ public class CollectMoneyFragment extends Fragment {
                                         if (task.isSuccessful()) {
                                             pd.hide();
                                             pd.dismiss();
-                                            Toast.makeText(getActivity(), "Client acc added Successfully", Toast.LENGTH_SHORT).show();
+                                        //    Toast.makeText(getActivity(), "Client acc added Successfully", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -493,6 +670,8 @@ public class CollectMoneyFragment extends Fragment {
                     }
                     else
                     {
+
+
                         fs.collection("MoneyLender").document("Agent_" + agentEmail)
                                 .collection(loantype).document("Month_" + mMonth+mYear)
                                 .collection("customers").document("client_" + acctext)
@@ -535,7 +714,7 @@ public class CollectMoneyFragment extends Fragment {
                                         if (task.isSuccessful()) {
                                             pd.hide();
                                             pd.dismiss();
-                                            Toast.makeText(getActivity(), "Client acc added Successfully", Toast.LENGTH_SHORT).show();
+                                         //   Toast.makeText(getActivity(), "Client acc added Successfully", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -550,7 +729,15 @@ public class CollectMoneyFragment extends Fragment {
 
                     }
 
-                    getAccountDetail();
+                    updateTotal();
+                    UpdateClientAcc();
+                    updateDate();
+
+                    clearText();
+
+                    sendToHome();
+
+
 
                 }
                 else
@@ -607,7 +794,7 @@ public class CollectMoneyFragment extends Fragment {
 
                                         pd.dismiss();
 
-                                        Toast.makeText(getActivity(), "Total Collection Updated successfully", Toast.LENGTH_SHORT).show();
+                                //        Toast.makeText(getActivity(), "Total Collection Updated successfully", Toast.LENGTH_SHORT).show();
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -673,7 +860,7 @@ public class CollectMoneyFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), "Failed to collect daily amount"+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Failed to collect Monthly amount"+e.getMessage(), Toast.LENGTH_LONG).show();
                     pd.dismiss();
                 }
             });
@@ -687,175 +874,169 @@ public class CollectMoneyFragment extends Fragment {
 
     private void UpdateClientAcc()
     {
-        Map<String,Object> data=new HashMap<>();
+
+
+
+        Map<String, Object> data = new HashMap<>();
         data.clear();
-        DecimalFormat dec=new DecimalFormat("#0.00");
+        DecimalFormat dec = new DecimalFormat("#0.00");
 
 
-        if(Double.parseDouble(amounttext)<ExpectedInstallment)
+      //  Toast.makeText(getActivity(), "pending: "+pendingMoney+" expected: "+ExpectedInstallment+" dayslef: "+daysLeft, Toast.LENGTH_SHORT).show();
+        if (typeText.get(loanIdtext).equals("Daily"))
         {
 
-
-            if (pendingMoney>=Double.parseDouble(amounttext))
+            if (Double.parseDouble(amounttext)>=ExpectedInstallment && pendingMoney==0)
             {
-               double temp=pendingMoney-Double.parseDouble(amounttext);
+                AmountToReturn =AmountToReturn-Double.parseDouble(amounttext);
+                ExpectedInstallment=AmountToReturn/daysLeft;
+
+                data.put("ExpectedInstallment", String.valueOf((int)ExpectedInstallment));
+                data.put("AmountToReturn", String.valueOf((int)AmountToReturn));
+                data.put("PendingAmount", "0");
 
 
-
-                   pendingMoney=temp;
-                   AmountToReturn=AmountToReturn-Double.parseDouble(amounttext);
-
-                   ExpectedInstallment = AmountToReturn *(interest/ 100);
-                   data.put("ExpectedInstallment", String.valueOf(dec.format(ExpectedInstallment)));
-                   data.put("PendingAmount", String.valueOf(temp));
-                   data.put("AmountToReturn", String.valueOf(dec.format(AmountToReturn)));
-
-             /*  else if(temp>0)
-               {
-                   pendingMoney=temp;
-                   AmountToReturn=AmountToReturn-Double.parseDouble(amounttext);
-
-                   ExpectedInstallment = AmountToReturn *(interest/ 100);
-                   data.put("ExpectedInstallment", String.valueOf(dec.format(ExpectedInstallment)));
-                   data.put("PendingAmount", pendingMoney);
-                   data.put("AmountToReturn", String.valueOf(dec.format(AmountToReturn)));
-               }
-               */
             }
-            else
+            else if (Double.parseDouble(amounttext)>=ExpectedInstallment && pendingMoney>0)
             {
-                 AmountToReturn=AmountToReturn-Double.parseDouble(amounttext);
+                if (Double.parseDouble(amounttext)>=pendingMoney) {
+                    double temp = Double.parseDouble(amounttext) - pendingMoney;
 
-                if (AmountToReturn==0)
-                {
-                    if (AmountToReturn==0 && pendingMoney==0 && ExpectedInstallment==0)
-                    {
-                        status="0";
-                        data.put("Status","0");
-                    }
-                    else if (pendingMoney>0)
-                    {
-                      data.put("PendingAmount",pendingMoney);
-                    }
-                    else if (ExpectedInstallment>0)
-                    {
-                        data.put("ExpectedInstallment",ExpectedInstallment);
-                    }
-                }
-                else
-                {
-                    if (AmountToReturn>0) {
+                    pendingMoney = 0;
 
-                        pendingMoney=ExpectedInstallment-Double.parseDouble(amounttext);
 
-                        ExpectedInstallment = AmountToReturn *(interest/ 100);
-                        data.put("ExpectedInstallment", String.valueOf(dec.format(ExpectedInstallment)));
-                        data.put("PendingAmount", String.valueOf(pendingMoney));
-                        data.put("AmountToReturn", String.valueOf(dec.format(AmountToReturn)));
-                    }
-                }
-            }
+                    if (temp == 0) {
 
-         //   data.put("PendingAmount",String.valueOf(dec.format(pendingMoney)));
+                        data.put("PendingAmount", "0");
+                    } else if (temp > 0) {
 
-        }
-        else
-        {
-            if( (Double.parseDouble(amounttext) >= ExpectedInstallment) && (pendingMoney>0))
-            {
+                        AmountToReturn = AmountToReturn - temp;
 
-                if(pendingMoney>=Double.parseDouble(amounttext))
-                {
-                    double temp=pendingMoney-Double.parseDouble(amounttext);
-
-                    if (temp>0)
-                    {
-                       // AmountToReturn=AmountToReturn-temp;
-
-                        data.put("PendingAmount",String.valueOf(dec.format(temp)));
-                    }
-                    else if(temp==0)
-                    {
-                        data.put("PendingAmount","0");
-
-                        AmountToReturn=AmountToReturn-Double.parseDouble(amounttext);
-
-                        if (AmountToReturn>0) {
-                            ExpectedInstallment = AmountToReturn *(interest/ 100);
-                            data.put("ExpectedInstallment", String.valueOf(dec.format(ExpectedInstallment)));
-                            data.put("PendingAmount", "0");
-                            data.put("AmountToReturn", String.valueOf(dec.format(AmountToReturn)));
+                        if (daysLeft>0) {
+                            ExpectedInstallment = (AmountToReturn / daysLeft);
                         }
                         else
                         {
-                            if (pendingMoney<=0 && ExpectedInstallment<=0) {
-                                status="0";
-                                data.put("Status", "0");
-                                Toast.makeText(getActivity(), "Account is Neel Now", Toast.LENGTH_SHORT).show();
-                            }
+                            ExpectedInstallment=(AmountToReturn / daysLeft);
                         }
-                    }
-                }else
-                {
-                    double temp=Double.parseDouble(amounttext)-pendingMoney;
 
-                    if (temp==0)
-                    {
-                        data.put("PendingAmount","0");
-                    }
-                    else if (temp>0)
-                    {
-                        AmountToReturn=AmountToReturn-temp;
-
-                        if (AmountToReturn>0) {
-                            ExpectedInstallment = AmountToReturn *(interest/ 100);
-                            data.put("ExpectedInstallment", String.valueOf(dec.format(ExpectedInstallment)));
-                            data.put("PendingAmount", "0");
-                            data.put("AmountToReturn", String.valueOf(dec.format(AmountToReturn)));
-                        }
-                        else
-                        {
-                            if (pendingMoney<=0 && ExpectedInstallment<=0) {
-                                status="0";
-                                data.put("Status", "0");
-                                Toast.makeText(getActivity(), "Account is Neel Now", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                        data.put("ExpectedInstallment", String.valueOf((int)ExpectedInstallment));
+                        data.put("AmountToReturn", String.valueOf((int)AmountToReturn));
+                        data.put("PendingAmount", "0");
                     }
                 }
+                else  if (Double.parseDouble(amounttext)<pendingMoney)
+                {
+                    pendingMoney=pendingMoney-Double.parseDouble(amounttext);
 
+                    data.put("PendingAmount", String.valueOf((int)pendingMoney));
+                }
             }
-            else if((Double.parseDouble(amounttext) >= ExpectedInstallment) && (pendingMoney==0))
+            else if (Double.parseDouble(amounttext)<ExpectedInstallment && pendingMoney==0)
             {
+                if (Double.parseDouble(amounttext)<ExpectedInstallment) {
+                    double temp = ExpectedInstallment-Double.parseDouble(amounttext) ;
 
+                    pendingMoney=temp;
 
-                AmountToReturn=AmountToReturn-Double.parseDouble(amounttext);
+                    AmountToReturn = AmountToReturn - Double.parseDouble(amounttext);
 
-                if (AmountToReturn>0)
-                {
-                    ExpectedInstallment = AmountToReturn *(interest/ 100);
-                    data.put("ExpectedInstallment",String.valueOf(dec.format(ExpectedInstallment)));
-                    data.put("PendingAmount","0");
-                    data.put("AmountToReturn",String.valueOf(dec.format(AmountToReturn)));
-                }
-                else
-                {
-                    if (pendingMoney<=0 && ExpectedInstallment<=0) {
-                        status="0";
-                        data.put("Status", "0");
-                        Toast.makeText(getActivity(), "Account is Neel Now", Toast.LENGTH_SHORT).show();
+                    if (daysLeft>0) {
+                        ExpectedInstallment = (AmountToReturn / daysLeft);
                     }
+                    else
+                    {
+                        ExpectedInstallment=(AmountToReturn / daysLeft);
+                    }
+                    data.put("ExpectedInstallment", String.valueOf((int)ExpectedInstallment));
+                    data.put("AmountToReturn", String.valueOf((int)AmountToReturn));
+                    data.put("PendingAmount", String.valueOf((int)temp));
                 }
 
             }
+            else if (Double.parseDouble(amounttext)<ExpectedInstallment && pendingMoney>0)
+            {
+                if (Double.parseDouble(amounttext)<=pendingMoney) {
+                    double temp =pendingMoney - Double.parseDouble(amounttext);
+
+
+                    if (temp == 0) {
+                        pendingMoney=0;
+
+                        data.put("PendingAmount", "0");
+                    } else if (temp > 0) {
+
+                        pendingMoney=temp;
+                        data.put("PendingAmount", String.valueOf((int)pendingMoney));
+                    }
+                }
+                else if (Double.parseDouble(amounttext)>pendingMoney)
+                {
+                    double temp = Double.parseDouble(amounttext)-pendingMoney;
+                    pendingMoney=0;
+
+                    AmountToReturn=AmountToReturn-temp;
+
+                    if (daysLeft>0) {
+                        ExpectedInstallment = (AmountToReturn / daysLeft);
+                    }
+                    else
+                    {
+                        ExpectedInstallment=(AmountToReturn / daysLeft);
+                    }
+
+                    data.put("ExpectedInstallment", String.valueOf((int)ExpectedInstallment));
+                    data.put("AmountToReturn", String.valueOf((int)AmountToReturn));
+                    data.put("PendingAmount", "0");
+                }
+
+            }
+
         }
 
+        else if (typeText.get(loanIdtext).equals("Monthly"))
+            {
 
-        if((AmountToReturn>=0))
+                Toast.makeText(getActivity(), "updating monthly client: "+typeText.get(loanIdtext), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), "In Monthly expectedAmount: "+ExpectedInstallment, Toast.LENGTH_SHORT).show();
+
+                if (Double.parseDouble(amounttext)<=ExpectedInstallment)
+                    {
+
+                        double temp=ExpectedInstallment-Double.parseDouble(amounttext);
+
+                        pendingMoney=temp;
+                        ExpectedInstallment=(AmountToReturn*(interest/100))+temp;
+                        data.put("ExpectedInstallment",String.valueOf((int) ExpectedInstallment));
+                        data.put("PendingAmount",String.valueOf((int) pendingMoney));
+
+                    }
+                    else if (Double.parseDouble(amounttext)>ExpectedInstallment)
+                    {
+                         double temp=Double.parseDouble(amounttext)-ExpectedInstallment;
+
+                         if (AmountToReturn>0)
+                         {
+                             AmountToReturn=AmountToReturn-temp;
+                             ExpectedInstallment=(AmountToReturn*(interest/100));
+
+                             data.put("ExpectedInstallment",String.valueOf((int) ExpectedInstallment));
+                             data.put("AmountToReturn",String.valueOf((int)AmountToReturn));
+                         }
+                    }
+
+            }
+
+
+
+
+
+
+        if((AmountToReturn>=0) && (typeText.get(loanIdtext).equals("Daily")))
         {
             double tempamount=AmountToReturn;
             if(tempamount!=0 && (ExpectedInstallment>0)) {
-     //           tempamount = tempamount - Double.parseDouble(amounttext);
 
                 if(tempamount==0 && !(pendingMoney>0) && !(ExpectedInstallment>0))
                 {
@@ -866,7 +1047,7 @@ public class CollectMoneyFragment extends Fragment {
                 {
                     ExpectedInstallment=pendingMoney;
 
-                    data.put("ExpectedInstallment",String.valueOf(ExpectedInstallment));
+                    data.put("ExpectedInstallment",String.valueOf(dec.format(ExpectedInstallment)));
                     data.put("PendingAmount","0.0");
                     status="1";
                     data.put("Status","1");
@@ -886,13 +1067,13 @@ public class CollectMoneyFragment extends Fragment {
 
                     if(ExpectedInstallment==0)
                     {
-                        data.put("ExpectedInstallment",String.valueOf(ExpectedInstallment));
+                        data.put("ExpectedInstallment",String.valueOf(dec.format(ExpectedInstallment)));
                         data.put("PendingAmount","0.0");
                         status="0";
                         data.put("Status","0");
                     }
                     else {
-                        data.put("ExpectedInstallment", String.valueOf(ExpectedInstallment));
+                        data.put("ExpectedInstallment", String.valueOf(dec.format(ExpectedInstallment)));
                         data.put("PendingAmount", "0.0");
                         status = "1";
                         data.put("Status", "1");
@@ -905,15 +1086,13 @@ public class CollectMoneyFragment extends Fragment {
                 }
             }
         }
-        else if(pendingMoney>0)
-        {
-            Toast.makeText(getActivity(), "pending Amount: "+pendingMoney, Toast.LENGTH_SHORT).show();
-        }
-        else
+        else if(AmountToReturn<=0 && ExpectedInstallment<=0 && pendingMoney<=0)
         {
             status="0";
+
             data.put("Status","0");
-            Toast.makeText(getActivity(), "Account is null", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getActivity(), "Account Deactivated", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -952,7 +1131,7 @@ public class CollectMoneyFragment extends Fragment {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(getActivity(), "Successfully updated Account Details"+ExpectedInstallment+"AmountReturn: "+AmountToReturn, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Successfully amount collected"+ExpectedInstallment+"AmountReturn: "+AmountToReturn, Toast.LENGTH_SHORT).show();
 
                 }
                 else
@@ -992,11 +1171,7 @@ public class CollectMoneyFragment extends Fragment {
 
                             Toast.makeText(getActivity(), "Successfully fetched Account Details"+ExpectedInstallment+"AmountReturn: "+AmountToReturn, Toast.LENGTH_SHORT).show();
 
-                            updateTotal();
-                            UpdateClientAcc();
-                            clearText();
 
-                            sendToHome();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -1007,6 +1182,34 @@ public class CollectMoneyFragment extends Fragment {
 
             }
         });
+
+    }
+
+    private void updateDate()
+    {
+
+        lagData.put("LastDateOfCollection", String.valueOf(dateOfCol));
+
+        if ( acctext!=null && loanIdtext!=null) {
+            fs.collection("CollectionDates").document("cust_" + acctext).collection(typeText.get(loanIdtext))
+                    .document(loanIdtext)
+                    .set(lagData)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            Toast.makeText(getActivity(), "Successfully updated Collection Date "+ExpectedInstallment+"AmountReturn: "+AmountToReturn, Toast.LENGTH_SHORT).show();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    Toast.makeText(getActivity(),"failed to update date: "+e.getMessage() , Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }
 
     }
 

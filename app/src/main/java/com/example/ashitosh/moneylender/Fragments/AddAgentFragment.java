@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.ProviderQueryResult;
@@ -96,7 +97,7 @@ public class AddAgentFragment extends Fragment {
                 phoneStr=phone.getText().toString();
                 addrStr=address.getText().toString();
 
-                if (!isCheckEmail(emailStr))
+                if (!isCheckEmail(emailStr) && f_auth.getCurrentUser()!=null)
                 {
                     registerAgent();
                 }
@@ -114,6 +115,8 @@ public class AddAgentFragment extends Fragment {
 
     public boolean isCheckEmail(final String email)
     {
+
+
         final boolean[] flag = {false};
 
         f_auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>()
@@ -160,40 +163,42 @@ public class AddAgentFragment extends Fragment {
             uploadData();
 
 
-
             prevEmail= Objects.requireNonNull(f_auth.getCurrentUser()).getEmail();
 
-            f_auth.fetchProvidersForEmail(Objects.requireNonNull(prevEmail)).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
-                @Override
-                public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                    if (task.isSuccessful())
-                    {
-                        int size= Objects.requireNonNull(task.getResult().getProviders()).size();
+            if(prevEmail!=null) {
+                f_auth.fetchProvidersForEmail(Objects.requireNonNull(prevEmail)).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                        if (task.isSuccessful()) {
+                            int size = Objects.requireNonNull(task.getResult().getProviders()).size();
 
 
-                        Toast.makeText(getActivity(), "Provideres: "+task.getResult().getProviders(), Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(getActivity(), "Provideres: " + task.getResult().getProviders(), Toast.LENGTH_SHORT).show();
 
-                        provider.addAll(task.getResult().getProviders());
+                            provider.addAll(task.getResult().getProviders());
 
-                        if (provider.isEmpty())
-                        {
-                            Toast.makeText(getActivity(), "No provider found", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            create();
+                            if (provider.isEmpty()) {
+                                Toast.makeText(getActivity(), "No provider found", Toast.LENGTH_SHORT).show();
+                            } else {
+                                create();
+                            }
                         }
                     }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
-
+            }
+            else
+            {
+                Intent intent=new Intent(getActivity(),loginActivity.class);
+                startActivity(intent);
+                Toast.makeText(getActivity(), "Failed To find previous user", Toast.LENGTH_SHORT).show();
+            }
         }
 
 
@@ -211,14 +216,43 @@ public class AddAgentFragment extends Fragment {
 
                         if(task.isSuccessful())
                         {
-                            Toast.makeText(getActivity(),"Agent Account Created",Toast.LENGTH_LONG).show();
+                            if (task.getResult().getAdditionalUserInfo().isNewUser())
+                            {
+                                Toast.makeText(getActivity(),"Agent Account Created",Toast.LENGTH_LONG).show();
+
+
+                            }
+                            else
+                            {
+                                FirebaseUser user=f_auth.getCurrentUser();
+                                if (user!=null)
+                                {
+                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful())
+                                            {
+                                                Toast.makeText(getActivity(),"Agent with this email address is already exists",Toast.LENGTH_LONG).show();
+
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(getActivity(),"Failed To delete Existing user: "+e.getMessage(),Toast.LENGTH_LONG).show();
+
+                                        }
+                                    });
+                                }
+                            }
+
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
 
-                Toast.makeText(getActivity(),"failed to register agent",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"failed to register agent: "+e.getMessage(),Toast.LENGTH_LONG).show();
 
             }
         });

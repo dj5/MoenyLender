@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Adapters.CustAdapter;
 import com.example.ashitosh.moneylender.Fragments.csvFragment;
@@ -58,16 +59,22 @@ public class AgentHome extends Fragment {
         MonthlyCsv=v.findViewById(R.id.MonthlyCsv);
         CustCsv=v.findViewById(R.id.CustDetailCSV);
 
+        email= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
+
         search=v.findViewById(R.id.CustSearch);
 
-        adapter= new CustAdapter(userList, Objects.requireNonNull(getActivity()).getSupportFragmentManager(),"Agent");
-
+        if (!email.isEmpty()) {
+            adapter = new CustAdapter(userList,email, Objects.requireNonNull(getActivity()).getSupportFragmentManager(), "Agent");
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Agent`s Email empty", Toast.LENGTH_SHORT).show();
+        }
         recyclerView=v.findViewById(R.id.AgentRecycleList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        email= Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail();
 
         DailyCsv.setOnClickListener(new View.OnClickListener() {
             @Override

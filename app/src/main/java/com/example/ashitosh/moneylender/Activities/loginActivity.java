@@ -81,7 +81,7 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
     private GoogleSignInOptions gso;
     private SignInButton gsignin;
     //private GoogleApiClient gac;
-
+    private FirebaseUser user;
     private TextView forgetPass;
 
 
@@ -92,9 +92,13 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
 
         FirebaseApp.initializeApp(this);
 
-        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+     //   FirebaseAuth.getInstance().signOut();
 
-        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        user=FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+
 
         if (user!=null)
         {
@@ -115,16 +119,9 @@ public class loginActivity extends AppCompatActivity implements  GoogleApiClient
                 finish();
             }
         }
-        else if(googleSignInAccount !=null)
-        {
-            Intent intent=new Intent(this.getApplicationContext(),loginActivity.class);
-            startActivity(intent);
-            finish();
-        }
 
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

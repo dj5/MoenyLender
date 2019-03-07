@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Adapters.CustAdapter;
 import com.example.ashitosh.moneylender.Adapters.LoanAdapter;
@@ -37,7 +38,7 @@ public class LoanFragment extends Fragment {
     private LoanAdapter adapter;
     private List<LoanModel> userList;
 
-    private String Accno;
+    private String Accno,agentEmail;
     public LoanFragment() {
         // Required empty public constructor
     }
@@ -56,6 +57,7 @@ public class LoanFragment extends Fragment {
         adapter=new LoanAdapter(userList);
 
         Accno= Objects.requireNonNull(getArguments()).getString("AccountNo");
+        agentEmail=getArguments().getString("AgentEmail");
 
         recyclerView=v.findViewById(R.id.LoanRecyle);
         recyclerView.setHasFixedSize(true);
@@ -77,13 +79,35 @@ public class LoanFragment extends Fragment {
                     {
                         if (doc.getType().equals(DocumentChange.Type.ADDED))
                         {
+
                             LoanModel model=doc.getDocument().toObject(LoanModel.class);
-                            userList.add(model);
 
-                            String name=doc.getDocument().getString("Name");
-                            Log.d("name","name: "+name);
+                            Toast.makeText(getActivity(), "Loan Email: "+agentEmail, Toast.LENGTH_SHORT).show();
 
-                            adapter.notifyDataSetChanged();
+                            try {
+                                if (agentEmail!=null) {
+
+
+                                    if (model.getAgentEmail().equals(agentEmail)) {
+
+                                        userList.add(model);
+                                        String name = doc.getDocument().getString("Name");
+                                        Log.d("name", "name: " + name);
+                                    }
+                                }
+                                else
+                                {
+                                    userList.add(model);
+                                    String name = doc.getDocument().getString("Name");
+                                    Log.d("name", "name: " + name);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                            catch (java.lang.NullPointerException e1)
+                            {
+                                Toast.makeText(getActivity(), "Exception: "+e1.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     }
                 }

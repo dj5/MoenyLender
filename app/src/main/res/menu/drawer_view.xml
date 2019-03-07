@@ -4,25 +4,29 @@
         <item
             android:id="@+id/csvfile"
             android:title="Csv Files"
+
             android:icon="@drawable/csv_icon"/>
         <item
             android:id="@+id/ActiveClient"
             android:title="Active Client"
+
             android:icon="@drawable/account" />
 
         <item
             android:id="@+id/ManageClient"
             android:title="Manage Client"
+
             android:icon="@drawable/account" />
 
         <item
             android:id="@+id/ManageAgent"
             android:title="Manage Agent"
+
             android:icon="@drawable/account" />
         <item
             android:id="@+id/AgentClients"
             android:title="Agent`s Client"
-            android:icon="@drawable/account" />
+            android:icon="@drawable/baseline_supervisor_account_black_24" />
 
     </group>
     <group android:checkableBehavior="single"  >

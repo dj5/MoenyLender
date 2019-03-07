@@ -129,7 +129,7 @@ public class AgentDetailFragment extends Fragment {
     }
 
 
-    private void changePass()
+    public void changePass()
     {
         myDialog = new Dialog(Objects.requireNonNull(this.getActivity()));
         myDialog.setContentView(R.layout.chane_pass);

@@ -23,31 +23,7 @@
           }
         },
         {
-          "client_id": "150314773303-momr8k54milo88ln952jehfflrihmvqs.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.ashitosh.moneylender",
-            "certificate_hash": "0747c639b5997ec59ea05b3144627711443c952e"
-          }
-        },
-        {
-          "client_id": "150314773303-506cjkhvsbe2r8siqrp2jdabohjvjc6f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.ashitosh.moneylender",
-            "certificate_hash": "4ae8cf98b075e3d3005701c8a75ca55a2bbe60ee"
-          }
-        },
-        {
-          "client_id": "150314773303-93nf7c0e731nebbo3cj1n5cas7ksre92.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.ashitosh.moneylender",
-            "certificate_hash": "377b8458deb212be5929dee27f802e5e13936214"
-          }
-        },
-        {
-          "client_id": "150314773303-tg7j4ji9ms3uub40gdn786eofe47etg6.apps.googleusercontent.com",
+          "client_id": "150314773303-bukv21c793pahiu614as011vmsg28cbk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -64,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "150314773303-tg7j4ji9ms3uub40gdn786eofe47etg6.apps.googleusercontent.com",
+              "client_id": "150314773303-bukv21c793pahiu614as011vmsg28cbk.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key1'
+            keyPassword 'moneylender'
+            storeFile file('/home/ashitosh/Videos/MoneyLender/app/build/outputs/apk/release/app-release-unsigned.apk')
+            storePassword 'moneylender'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.ashitosh.moneylender"
@@ -13,9 +21,25 @@ android {
     }
     buildTypes {
         release {
+            shrinkResources false
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    dexOptions {
+    }
+    compileOptions {
     }
 }
 
@@ -56,9 +80,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.opencsv:opencsv:3.8'
     // implementation 'com.google.firebase:firebase-admin:6.6.0'
-
     implementation 'net.danlew:android.joda:2.10.1'
-
 }
 
 apply plugin: 'com.google.gms.google-services'

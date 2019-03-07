@@ -142,6 +142,14 @@ public class csvDaily extends Fragment {
                             }
 
                             if(checkPermission()) {
+
+                                File csv=new File("/sdcard/agentDaily.csv");
+
+                                if(csv.exists())
+                                {
+                                    csv.delete();
+                                }
+
                                 createCsv();
                             }
                             else
@@ -197,8 +205,6 @@ public class csvDaily extends Fragment {
 
         try
         {
-
-
             ita=userList.iterator();
             int i=0;
             writer = new CSVWriter(new FileWriter("/sdcard/agentDaily.csv"), ',');

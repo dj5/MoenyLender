@@ -63,15 +63,16 @@ public class CustRegNextFragment extends Fragment  {
 
 
     private Spinner spinner,agentSpinner;
-    private EditText reqamount,discount,LfNo,interest,FiledAmount,LoanMonths,FileOpeningDate,FileClosingDate;
+    private EditText reqamount,discount,LfNo,interest,FiledAmount,LoanMonths,FileClosingDate;
     private ArrayAdapter<String> adapter,agentAdapter;
     private List<String> type,agentList,agentEmailList;
-    private Button regbtn,dor;
+    private Button regbtn,dor,doi,FileOpeningDate;
     private FirebaseFirestore fs;
 
     private String typeStr,agentEmail,reqamountStr,expInstallStr,interestStr,discountstr,doiStr,dorStr,agentnameStr,filedamountStr;
 
     private String AccountNo,AdharId,CustDob,GuarantorName,GuarantorMob,GuarantorAddr,Address,custName,phone,custemail,AmountToReturn,PendingAmount;
+
 
     private ProgressDialog pd;
     private int loanno=0;
@@ -166,6 +167,8 @@ public class CustRegNextFragment extends Fragment  {
 
         zone=DateTimeZone.forID("Asia/Kolkata");
         dateTime=new DateTime(zone);
+
+   /*
         doiStr=dateTime.toLocalDate().toString();
 
         try {
@@ -186,6 +189,60 @@ public class CustRegNextFragment extends Fragment  {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+*/
+
+        FileOpeningDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                                issueMonth=month+1;
+
+                                month=month+1;
+
+                                if(month<10) {
+                                    doiStr = year + "-0" + month + "-" + dayOfMonth;
+                                }
+                                else
+                                {
+                                    doiStr = year + "-0" + month + "-" + dayOfMonth;
+                                }
+
+                                if (!doiStr.isEmpty())
+                                {
+                                    try {
+                                        sdate=new SimpleDateFormat("dd/MM/yyyy").parse(doiStr);
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    FileOpeningDate.setText(doiStr);
+
+                                }else
+                                {
+                                    FileOpeningDate.setError("Could Not Found Date");
+                                }
+
+
+                            }
+
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+
+        });
+
+
 
         LoanMonths.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,42 +258,41 @@ public class CustRegNextFragment extends Fragment  {
             @Override
             public void afterTextChanged(Editable s) {
 
-                if(LoanMonths.getText().toString().isEmpty())
-                {
+                if (LoanMonths.getText().toString().isEmpty()) {
                     LoanMonths.setError("Enter Months");
                     LoanMonths.setFocusable(true);
-                }
-                else if(Integer.parseInt(LoanMonths.getText().toString())<=0)
-                {
+                } else if (Integer.parseInt(LoanMonths.getText().toString()) <= 0) {
                     LoanMonths.setError("Months Should be greater");
                     LoanMonths.setEnabled(true);
-                }
-                else if(!doiStr.isEmpty())
+                } else
                 {
-                    FileOpeningDate.setText(doiStr);
-                    FileOpeningDate.setEnabled(false);
+                    if (doiStr!=null) {
+                    //   FileOpeningDate.setText(doiStr);
+                    //   FileOpeningDate.setEnabled(false);
 
-                    LocalDate temp=new LocalDate(doiStr);
+                    LocalDate temp = new LocalDate(doiStr);
 
-                    LocalDate end=temp.plusMonths(Integer.parseInt(LoanMonths.getText().toString()));
-                    dorStr=end.toString();
+                    LocalDate end = temp.plusMonths(Integer.parseInt(LoanMonths.getText().toString()));
+                    dorStr = end.toString();
 
-                    if(!dorStr.isEmpty())
-                    {
+                    if (!dorStr.isEmpty()) {
                         FileClosingDate.setText(dorStr);
                         FileClosingDate.setFocusable(false);
 
                         try {
-                            edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
+                            edate = new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
 
+                    } else {
+                        LoanMonths.setError("Could Not Found File Closing date");
+                        LoanMonths.setFocusable(false);
+                    }
                     }
                     else
                     {
-                        LoanMonths.setError("Could Not Found File Closing date");
-                        LoanMonths.setFocusable(false);
+                        LoanMonths.setError("First select Date of Issue");
                     }
                 }
             }
@@ -315,16 +371,27 @@ public class CustRegNextFragment extends Fragment  {
 
                     interest.setVisibility(View.GONE);
                     group.setVisibility(View.VISIBLE);
+
                     LoanMonths.setEnabled(false);
                     LoanMonths.setVisibility(View.GONE);
+
+                    discount.setEnabled(true);
+                    discount.setVisibility(View.VISIBLE);
+
                 }
                 if(typeStr.equals("Monthly"))
                 {
                     ClearForm();
+                    discount.setEnabled(false);
+                    discount.setVisibility(View.GONE);
+
                     LoanMonths.setEnabled(true);
                     LoanMonths.setVisibility(View.VISIBLE);
                     interest.setVisibility(View.VISIBLE);
                     group.setVisibility(View.GONE);
+
+
+
                 }
             }
 
@@ -339,6 +406,7 @@ public class CustRegNextFragment extends Fragment  {
             @Override
             public void onClick(View v) {
 
+
                 DateTime dor=dateTime.plusDays(100);
                 dorStr=dor.getYear()+"-"+dor.getMonthOfYear()+"-"+dor.getDayOfMonth();
 
@@ -346,7 +414,7 @@ public class CustRegNextFragment extends Fragment  {
                     edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
 
                     FileOpeningDate.setText(doiStr);
-                    FileOpeningDate.setEnabled(false);
+                  //  FileOpeningDate.setEnabled(false);
 
                     FileClosingDate.setText(dorStr);
                     FileClosingDate.setEnabled(false);
@@ -367,7 +435,7 @@ public class CustRegNextFragment extends Fragment  {
                     edate=new SimpleDateFormat("yyyy-MM-dd").parse(dorStr);
 
                     FileOpeningDate.setText(doiStr);
-                    FileOpeningDate.setEnabled(false);
+                //    FileOpeningDate.setEnabled(false);
 
                     FileClosingDate.setText(dorStr);
                     FileClosingDate.setEnabled(false);
@@ -408,43 +476,34 @@ public class CustRegNextFragment extends Fragment  {
             @Override
             public void afterTextChanged(Editable s) {
 
-                discount.setError(null);
+                if (typeStr.equals("Daily")) {
+                    discount.setError(null);
 
-                if (reqamount.getText().toString().isEmpty())
-                {
-                    reqamount.setError("Enter Requested Amount");
-                    reqamount.setFocusable(true);
-                }
-                else if (discount.getText().toString().isEmpty())
-                {
-                    discount.setError("Enter Discount Amount");
-                    discount.setFocusable(true);
-                }
-                else if(Double.parseDouble(discount.getText().toString())<=0)
-                {
-                    discount.setError("Discount shound be Greater");
-                    discount.setFocusable(true);
-                }
-                else if (Double.parseDouble(reqamount.getText().toString())<Double.parseDouble(discount.getText().toString()))
-                {
-                    discount.setError("Discount Amount is Greater Than Requested Amount");
-                    discount.setFocusable(true);
-                }
-                else if (Double.parseDouble(reqamount.getText().toString())==Double.parseDouble(discount.getText().toString()))
-                {
-                    discount.setError("Discount Amount is same as Requested Amount");
-                    discount.setFocusable(true);
-                }
-                else
-                {
+                    if (reqamount.getText().toString().isEmpty()) {
+                        reqamount.setError("Enter Requested Amount");
+                        reqamount.setFocusable(true);
+                    } else if (discount.getText().toString().isEmpty()) {
+                        discount.setError("Enter Discount Amount");
+                        discount.setFocusable(true);
+                    } else if (Double.parseDouble(discount.getText().toString()) <= 0) {
+                        discount.setError("Discount shound be Greater");
+                        discount.setFocusable(true);
+                    } else if (Double.parseDouble(reqamount.getText().toString()) < Double.parseDouble(discount.getText().toString())) {
+                        discount.setError("Discount Amount is Greater Than Requested Amount");
+                        discount.setFocusable(true);
+                    } else if (Double.parseDouble(reqamount.getText().toString()) == Double.parseDouble(discount.getText().toString())) {
+                        discount.setError("Discount Amount is same as Requested Amount");
+                        discount.setFocusable(true);
+                    } else {
 
-                    double filedAmount=Double.parseDouble(reqamount.getText().toString())-Double.parseDouble(s.toString());
-                    FiledAmount.setText(String.valueOf(filedAmount));
-                    filedamountStr=FiledAmount.getText().toString();
-                    FiledAmount.setEnabled(false);
-                }
+                        double filedAmount = Double.parseDouble(reqamount.getText().toString()) - Double.parseDouble(s.toString());
+                        FiledAmount.setText(String.valueOf(filedAmount));
+                        filedamountStr = FiledAmount.getText().toString();
+                        FiledAmount.setEnabled(false);
+                    }
 
 
+                }
             }
         });
 
@@ -460,6 +519,7 @@ public class CustRegNextFragment extends Fragment  {
                 pd.setCanceledOnTouchOutside(false);
                 pd.setMessage("Please wait until registering customer");
                 pd.show();
+
 
 
                 if (btnId.equals("FirstLoan")) {
@@ -526,10 +586,15 @@ public class CustRegNextFragment extends Fragment  {
                                             //Cust Loan Registration
                                             reqamountStr = reqamount.getText().toString();
                                             interestStr = interest.getText().toString();
-                                            discountstr=discount.getText().toString();
 
                                             if (typeStr.equals("Daily")) {
                                                 interestStr = "0";
+                                                discountstr=discount.getText().toString();
+                                            }
+                                            else
+                                            {
+                                                filedamountStr=FiledAmount.getText().toString();
+                                                discountstr="0";
                                             }
 
                                             if (isValid()) {
@@ -614,9 +679,9 @@ public class CustRegNextFragment extends Fragment  {
 
                                                     Double rate = Double.parseDouble(interestStr);
 
-                                                    Double SI = (Double.parseDouble(filedamountStr) * (rate/100)) ;
+                                                    Double SI = (Double.parseDouble(filedamountStr) * (rate/100));
 
-                                                    Double Amount =  SI*months;
+                                                    Double Amount = Double.parseDouble(filedamountStr);
 
                                                     DecimalFormat dec = new DecimalFormat("#0.00");
 
@@ -624,9 +689,9 @@ public class CustRegNextFragment extends Fragment  {
 
                                                     //calculating expected Amount
 
-                                                    Double expectAmount = Amount / months;
 
-                                                    expInstallStr = String.valueOf(dec.format(expectAmount));
+
+                                                    expInstallStr = String.valueOf(dec.format(SI));
 
                                                 }
 
@@ -634,6 +699,7 @@ public class CustRegNextFragment extends Fragment  {
 
                                                 loanData.put("LoanId", "1");
                                                 loanData.put("AgentName", agentnameStr);
+                                                loanData.put("AgentEmail",agentEmail);
                                                 loanData.put("DOI", doiStr);
                                                 loanData.put("DOR", dorStr);
 
@@ -646,7 +712,7 @@ public class CustRegNextFragment extends Fragment  {
                                                 loanData.put("AmountToReturn", AmountToReturn);
                                                 loanData.put("PendingAmount", PendingAmount);
                                                 loanData.put("LFNO", LfNo.getText().toString());
-                                                loanData.put("Discount",discount.getText().toString());
+                                                loanData.put("Discount",discountstr);
                                                 loanData.put("FileOpeningDate", FileOpeningDate.getText().toString());
                                                 loanData.put("FileClosingDate", FileClosingDate.getText().toString());
 
@@ -742,6 +808,10 @@ public class CustRegNextFragment extends Fragment  {
                 //Add Loan
                 else if (btnId.equals("AddLoan")) {
 
+
+
+
+
                     fs.collection("AccNo").document("CurrentAcc").get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -752,39 +822,92 @@ public class CustRegNextFragment extends Fragment  {
                                         //Cust Loan Registration
                                         reqamountStr = reqamount.getText().toString();
                                         interestStr = interest.getText().toString();
-                                        discountstr = discount.getText().toString();
 
                                         if (typeStr.equals("Daily")) {
                                             interestStr = "0";
+                                            discountstr = discount.getText().toString();
+
                                         }
+                                        else if (typeStr.equals("Monthly"))
+                                        {
+
+                                            filedamountStr=FiledAmount.getText().toString();
+                                            discountstr="0";
+                                        }
+
 
                                         if (isValid()) {
 
-                                            //Adds Multiple loans
-                                            Map<String, Object> data = new HashMap<>();
-                                            data.put("Status", "1");
 
-                                            fs.collection("Agents").document("Agent_" + agentEmail).collection(typeStr).document("cust_" + addLoanAccNo)
-                                                    .collection("Loans").document("loan_" + String.valueOf(Integer.parseInt(totalLoan) + 1))
-                                                    .set(data, SetOptions.merge())
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                Toast.makeText(getActivity().getApplicationContext(), "Successfully loan added", Toast.LENGTH_SHORT).show();
-                                                                pd.dismiss();
-                                                            } else {
-                                                                Toast.makeText(getActivity().getApplicationContext(), "failed to add loan", Toast.LENGTH_SHORT).show();
-                                                                pd.dismiss();
+                                            Map<String, Object> Custdata = new HashMap<>();
+
+                                            Custdata.put("AccountNo", addLoanAccNo);
+                                            Custdata.put("CustEmail", custemail);
+                                            Custdata.put("CustAddr", Address);
+                                            //   Custdata.put("agent_name",agentnameStr);
+                                            Custdata.put("CustName", custName);
+                                            Custdata.put("CustPhone", phone);
+                                            Custdata.put("CustTotalLoan", "1");
+                                            Custdata.put("CustAdharId",AdharId);
+                                            Custdata.put("CustDob",CustDob);
+                                            Custdata.put("GuarantorName",GuarantorName);
+                                            Custdata.put("GuarantorMob",GuarantorMob);
+                                            Custdata.put("GuarantorAddr",GuarantorAddr);
+
+                                                Custdata.put("Status", "1");
+                                                fs.collection("Agents").document("Agent_" + agentEmail).collection(typeStr).document("cust_" + String.valueOf(addLoanAccNo)).set(Custdata, SetOptions.merge())
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+
+                                                                    //Adds Multiple loans
+                                                                    Map<String, Object> data = new HashMap<>();
+                                                                    data.put("Status", "1");
+
+                                                                    fs.collection("Agents").document("Agent_" + agentEmail).collection(typeStr).document("cust_" + addLoanAccNo)
+                                                                            .collection("Loans").document("loan_" + String.valueOf(Integer.parseInt(totalLoan) + 1))
+                                                                            .set(data, SetOptions.merge())
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    if (task.isSuccessful()) {
+                                                                                        Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "Successfully loan added", Toast.LENGTH_SHORT).show();
+                                                                                        pd.dismiss();
+                                                                                    } else {
+                                                                                        Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "failed to add loan", Toast.LENGTH_SHORT).show();
+                                                                                        pd.dismiss();
+                                                                                    }
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Toast.makeText(Objects.requireNonNull(getActivity()).getApplicationContext(), "failed to upload loan " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                            pd.dismiss();
+                                                                        }
+                                                                    });
+
+                                                                    pd.setMessage("agent assigned");
+                                                                    Toast.makeText(getActivity(), "Agent Customer Registed Successfully", Toast.LENGTH_LONG).show();
+
+                                                                }
+
                                                             }
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(getActivity().getApplicationContext(), "failed to upload loan " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                    pd.dismiss();
-                                                }
-                                            });
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        pd.setMessage("failed to assign agent");
+                                                        pd.hide();
+                                                        pd.dismiss();
+
+                                                        Toast.makeText(getActivity(), "Failed to register Agent Customer: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                                                    }
+                                                });
+
+
+
+
 
 
                                             //uploading loan details
@@ -818,7 +941,7 @@ public class CustRegNextFragment extends Fragment  {
 
                                                 Double SI = (Double.parseDouble(filedamountStr) * (rate/100));
 
-                                                Double Amount = Double.parseDouble(filedamountStr)+ SI;
+                                                Double Amount = Double.parseDouble(filedamountStr);
 
                                                 DecimalFormat dec = new DecimalFormat("#0.00");
 
@@ -826,9 +949,9 @@ public class CustRegNextFragment extends Fragment  {
 
                                                 //calculating expected Amount
 
-                                                Double expectAmount = Amount / months;
 
-                                                expInstallStr = String.valueOf(dec.format(expectAmount));
+
+                                                expInstallStr = String.valueOf(dec.format(SI));
 
                                             }
 
@@ -836,6 +959,7 @@ public class CustRegNextFragment extends Fragment  {
 
                                             loanData.put("LoanId", String.valueOf(Integer.parseInt(totalLoan) + 1));
                                             loanData.put("AgentName", agentnameStr);
+                                            loanData.put("AgentEmail",agentEmail);
                                             loanData.put("DOI", doiStr);
                                             loanData.put("DOR", dorStr);
 
@@ -848,7 +972,7 @@ public class CustRegNextFragment extends Fragment  {
                                             loanData.put("AmountToReturn", AmountToReturn);
                                             loanData.put("PendingAmount", PendingAmount);
                                             loanData.put("LFNO", LfNo.getText().toString());
-                                            loanData.put("Discount",discount.getText().toString());
+                                            loanData.put("Discount",discountstr);
                                             loanData.put("TotalMonths",LoanMonths.getText().toString());
 
                                             if (Double.parseDouble(AmountToReturn) > 0) {
@@ -983,24 +1107,29 @@ public class CustRegNextFragment extends Fragment  {
         }
         */
 
-        else if (discount.getText().toString().isEmpty())
+        else if (typeStr.equals("Daily"))
         {
-            discount.setError("Enter Discount Amount");
-            discount.setFocusable(true);
-            return false;
+            if(discount.getText().toString().isEmpty()) {
+
+                discount.setError("Enter Discount Amount");
+                discount.setFocusable(true);
+                return false;
+            }
+            else if (Double.parseDouble(reqamount.getText().toString())<Double.parseDouble(discount.getText().toString()))
+            {
+                discount.setError("Discount Amount is Greater Than Requested Amount");
+                discount.setFocusable(true);
+                return false;
+            }
+
+            else if (Double.parseDouble(reqamount.getText().toString())==Double.parseDouble(discount.getText().toString()))
+            {
+                discount.setError("Discount Amount is same as Requested Amount");
+                discount.setFocusable(true);
+                return false;
+            }
         }
-        else if (Double.parseDouble(reqamount.getText().toString())<Double.parseDouble(discount.getText().toString()))
-        {
-            discount.setError("Discount Amount is Greater Than Requested Amount");
-            discount.setFocusable(true);
-            return false;
-        }
-        else if (Double.parseDouble(reqamount.getText().toString())==Double.parseDouble(discount.getText().toString()))
-        {
-            discount.setError("Discount Amount is same as Requested Amount");
-            discount.setFocusable(true);
-            return false;
-        }
+
         else if(dorStr==null)
         {
 
@@ -1027,12 +1156,7 @@ public class CustRegNextFragment extends Fragment  {
             return false;
         }
 
-        else if(typeStr.isEmpty())
-        {
-            spinner.requestFocus();
-            Toast.makeText(getActivity(),"Select Installment Type",Toast.LENGTH_LONG).show();
-            return false;
-        }
+
 
         else if(agentEmail.isEmpty())
         {

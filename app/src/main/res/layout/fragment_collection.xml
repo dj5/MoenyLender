@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/cardview_light_background"
     android:orientation="vertical"
     tools:context=".Fragments.CollectionFragment">
 
@@ -11,12 +12,12 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/dateCard"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
         app:cardBackgroundColor="@color/background"
-        app:cardElevation="10dp"
 
-        android:padding="5dp">
+        app:cardElevation="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,12 +28,12 @@
                 android:id="@+id/ColHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="1dp"
                 android:text="@string/agent_name"
                 android:textAlignment="center"
                 android:textColor="@color/titlecolor"
@@ -43,11 +44,11 @@
                 android:id="@+id/ColEamil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="1dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/agent_email"
 
                 android:textAlignment="center"
@@ -61,10 +62,10 @@
             android:id="@+id/AgentDailyCsv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="150dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@color/background"
             android:text="@string/dailycsv"
             android:textAlignment="center"
@@ -76,10 +77,10 @@
             android:id="@+id/AgentMonthCsv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginStart="250dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@color/background"
             android:text="@string/monthlycsv"
             android:textAlignment="center"
@@ -99,12 +100,12 @@
             android:id="@+id/col_installment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="1dp"
             android:text="@string/installment_type"
             android:textAlignment="center"
             android:textColor="@color/background"
@@ -112,10 +113,10 @@
             android:textStyle="bold" />
 
         <RadioGroup
+            android:id="@+id/AgentRadioGrp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:id="@+id/AgentRadioGrp"
             android:orientation="horizontal"
             android:textAlignment="center">
 
@@ -124,11 +125,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="20dp"
-                android:text="@string/daily"
+                android:layout_marginEnd="10dp"
                 android:checked="true"
-                android:textColor="@color/background"/>
+                android:text="@string/daily"
+                android:textColor="@color/background" />
 
             <RadioButton
                 android:id="@+id/radioMonthly"
@@ -137,13 +138,13 @@
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:text="@string/monthly"
-                android:textColor="@color/background"/>
+                android:textColor="@color/background" />
         </RadioGroup>
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/installment_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/installment_layout" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

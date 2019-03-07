@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ashitosh.moneylender.Models.custModel;
 import com.example.ashitosh.moneylender.R;
@@ -32,9 +33,10 @@ public class CustDetailFragment extends Fragment {
 
     private Button loanviewBtn,addLoanBtn;
     private TextView Custname,address,phone,email,AccNo,Loan,CustAdhar,CustDob,GuarantorName,GuarantorMob,GuarantorAddr;
-    private String activity,totalLoan;
+    private String activity,totalLoan,agentEmail;
     private FirebaseFirestore fs;
     private String CurrentEmail;
+    private Bundle data;
     public CustDetailFragment() {
         // Required empty public constructor
     }
@@ -66,8 +68,10 @@ public class CustDetailFragment extends Fragment {
 
         fs= FirebaseFirestore.getInstance();
 
-        Bundle data=getArguments();
+        data=getArguments();
         activity= Objects.requireNonNull(data).getString("fragment");
+
+        agentEmail=data.getString("AgentEmail");
 
         Custname.setText(Objects.requireNonNull(data).getString("CustName"));
         address.setText(data.getString("Address"));
@@ -78,11 +82,14 @@ public class CustDetailFragment extends Fragment {
 
         totalLoan=data.getString("TotalLoans");
 
+        Toast.makeText(getActivity(), "Total Loans: "+totalLoan, Toast.LENGTH_SHORT).show();
+
         CustAdhar.setText(data.getString("CustAdharId"));
         CustDob.setText(data.getString("CustDob"));
         GuarantorName.setText(data.getString("GuarantorName"));
         GuarantorMob.setText(data.getString("GuarantorMob"));
         GuarantorAddr.setText(data.getString("GuarantorAddr"));
+
 
         CurrentEmail= Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
 
@@ -92,6 +99,8 @@ public class CustDetailFragment extends Fragment {
 
                 Bundle data=new Bundle();
                 data.putString("AccountNo", String.valueOf(AccNo.getText().toString()));
+
+                data.putString("AgentEmail",agentEmail);
 
                 LoanFragment fragment=new LoanFragment();
 
@@ -125,27 +134,42 @@ public class CustDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Bundle data=new Bundle();
-                data.putString("AccountNo", String.valueOf(AccNo.getText().toString()));
+                if (!data.isEmpty()) {
+                    Bundle data1 = new Bundle();
+                    data1.putString("AccountNo", String.valueOf(AccNo.getText().toString()));
 
-                data.putString("BtnId","AddLoan");
-                data.putString("TotalLoan",totalLoan);
+                    data1.putString("BtnId", "AddLoan");
+                    data1.putString("TotalLoan", totalLoan);
 
-                CustRegNextFragment fragment=new CustRegNextFragment();
 
-                fragment.setArguments(data);
+                    Objects.requireNonNull(data1).putString("CustName", Objects.requireNonNull(data).getString("CustName"));
+                    data1.putString("CustEmail", data.getString("CustEmail"));
+                    data1.putString("CustPhone", data.getString("Phone"));
+                    data1.putString("CustAddr", data.getString("Address"));
+                    data1.putString("CustAdhar", data.getString("CustAdharId"));
+                    data1.putString("CustDob", data.getString("CustDob"));
+                    data1.putString("GuarantorName", data.getString("GuarantorName"));
+                    data1.putString("GuarantorMob", data.getString("GuarantorMob"));
+                    data1.putString("GurantorAddr", data.getString("GuarantorAddr"));
 
-                android.support.v4.app.FragmentTransaction fragmentTransaction= Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().add(fragment,"Custhead").addToBackStack("head");
+                    CustRegNextFragment fragment = new CustRegNextFragment();
 
-                if(activity.equals("Owner")) {
-                    fragmentTransaction.replace(R.id.mainFrame, fragment);
+                    fragment.setArguments(data1);
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().add(fragment, "Custhead").addToBackStack("head");
+
+                    if (activity.equals("Owner")) {
+                        fragmentTransaction.replace(R.id.mainFrame, fragment);
+                    } else {
+                        fragmentTransaction.replace(R.id.AgentmainFrame, fragment);
+
+                    }
+                    fragmentTransaction.commit();
                 }
                 else
                 {
-                    fragmentTransaction.replace(R.id.AgentmainFrame, fragment);
-
+                    Toast.makeText(getActivity(), "Customer data is not available", Toast.LENGTH_SHORT).show();
                 }
-                fragmentTransaction.commit();
             }
         });
 

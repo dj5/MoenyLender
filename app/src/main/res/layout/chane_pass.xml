@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:backgroundTint="#FF189FCD"
             android:hint="Enter email"
-            android:inputType="text" />
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
