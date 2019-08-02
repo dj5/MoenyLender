@@ -1,8 +1,8 @@
 MoenyLender
 # MoneyLender
 
-It is a android app for managing money transactions for small scale money lenders.
-A user can add agents and customers. Agents will be assigned customers who have taken loan.
+It is a android app for managing monetary transactions for small scale money lenders.
+A user can add agents and customers. Agents will be assigned customers who have taken loan from lender.
 Lender can monitor, create or delete agents and customer transactions.
 App is simple to use:
 1. Lender must create a admin account.
