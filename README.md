@@ -1,4 +1,4 @@
-MoenyLender
+MoneyLender
 # MoneyLender
 
 It is a android app for managing monetary transactions for small scale money lenders.
